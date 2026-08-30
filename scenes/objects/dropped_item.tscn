@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dropped123"]
+
+[ext_resource type="Script" path="res://scripts/components/dropped_item.gd" id="1_drp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 16.0
+
+[node name="DroppedItem" type="Area2D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1_drp")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1")

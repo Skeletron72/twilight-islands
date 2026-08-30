@@ -1,0 +1,123 @@
+import re
+
+with open('scenes/objects/campfire.tscn', 'r') as f:
+    content = f.read()
+
+# I will just write a whole new one to avoid regex mess
+new_content = """[gd_scene load_steps=12 format=3 uid="uid://campfire123"]
+
+[ext_resource type="Texture2D" uid="uid://items_atlas" path="res://assets/sprites/tileset/spr_tileset_sunnysideworld_16px.png" id="1_tex"]
+[ext_resource type="Script" uid="uid://campfire_script_uid" path="res://scripts/components/campfire.gd" id="2_script"]
+[ext_resource type="Texture2D" uid="uid://fire_atlas" path="res://assets/sprites/vfx/Fire/spr_deco_fire_01_strip4.png" id="3_fire"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_campfire"]
+atlas = ExtResource("1_tex")
+region = Rect2(592, 336, 32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_col"]
+size = Vector2(28, 28)
+
+[sub_resource type="Gradient" id="Gradient_light"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_light"]
+gradient = SubResource("Gradient_light")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.8, 0.8)
+width = 128
+height = 128
+
+[sub_resource type="Animation" id="Animation_burn"]
+resource_name = "burn"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FireSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PointLight2D:energy")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.8, 0.9]
+}
+
+[sub_resource type="Animation" id="Animation_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FireSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PointLight2D:energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.8]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fire"]
+_data = {
+"RESET": SubResource("Animation_reset"),
+"burn": SubResource("Animation_burn")
+}
+
+[node name="Campfire" type="StaticBody2D" groups=["interactable"]]
+y_sort_enabled = true
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("2_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_campfire")
+
+[node name="FireSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -2)
+texture = ExtResource("3_fire")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_col")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(1, 0.611765, 0.239216, 1)
+energy = 0.8
+texture = SubResource("GradientTexture2D_light")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_fire")
+}
+"""
+
+with open('scenes/objects/campfire.tscn', 'w') as f:
+    f.write(new_content)

@@ -1,0 +1,498 @@
+[gd_scene format=3 uid="uid://bookui123"]
+
+[ext_resource type="Script" uid="uid://bgyhsbkjcwyqc" path="res://scripts/components/book_ui.gd" id="1_book"]
+[ext_resource type="FontFile" uid="uid://cp5m6git4cdoo" path="res://assets/fonts/Chalkboard.ttf" id="3_ue6pm"]
+[ext_resource type="FontFile" uid="uid://biwqbhnnjqhqe" path="res://assets/fonts/WarmPixel.ttf" id="4_yq8p3"]
+[ext_resource type="Texture2D" uid="uid://bbidjq3oxl772" path="res://assets/sprites/ui/inventory/Book.png" id="tex_book"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_closed_book"]
+atlas = ExtResource("tex_book")
+region = Rect2(192, 32, 80, 94)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_book"]
+atlas = ExtResource("tex_book")
+region = Rect2(16, 32, 160, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bookmark_active"]
+atlas = ExtResource("tex_book")
+region = Rect2(96, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bookmark_inactive"]
+atlas = ExtResource("tex_book")
+region = Rect2(112, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon_inv_active"]
+atlas = ExtResource("tex_book")
+region = Rect2(368, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon_inv_inactive"]
+atlas = ExtResource("tex_book")
+region = Rect2(368, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon_char_active"]
+atlas = ExtResource("tex_book")
+region = Rect2(304, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon_char_inactive"]
+atlas = ExtResource("tex_book")
+region = Rect2(304, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon_craft_active"]
+atlas = ExtResource("tex_book")
+region = Rect2(320, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon_craft_inactive"]
+atlas = ExtResource("tex_book")
+region = Rect2(320, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon_quest_active"]
+atlas = ExtResource("tex_book")
+region = Rect2(336, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icon_quest_inactive"]
+atlas = ExtResource("tex_book")
+region = Rect2(336, 80, 16, 16)
+
+[sub_resource type="LabelSettings" id="LabelSettings_danvl"]
+font = ExtResource("3_ue6pm")
+font_size = 21
+font_color = Color(0.4, 0.2912, 0.20799999, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_nd61c"]
+font = ExtResource("4_yq8p3")
+font_size = 12
+font_color = Color(0.4, 0.2912, 0.20799999, 1)
+
+[node name="BookUI" type="Control" unique_id=798071426]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_book")
+closed_book_tex = SubResource("AtlasTexture_closed_book")
+open_book_tex = SubResource("AtlasTexture_book")
+bookmark_active_tex = SubResource("AtlasTexture_bookmark_active")
+bookmark_inactive_tex = SubResource("AtlasTexture_bookmark_inactive")
+icon_inv_active = SubResource("AtlasTexture_icon_inv_active")
+icon_inv_inactive = SubResource("AtlasTexture_icon_inv_inactive")
+icon_char_active = SubResource("AtlasTexture_icon_char_active")
+icon_char_inactive = SubResource("AtlasTexture_icon_char_inactive")
+icon_craft_active = SubResource("AtlasTexture_icon_craft_active")
+icon_craft_inactive = SubResource("AtlasTexture_icon_craft_inactive")
+icon_quest_active = SubResource("AtlasTexture_icon_quest_active")
+icon_quest_inactive = SubResource("AtlasTexture_icon_quest_inactive")
+
+[node name="DimBackground" type="ColorRect" parent="." unique_id=1214838446]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="CenterContainer" type="CenterContainer" parent="DimBackground" unique_id=911784674]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainVBox" type="VBoxContainer" parent="DimBackground/CenterContainer" unique_id=1208582404]
+layout_mode = 2
+theme_override_constants/separation = -8
+alignment = 1
+
+[node name="Tabs" type="HBoxContainer" parent="DimBackground/CenterContainer/MainVBox" unique_id=1403863197]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Spacer" type="Control" parent="DimBackground/CenterContainer/MainVBox/Tabs" unique_id=363574906]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+
+[node name="BtnInv" type="TextureButton" parent="DimBackground/CenterContainer/MainVBox/Tabs" unique_id=235863632]
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bookmark_inactive")
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="DimBackground/CenterContainer/MainVBox/Tabs/BtnInv" unique_id=1713356690]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_icon_inv_inactive")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BtnChar" type="TextureButton" parent="DimBackground/CenterContainer/MainVBox/Tabs" unique_id=2089894720]
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bookmark_inactive")
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="DimBackground/CenterContainer/MainVBox/Tabs/BtnChar" unique_id=541524364]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_icon_char_inactive")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BtnCraft" type="TextureButton" parent="DimBackground/CenterContainer/MainVBox/Tabs" unique_id=754791252]
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bookmark_inactive")
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="DimBackground/CenterContainer/MainVBox/Tabs/BtnCraft" unique_id=1691328440]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_icon_craft_inactive")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BtnQuest" type="TextureButton" parent="DimBackground/CenterContainer/MainVBox/Tabs" unique_id=1613573978]
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_bookmark_inactive")
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="DimBackground/CenterContainer/MainVBox/Tabs/BtnQuest" unique_id=1805503476]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_icon_quest_inactive")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BookPanel" type="TextureRect" parent="DimBackground/CenterContainer/MainVBox" unique_id=362497156]
+texture_filter = 1
+custom_minimum_size = Vector2(480, 288)
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_book")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Pages" type="MarginContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel" unique_id=1698473890]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 18
+
+[node name="InventoryTab" type="Control" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages" unique_id=2066662086]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/InventoryTab" unique_id=1400800398]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftPage" type="VBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/InventoryTab/HBoxContainer" unique_id=671330847]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/InventoryTab/HBoxContainer/LeftPage" unique_id=1735497030]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.1, 0.05, 1)
+text = "Детали"
+label_settings = SubResource("LabelSettings_danvl")
+horizontal_alignment = 1
+
+[node name="Details" type="VBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/InventoryTab/HBoxContainer/LeftPage" unique_id=1588695881]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="IconRect" type="TextureRect" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/InventoryTab/HBoxContainer/LeftPage/Details" unique_id=434913689]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/InventoryTab/HBoxContainer/LeftPage/Details" unique_id=761956439]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Выберите предмет"
+label_settings = SubResource("LabelSettings_danvl")
+horizontal_alignment = 1
+
+[node name="DescLabel" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/InventoryTab/HBoxContainer/LeftPage/Details" unique_id=1223050890]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 8
+label_settings = SubResource("LabelSettings_nd61c")
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Divider" type="ColorRect" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/InventoryTab/HBoxContainer" unique_id=2079312680]
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 2
+color = Color(0, 0, 0, 0)
+
+[node name="RightPage" type="VBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/InventoryTab/HBoxContainer" unique_id=1471340789]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/InventoryTab/HBoxContainer/RightPage" unique_id=2029193019]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.1, 0.05, 1)
+text = "Рюкзак"
+label_settings = SubResource("LabelSettings_danvl")
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/InventoryTab/HBoxContainer/RightPage" unique_id=1606829200]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/InventoryTab/HBoxContainer/RightPage/ScrollContainer" unique_id=1840969537]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 4
+
+[node name="CharacterTab" type="Control" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages" unique_id=16415849]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CharacterTab" unique_id=224899971]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftPage" type="VBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CharacterTab/HBoxContainer" unique_id=75081068]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CharacterTab/HBoxContainer/LeftPage" unique_id=528316030]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.1, 0.05, 1)
+text = "Экипировка"
+label_settings = SubResource("LabelSettings_danvl")
+horizontal_alignment = 1
+
+[node name="EquipGrid" type="GridContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CharacterTab/HBoxContainer/LeftPage" unique_id=2146180873]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 2
+
+[node name="Divider" type="ColorRect" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CharacterTab/HBoxContainer" unique_id=1162595116]
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 2
+color = Color(0, 0, 0, 0)
+
+[node name="RightPage" type="VBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CharacterTab/HBoxContainer" unique_id=195693571]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CharacterTab/HBoxContainer/RightPage" unique_id=860377377]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.1, 0.05, 1)
+text = "Гардероб"
+label_settings = SubResource("LabelSettings_danvl")
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CharacterTab/HBoxContainer/RightPage" unique_id=1356639162]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CharacterTab/HBoxContainer/RightPage/ScrollContainer" unique_id=1894961530]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 4
+
+[node name="CraftTab" type="Control" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages" unique_id=401506201]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab" unique_id=538752416]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftPage" type="VBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer" unique_id=2112853685]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/LeftPage" unique_id=539898724]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.1, 0.05, 1)
+text = "Чертежи"
+label_settings = SubResource("LabelSettings_danvl")
+horizontal_alignment = 1
+
+[node name="ScrollMargin" type="MarginContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/LeftPage" unique_id=629278946]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ScrollContainer" type="ScrollContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/LeftPage/ScrollMargin" unique_id=913068805]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="RecipeList" type="VBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/LeftPage/ScrollMargin/ScrollContainer" unique_id=692617277]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Divider" type="ColorRect" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer" unique_id=1067704509]
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 2
+color = Color(0, 0, 0, 0)
+
+[node name="RightPage" type="VBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer" unique_id=1259492515]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/RightPage" unique_id=18245894]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.1, 0.05, 1)
+text = "Создание"
+label_settings = SubResource("LabelSettings_danvl")
+horizontal_alignment = 1
+
+[node name="DetailsMargin" type="MarginContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/RightPage" unique_id=913873704]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 32
+
+[node name="Details" type="VBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/RightPage/DetailsMargin" unique_id=1032841872]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/RightPage/DetailsMargin/Details" unique_id=1949777386]
+layout_mode = 2
+
+[node name="IconRect" type="TextureRect" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/RightPage/DetailsMargin/Details/HBoxContainer" unique_id=2101321436]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/RightPage/DetailsMargin/Details/HBoxContainer" unique_id=1309798203]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.1, 0.05, 1)
+theme_override_fonts/font = ExtResource("3_ue6pm")
+theme_override_font_sizes/font_size = 16
+text = "Выберите чертеж"
+
+[node name="DescLabel" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/RightPage/DetailsMargin/Details" unique_id=1421458949]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("4_yq8p3")
+theme_override_font_sizes/font_size = 8
+autowrap_mode = 3
+
+[node name="StatsLabel" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/RightPage/DetailsMargin/Details" unique_id=52459094]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.3, 0, 1)
+theme_override_fonts/font = ExtResource("4_yq8p3")
+theme_override_font_sizes/font_size = 8
+autowrap_mode = 3
+
+[node name="ReqTitle" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/RightPage/DetailsMargin/Details" unique_id=63987948]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.2, 0.1, 1)
+theme_override_fonts/font = ExtResource("4_yq8p3")
+theme_override_font_sizes/font_size = 8
+text = "Требуется:"
+
+[node name="ReqList" type="VBoxContainer" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/RightPage/DetailsMargin/Details" unique_id=971582885]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CraftButton" type="Button" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/CraftTab/HBoxContainer/RightPage/DetailsMargin/Details" unique_id=1879932352]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.1, 0.05, 1)
+theme_override_colors/font_pressed_color = Color(0.1, 0.05, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.4, 0.2, 0.1, 1)
+theme_override_fonts/font = ExtResource("4_yq8p3")
+theme_override_font_sizes/font_size = 16
+text = "Создать"
+flat = true
+
+[node name="QuestTab" type="Control" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages" unique_id=388290484]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="DimBackground/CenterContainer/MainVBox/BookPanel/Pages/QuestTab" unique_id=1058508556]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.2, 0.1, 0.05, 1)
+text = "Задания пока недоступны"
+label_settings = SubResource("LabelSettings_nd61c")
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://cxab3213x0x"]
+
+[ext_resource type="Script" uid="uid://dtmnpfethh75s" path="res://scripts/components/player.gd" id="1_xxx"]
+[ext_resource type="Texture2D" uid="uid://bh3spiwkpjd5h" path="res://assets/sprites/characters/Human/IDLE/base_idle_strip9.png" id="tex_base"]
+[ext_resource type="Texture2D" uid="uid://b37i6lwrbixwm" path="res://assets/sprites/characters/Human/IDLE/boots1_idle_strip9.png" id="tex_boots"]
+[ext_resource type="Texture2D" uid="uid://by5gvwqgl3etn" path="res://assets/sprites/characters/Human/IDLE/cloth1_idle_strip9.png" id="tex_cloth"]
+[ext_resource type="Texture2D" uid="uid://dk7qypv7dyjch" path="res://assets/sprites/characters/Human/IDLE/hair_merged_idle_strip9.png" id="tex_hair"]
+[ext_resource type="Texture2D" uid="uid://no87sm0msxi5" path="res://assets/sprites/characters/Human/IDLE/tools_idle_strip9.png" id="tex_tools"]
+
+[ext_resource type="Texture2D" uid="uid://tileset_atlas_shadow" path="res://assets/sprites/tileset/spr_tileset_sunnysideworld_16px.png" id="tex_shadow_atlas"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_abc12"]
+radius = 5.000004
+height = 20.00005
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_interaction"]
+radius = 20.0
+
+[node name="Player" type="CharacterBody2D" unique_id=78984533]
+y_sort_enabled = true
+script = ExtResource("1_xxx")
+
+[node name="Visuals" type="Node2D" parent="." unique_id=1018988374]
+position = Vector2(0, -16)
+
+[node name="Base" type="Sprite2D" parent="Visuals" unique_id=603172347]
+texture = ExtResource("tex_base")
+hframes = 9
+
+[node name="Boots" type="Sprite2D" parent="Visuals" unique_id=1475914654]
+texture = ExtResource("tex_boots")
+hframes = 9
+
+[node name="Cloth" type="Sprite2D" parent="Visuals" unique_id=1928726182]
+texture = ExtResource("tex_cloth")
+hframes = 9
+
+[node name="Hair" type="Sprite2D" parent="Visuals" unique_id=709210148]
+texture = ExtResource("tex_hair")
+hframes = 9
+vframes = 6
+
+[node name="Tools" type="Sprite2D" parent="Visuals" unique_id=107256795]
+texture = ExtResource("tex_tools")
+hframes = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1652725522]
+position = Vector2(0, -17.1)
+shape = SubResource("CapsuleShape2D_abc12")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1063174798]
+collision_layer = 0
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1597799775]
+position = Vector2(0, -11)
+shape = SubResource("CircleShape2D_interaction")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1613506289]
+position = Vector2(0, -9)
+zoom = Vector2(2, 2)
+position_smoothing_enabled = true

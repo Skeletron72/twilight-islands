@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://dcnqocwlvsg1m"]
+
+[ext_resource type="Script" uid="uid://dfy8fnudi0laq" path="res://scripts/components/destructible.gd" id="1_dest"]
+[ext_resource type="Texture2D" uid="uid://dnb04i50twx1i" path="res://assets/sprites/plants/spr_deco_tree_02_strip4.png" id="2_5qchx"]
+[ext_resource type="Script" uid="uid://btn8jgmg2d5an" path="res://scripts/components/occluder.gd" id="3_occ"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_01qp8"]
+atlas = ExtResource("2_5qchx")
+region = Rect2(28, 0, 28, 43)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tree"]
+size = Vector2(40, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_static"]
+size = Vector2(16, 10.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_occluder"]
+size = Vector2(28, 24)
+
+[node name="SpruceTree" type="Area2D" unique_id=892352020]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_dest")
+drop_amount = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=969829852]
+position = Vector2(0, 4)
+scale = Vector2(1, 0.9999999)
+texture = SubResource("AtlasTexture_01qp8")
+offset = Vector2(0, -21)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=331655033]
+position = Vector2(0, -21)
+shape = SubResource("RectangleShape2D_tree")
+
+[node name="StaticBody" type="StaticBody2D" parent="." unique_id=751000888]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody" unique_id=1983052785]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_static")
+
+[node name="OccluderArea" type="Area2D" parent="." unique_id=1114564926]
+position = Vector2(0, -26)
+collision_layer = 0
+script = ExtResource("3_occ")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OccluderArea" unique_id=1378992220]
+shape = SubResource("RectangleShape2D_occluder")

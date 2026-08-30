@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://dfoo5613x3x"]
+
+[ext_resource type="PackedScene" uid="uid://debugpanel123" path="res://scenes/ui/debug_panel.tscn" id="10_debug"]
+[ext_resource type="FontFile" uid="uid://chalkboardfont" path="res://assets/fonts/Chalkboard.ttf" id="4_font_chalk"]
+[ext_resource type="Texture2D" uid="uid://c3jvr8og3qmc" path="res://assets/sprites/ui/inventory/UI.png" id="2_tex"]
+[ext_resource type="FontFile" uid="uid://biwqbhnnjqhqe" path="res://assets/fonts/WarmPixel.ttf" id="3_font"]
+[ext_resource type="Script" uid="uid://v01ll20qiani" path="res://scripts/components/ui_manager.gd" id="1_ui"]
+[ext_resource type="PackedScene" uid="uid://bookui123" path="res://scenes/ui/book_ui.tscn" id="3_book"]
+[ext_resource type="PackedScene" uid="uid://m0b1l3ctrl5" path="res://scenes/ui/mobile_controls.tscn" id="4_mob"]
+[ext_resource type="PackedScene" uid="uid://hotbar123" path="res://scenes/ui/hotbar_ui.tscn" id="5_hotbar"]
+[ext_resource type="PackedScene" uid="uid://storageui123" path="res://scenes/ui/storage_ui.tscn" id="6_storage"]
+
+
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_book_closed"]
+atlas = ExtResource("2_tex")
+region = Rect2(928, 256, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_book_closed_hover"]
+atlas = ExtResource("2_tex")
+region = Rect2(992, 256, 16, 16)
+
+[sub_resource type="LabelSettings" id="LabelSettings_warm"]
+font = ExtResource("3_font")
+font_color = Color(1, 1, 1, 1)
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+
+[sub_resource type="LabelSettings" id="LabelSettings_time"]
+font = ExtResource("4_font_chalk")
+font_size = 20
+font_color = Color(1, 1, 1, 1)
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_day"]
+font = ExtResource("4_font_chalk")
+font_size = 14
+font_color = Color(0.8, 0.8, 0.8, 1)
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="UILayer" type="CanvasLayer"]
+script = ExtResource("1_ui")
+
+[node name="BookToggleContainer" type="VBoxContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -80.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 96.0
+grow_horizontal = 0
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="BookToggleBtn" type="TextureButton" parent="BookToggleContainer"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_normal = SubResource("AtlasTexture_book_closed")
+texture_hover = SubResource("AtlasTexture_book_closed_hover")
+stretch_mode = 0
+
+[node name="KeyLabel" type="Label" parent="BookToggleContainer"]
+layout_mode = 2
+text = "[TAB]"
+label_settings = SubResource("LabelSettings_warm")
+horizontal_alignment = 1
+
+[node name="TimeContainer" type="VBoxContainer" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 64.0
+offset_bottom = 120.0
+theme_override_constants/separation = 2
+alignment = 0
+
+[node name="TimeIcon" type="TextureRect" parent="TimeContainer"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+stretch_mode = 2
+
+[node name="TimeLabel" type="Label" parent="TimeContainer"]
+layout_mode = 2
+text = "Утро"
+label_settings = SubResource("LabelSettings_time")
+horizontal_alignment = 1
+
+[node name="DayLabel" type="Label" parent="TimeContainer"]
+layout_mode = 2
+text = "День 1"
+label_settings = SubResource("LabelSettings_day")
+horizontal_alignment = 1
+
+[node name="BookUI" parent="." unique_id=2141288084 instance=ExtResource("3_book")]
+
+[node name="HotbarUI" parent="." instance=ExtResource("5_hotbar")]
+
+[node name="StorageUI" parent="." instance=ExtResource("6_storage")]
+
+[node name="MobileControls" parent="." unique_id=1148640189 instance=ExtResource("4_mob")]
+layout_mode = 3
+anchors_preset = 0
+[node name="DebugPanel" parent="." instance=ExtResource("10_debug")]

@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://b1v0p5k2w2y2"]
+
+[ext_resource type="Script" path="res://scripts/components/destructible.gd" id="1_dest"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tileset/spr_tileset_sunnysideworld_16px.png" id="2_tex"]
+[ext_resource type="Script" path="res://scripts/components/occluder.gd" id="3_occ"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ore"]
+atlas = ExtResource("2_tex")
+region = Rect2(816, 464, 32, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ore"]
+radius = 30.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_static"]
+size = Vector2(24, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_occluder"]
+size = Vector2(28, 20)
+
+[node name="TwilightOre" type="Area2D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_dest")
+max_hp = 5
+resource_id = "twilight_ore"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_ore")
+offset = Vector2(0, -16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("CircleShape2D_ore")
+
+[node name="StaticBody" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody"]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_static")
+position = Vector2(0, -7)
+
+[node name="OccluderArea" type="Area2D" parent="."]
+position = Vector2(0, -18)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("3_occ")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OccluderArea"]
+shape = SubResource("RectangleShape2D_occluder")

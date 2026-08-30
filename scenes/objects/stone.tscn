@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://pd17uvo000p3"]
+
+[ext_resource type="Script" uid="uid://dfy8fnudi0laq" path="res://scripts/components/destructible.gd" id="1_dest"]
+[ext_resource type="Texture2D" uid="uid://cya4nt1s47vy1" path="res://assets/sprites/tileset/spr_tileset_sunnysideworld_16px.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://btn8jgmg2d5an" path="res://scripts/components/occluder.gd" id="3_occ"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qp2yk"]
+atlas = ExtResource("2_tex")
+region = Rect2(784, 464, 32, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_stone"]
+radius = 30.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_static"]
+size = Vector2(24, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_occluder"]
+size = Vector2(28, 20)
+
+[node name="Stone" type="Area2D" unique_id=756738835]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_dest")
+max_hp = 6
+hp_variance = 2
+resource_id = "stone"
+drop_on_shrink = 1
+drop_variance = 1
+regions = Array[Rect2]([Rect2(848, 464, 32, 32), Rect2(816, 464, 32, 32), Rect2(784, 464, 32, 32)])
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=395918286]
+texture = SubResource("AtlasTexture_qp2yk")
+offset = Vector2(0, -16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=611077861]
+position = Vector2(0, -16)
+shape = SubResource("CircleShape2D_stone")
+
+[node name="StaticBody" type="StaticBody2D" parent="." unique_id=506875738]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody" unique_id=529874687]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_static")
+
+[node name="OccluderArea" type="Area2D" parent="." unique_id=628425815]
+position = Vector2(0, -18)
+collision_layer = 0
+script = ExtResource("3_occ")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OccluderArea" unique_id=2093880769]
+shape = SubResource("RectangleShape2D_occluder")

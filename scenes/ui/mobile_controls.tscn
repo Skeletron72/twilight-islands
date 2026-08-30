@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://m0b1l3ctrl5"]
+
+[ext_resource type="Script" uid="uid://b8cdf3i8uvbxh" path="res://scripts/components/virtual_joystick.gd" id="1_joy"]
+[ext_resource type="Script" uid="uid://b7q8nu68a0qck" path="res://scripts/components/action_button.gd" id="2_act"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/joy_base.png" id="tex_base"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/joy_knob.png" id="tex_knob"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/action_button.png" id="tex_act"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_act"]
+radius = 40.0
+
+[node name="MobileControls" type="Control"]
+
+[node name="VirtualJoystick" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+offset_right = 200.0
+grow_vertical = 0
+script = ExtResource("1_joy")
+
+[node name="Base" type="TextureRect" parent="VirtualJoystick"]
+modulate = Color(1, 1, 1, 0.3)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("tex_base")
+expand_mode = 1
+texture_filter = 1
+
+[node name="Knob" type="TextureRect" parent="VirtualJoystick/Base"]
+modulate = Color(1, 1, 1, 0.8)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("tex_knob")
+expand_mode = 1
+texture_filter = 1
+
+[node name="ActionButton" type="TouchScreenButton" parent="."]
+position = Vector2(500, 240)
+shape = SubResource("CircleShape2D_act")
+script = ExtResource("2_act")
+
+[node name="Sprite2D" type="Sprite2D" parent="ActionButton"]
+modulate = Color(1, 0.5, 0.5, 0.8)
+scale = Vector2(4.0, 4.0)
+texture_filter = 1
+texture = ExtResource("tex_act")
