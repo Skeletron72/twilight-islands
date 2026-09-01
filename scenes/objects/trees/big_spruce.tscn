@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://tree_big_spruce"]
+
+[ext_resource type="Script" path="res://scripts/components/occluder.gd" id="3_occ"]
+[ext_resource type="Script" path="res://scripts/components/tree.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Trees/Big_Spruce_tree.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
+size = Vector2(16, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_static"]
+size = Vector2(22, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_occluder"]
+size = Vector2(44.8, 49)
+
+[node name="BigSpruceTree" type="Area2D"]
+y_sort_enabled = true
+position = Vector2(0, 4)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_script")
+tree_type = "spruce"
+tree_size = "big"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, 10)
+texture = ExtResource("2_tex")
+hframes = 3
+frame = 1
+offset = Vector2(0, -40.0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_base")
+
+[node name="StaticBody" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody"]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_static")
+
+[node name="OccluderArea" type="Area2D" parent="."]
+collision_mask = 1
+position = Vector2(0, -34.5)
+collision_layer = 0
+script = ExtResource("3_occ")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OccluderArea"]
+position = Vector2(0, 0)
+shape = SubResource("RectangleShape2D_occluder")

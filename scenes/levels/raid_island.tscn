@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://cxab3213x0x" path="res://scenes/characters/player/player.tscn" id="1_plr"]
 [ext_resource type="Script" uid="uid://dwwh8agna7gbs" path="res://scripts/components/day_night_cycle.gd" id="2_dnc"]
-[ext_resource type="PackedScene" uid="uid://c8ciq0k61rbq" path="res://scenes/objects/tree.tscn" id="3_tree"]
 [ext_resource type="PackedScene" uid="uid://pd17uvo000p3" path="res://scenes/objects/stone.tscn" id="4_stone"]
 [ext_resource type="PackedScene" uid="uid://jpwd31ashmqw" path="res://scenes/levels/extraction_zone.tscn" id="5_boat"]
 [ext_resource type="TileSet" uid="uid://bbrgwvpje8t2u" path="res://resources/tileset.tres" id="5_ts"]
@@ -65,21 +64,6 @@ tile_set = ExtResource("5_ts")
 
 [node name="Interactables" type="Node2D" parent="." unique_id=1508756038]
 y_sort_enabled = true
-
-[node name="Tree1" parent="Interactables" unique_id=2115048749 instance=ExtResource("3_tree")]
-position = Vector2(200, 100)
-
-[node name="Tree2" parent="Interactables" unique_id=1581757063 instance=ExtResource("3_tree")]
-position = Vector2(250, 150)
-
-[node name="Tree3" parent="Interactables" unique_id=1511276997 instance=ExtResource("3_tree")]
-position = Vector2(600, 200)
-
-[node name="Stone1" parent="Interactables" unique_id=680225951 instance=ExtResource("4_stone")]
-position = Vector2(500, 100)
-
-[node name="Stone2" parent="Interactables" unique_id=1047724586 instance=ExtResource("4_stone")]
-position = Vector2(550, 80)
 
 [node name="Player" parent="." unique_id=1422464141 instance=ExtResource("1_plr")]
 position = Vector2(400, 400)

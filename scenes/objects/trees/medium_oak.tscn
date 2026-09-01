@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://kguq6b1lnw3h"]
+
+[ext_resource type="Script" uid="uid://dqws33mrbjyps" path="res://scripts/components/tree.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cd1uypenxytko" path="res://assets/new_assets/Cute_Fantasy/Trees/Medium_Oak_Tree.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://btn8jgmg2d5an" path="res://scripts/components/occluder.gd" id="3_occ"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
+size = Vector2(12, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_static"]
+size = Vector2(16, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_occluder"]
+size = Vector2(22.4, 14)
+
+[node name="MediumOakTree" type="Area2D" unique_id=961471965]
+y_sort_enabled = true
+position = Vector2(0, 3)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_script")
+tree_size = "medium"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1689829374]
+position = Vector2(-2, -8)
+texture = ExtResource("2_tex")
+offset = Vector2(2, 0)
+hframes = 3
+frame = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=441039837]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_base")
+
+[node name="StaticBody" type="StaticBody2D" parent="." unique_id=400336052]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody" unique_id=1262849893]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_static")
+
+[node name="OccluderArea" type="Area2D" parent="." unique_id=2076182362]
+position = Vector2(0, -14)
+collision_layer = 0
+script = ExtResource("3_occ")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OccluderArea" unique_id=1466003859]
+shape = SubResource("RectangleShape2D_occluder")

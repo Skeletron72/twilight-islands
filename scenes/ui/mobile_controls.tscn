@@ -2,9 +2,6 @@
 
 [ext_resource type="Script" uid="uid://b8cdf3i8uvbxh" path="res://scripts/components/virtual_joystick.gd" id="1_joy"]
 [ext_resource type="Script" uid="uid://b7q8nu68a0qck" path="res://scripts/components/action_button.gd" id="2_act"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/joy_base.png" id="tex_base"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/joy_knob.png" id="tex_knob"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/action_button.png" id="tex_act"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_act"]
 radius = 40.0
@@ -35,7 +32,6 @@ offset_right = 64.0
 offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("tex_base")
 expand_mode = 1
 texture_filter = 1
 
@@ -53,7 +49,6 @@ offset_right = 32.0
 offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("tex_knob")
 expand_mode = 1
 texture_filter = 1
 
@@ -66,4 +61,3 @@ script = ExtResource("2_act")
 modulate = Color(1, 0.5, 0.5, 0.8)
 scale = Vector2(4.0, 4.0)
 texture_filter = 1
-texture = ExtResource("tex_act")

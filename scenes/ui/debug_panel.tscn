@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://debugpanel123"]
 
-[ext_resource type="Script" uid="uid://debugscript123" path="res://scripts/components/debug_panel.gd" id="1_scr"]
+[ext_resource type="Script" path="res://scripts/components/debug_panel.gd" id="1_scr"]
 
 [node name="DebugPanel" type="Control"]
 layout_mode = 3

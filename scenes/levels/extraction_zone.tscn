@@ -1,10 +1,7 @@
 [gd_scene format=3 uid="uid://jpwd31ashmqw"]
 
 [ext_resource type="Script" uid="uid://dx45bg6y8lbhn" path="res://scripts/components/extraction_zone.gd" id="1_ez"]
-[ext_resource type="Texture2D" uid="uid://dsmpxwgiowb0t" path="res://assets/sprites/other/spr_deco_coracle_land.png" id="2_jj47i"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_sn6gn"]
-atlas = ExtResource("2_jj47i")
+[ext_resource type="Texture2D" uid="uid://brpdb36bol5qb" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Other_Animations/Boat_Anim.png" id="2_jj47i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
 size = Vector2(80, 40)
@@ -15,7 +12,8 @@ collision_mask = 0
 script = ExtResource("1_ez")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=848496264]
-texture = SubResource("AtlasTexture_sn6gn")
+texture = ExtResource("2_jj47i")
+hframes = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=310673223]
 shape = SubResource("RectangleShape2D_1")

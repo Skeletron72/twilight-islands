@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://beweqdvy2gc85"]
+
+[ext_resource type="Script" uid="uid://dqws33mrbjyps" path="res://scripts/components/tree.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://ba0y47lh1t1c1" path="res://assets/new_assets/Cute_Fantasy/Trees/Medium_Fruit_Tree.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://btn8jgmg2d5an" path="res://scripts/components/occluder.gd" id="3_occ"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
+size = Vector2(12, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_static"]
+size = Vector2(16, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_occluder"]
+size = Vector2(22.4, 14)
+
+[node name="MediumFruitTree" type="Area2D" unique_id=236947659]
+y_sort_enabled = true
+position = Vector2(0, 4)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_script")
+tree_type = "fruit"
+tree_size = "medium"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1044853432]
+position = Vector2(0, 16)
+texture = ExtResource("2_tex")
+offset = Vector2(0, -32)
+hframes = 3
+frame = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1113111482]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_base")
+
+[node name="StaticBody" type="StaticBody2D" parent="." unique_id=1549788659]
+position = Vector2(0, 3)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody" unique_id=1156428306]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_static")
+
+[node name="OccluderArea" type="Area2D" parent="." unique_id=1181957043]
+position = Vector2(0, -14)
+collision_layer = 0
+script = ExtResource("3_occ")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OccluderArea" unique_id=1506199929]
+shape = SubResource("RectangleShape2D_occluder")

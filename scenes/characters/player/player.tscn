@@ -1,62 +1,74 @@
 [gd_scene format=3 uid="uid://cxab3213x0x"]
 
 [ext_resource type="Script" uid="uid://dtmnpfethh75s" path="res://scripts/components/player.gd" id="1_xxx"]
-[ext_resource type="Texture2D" uid="uid://bh3spiwkpjd5h" path="res://assets/sprites/characters/Human/IDLE/base_idle_strip9.png" id="tex_base"]
-[ext_resource type="Texture2D" uid="uid://b37i6lwrbixwm" path="res://assets/sprites/characters/Human/IDLE/boots1_idle_strip9.png" id="tex_boots"]
-[ext_resource type="Texture2D" uid="uid://by5gvwqgl3etn" path="res://assets/sprites/characters/Human/IDLE/cloth1_idle_strip9.png" id="tex_cloth"]
-[ext_resource type="Texture2D" uid="uid://dk7qypv7dyjch" path="res://assets/sprites/characters/Human/IDLE/hair_merged_idle_strip9.png" id="tex_hair"]
-[ext_resource type="Texture2D" uid="uid://no87sm0msxi5" path="res://assets/sprites/characters/Human/IDLE/tools_idle_strip9.png" id="tex_tools"]
+[ext_resource type="Texture2D" uid="uid://c15ajx83ua7tf" path="res://assets/new_assets/Cute_Fantasy/Player/Player_Base/Player_Base_animations.png" id="tex_base"]
+[ext_resource type="Texture2D" uid="uid://dgs4r4hk53qpf" path="res://assets/new_assets/Cute_Fantasy/Player/Chest/Farmer_Shirt/Farmer_Shirt_1_Red.png" id="tex_chest"]
+[ext_resource type="Texture2D" uid="uid://cvhkdn6q5eggd" path="res://assets/new_assets/Cute_Fantasy/Player/Feet/Shoes_1_Brown.png" id="tex_feet"]
+[ext_resource type="Texture2D" uid="uid://db0ygtd2kauq4" path="res://assets/new_assets/Cute_Fantasy/Player/Hands/Hands_1_Bare.png" id="tex_hands"]
+[ext_resource type="Texture2D" uid="uid://b3x27worqgt36" path="res://assets/new_assets/Cute_Fantasy/Player/Head/Hair_1/Hair_1_Brown.png" id="tex_head"]
+[ext_resource type="Texture2D" uid="uid://bxy27qcyxo4pp" path="res://assets/new_assets/Cute_Fantasy/Player/Legs/Farmer_Pants/Farmer_Pants_1_Blue.png" id="tex_legs"]
 
-[ext_resource type="Texture2D" uid="uid://tileset_atlas_shadow" path="res://assets/sprites/tileset/spr_tileset_sunnysideworld_16px.png" id="tex_shadow_atlas"]
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_abc12"]
-radius = 5.000004
-height = 20.00005
+[sub_resource type="CircleShape2D" id="CircleShape2D_player_base"]
+radius = 6.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_interaction"]
 radius = 20.0
 
-[node name="Player" type="CharacterBody2D" unique_id=78984533]
+[node name="Player" type="CharacterBody2D" unique_id=474914352]
 y_sort_enabled = true
 script = ExtResource("1_xxx")
 
-[node name="Visuals" type="Node2D" parent="." unique_id=1018988374]
-position = Vector2(0, -16)
+[node name="Visuals" type="Node2D" parent="." unique_id=1896263022]
+position = Vector2(0, -7)
 
-[node name="Base" type="Sprite2D" parent="Visuals" unique_id=603172347]
+[node name="Base" type="Sprite2D" parent="Visuals" unique_id=169495049]
 texture = ExtResource("tex_base")
 hframes = 9
+vframes = 56
 
-[node name="Boots" type="Sprite2D" parent="Visuals" unique_id=1475914654]
-texture = ExtResource("tex_boots")
+[node name="Legs" type="Sprite2D" parent="Visuals" unique_id=1126008828]
+texture = ExtResource("tex_legs")
 hframes = 9
+vframes = 56
 
-[node name="Cloth" type="Sprite2D" parent="Visuals" unique_id=1928726182]
-texture = ExtResource("tex_cloth")
+[node name="Feet" type="Sprite2D" parent="Visuals" unique_id=2037054513]
+texture = ExtResource("tex_feet")
 hframes = 9
+vframes = 56
 
-[node name="Hair" type="Sprite2D" parent="Visuals" unique_id=709210148]
-texture = ExtResource("tex_hair")
+[node name="Chest" type="Sprite2D" parent="Visuals" unique_id=1761042507]
+texture = ExtResource("tex_chest")
 hframes = 9
-vframes = 6
+vframes = 56
 
-[node name="Tools" type="Sprite2D" parent="Visuals" unique_id=107256795]
-texture = ExtResource("tex_tools")
+[node name="Head" type="Sprite2D" parent="Visuals" unique_id=2130128311]
+texture = ExtResource("tex_head")
 hframes = 9
+vframes = 56
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1652725522]
-position = Vector2(0, -17.1)
-shape = SubResource("CapsuleShape2D_abc12")
+[node name="Hands" type="Sprite2D" parent="Visuals" unique_id=435785788]
+texture = ExtResource("tex_hands")
+hframes = 9
+vframes = 56
 
-[node name="InteractionArea" type="Area2D" parent="." unique_id=1063174798]
+[node name="Tool" type="Sprite2D" parent="Visuals" unique_id=259522358]
+hframes = 9
+vframes = 56
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1603180234]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_player_base")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1273143332]
+position = Vector2(0, -2)
 collision_layer = 0
 collision_mask = 6
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1597799775]
-position = Vector2(0, -11)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1539598516]
+position = Vector2(0, -2)
 shape = SubResource("CircleShape2D_interaction")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1613506289]
-position = Vector2(0, -9)
+[node name="Camera2D" type="Camera2D" parent="." unique_id=424834419]
+position = Vector2(0, -17)
 zoom = Vector2(2, 2)
 position_smoothing_enabled = true

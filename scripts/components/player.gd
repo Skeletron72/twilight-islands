@@ -19,156 +19,51 @@ var is_dead: bool = false
 var current_anim: String = ""
 var current_frame: int = 0
 var anim_timer: float = 0.0
-var fps: float = 10.0
+var fps: float = 6.0
 
 # Define paperdoll layers
-const LAYERS = ["base", "boots", "cloth", "hair", "tools"]
+const LAYERS = ["Base", "Legs", "Feet", "Chest", "Head", "Hands"]
 
-var anim_data = {
-	"idle": {
-		"frames": 9,
-		"base": preload("res://assets/sprites/characters/Human/IDLE/base_idle_strip9.png"),
-		"boots": preload("res://assets/sprites/characters/Human/IDLE/boots1_idle_strip9.png"),
-		"cloth": preload("res://assets/sprites/characters/Human/IDLE/cloth1_idle_strip9.png"),
-		"hair": preload("res://assets/sprites/characters/Human/IDLE/hair_merged_idle_strip9.png"),
-		"tools": preload("res://assets/sprites/characters/Human/IDLE/tools_idle_strip9.png")
-	},
-	"run": {
-		"frames": 8,
-		"base": preload("res://assets/sprites/characters/Human/RUN/base_run_strip8.png"),
-		"boots": preload("res://assets/sprites/characters/Human/RUN/boots1_run_strip8.png"),
-		"cloth": preload("res://assets/sprites/characters/Human/RUN/cloth1_run_strip8.png"),
-		"hair": preload("res://assets/sprites/characters/Human/RUN/hair_merged_run_strip8.png"),
-		"tools": preload("res://assets/sprites/characters/Human/RUN/tools_run_strip8.png")
-	},
-	"walk": {
-		"frames": 8,
-		"base": preload("res://assets/sprites/characters/Human/WALK/base_walk_strip8.png"),
-		"boots": preload("res://assets/sprites/characters/Human/WALK/boots1_walk_strip8.png"),
-		"cloth": preload("res://assets/sprites/characters/Human/WALK/cloth1_walk_strip8.png"),
-		"hair": preload("res://assets/sprites/characters/Human/WALK/hair_merged_walk_strip8.png"),
-		"tools": preload("res://assets/sprites/characters/Human/WALK/tools_walk_strip8.png")
-	},
-	"swimming": {
-		"frames": 8,
-		"base": preload("res://assets/sprites/characters/Human/SWIMMING/base_swimming_strip8.png"),
-		"boots": preload("res://assets/sprites/characters/Human/SWIMMING/boots1_swimming_strip8.png"),
-		"cloth": preload("res://assets/sprites/characters/Human/SWIMMING/cloth1_swimming_strip8.png"),
-		"hair": preload("res://assets/sprites/characters/Human/SWIMMING/hair_merged_swimming_strip8.png"),
-		"tools": preload("res://assets/sprites/characters/Human/SWIMMING/tools_swimming_strip8.png")
-	},
-
-			"death": {
-		"frames": 13,
-		"base": preload("res://assets/sprites/characters/Human/DEATH/base_death_strip13.png"),
-		"boots": preload("res://assets/sprites/characters/Human/DEATH/boots1_death_strip13.png"),
-		"cloth": preload("res://assets/sprites/characters/Human/DEATH/cloth1_death_strip13.png"),
-		"hair": preload("res://assets/sprites/characters/Human/DEATH/hair_merged_death_strip13.png"),
-		"tools": preload("res://assets/sprites/characters/Human/DEATH/tools_death_strip13.png")
-	},
-	"attack": {
-		"frames": 10,
-		"base": preload("res://assets/sprites/characters/Human/ATTACK/base_attack_strip10.png"),
-		"boots": preload("res://assets/sprites/characters/Human/ATTACK/boots1_attack_strip10.png"),
-		"cloth": preload("res://assets/sprites/characters/Human/ATTACK/cloth1_attack_strip10.png"),
-		"hair": preload("res://assets/sprites/characters/Human/ATTACK/hair_merged_attack_strip10.png"),
-		"tools": preload("res://assets/sprites/characters/Human/ATTACK/tools_attack_strip10.png")
-	},
-	"hurt": {
-		"frames": 8,
-		"base": preload("res://assets/sprites/characters/Human/HURT/base_hurt_strip8.png"),
-		"boots": preload("res://assets/sprites/characters/Human/HURT/boots1_hurt_strip8.png"),
-		"cloth": preload("res://assets/sprites/characters/Human/HURT/cloth1_hurt_strip8.png"),
-		"hair": preload("res://assets/sprites/characters/Human/HURT/hair_merged_hurt_strip8.png"),
-		"tools": preload("res://assets/sprites/characters/Human/HURT/tools_hurt_strip8.png")
-	},
-	"axe": {
-		"frames": 10,
-		"base": preload("res://assets/sprites/characters/Human/AXE/base_axe_strip10.png"),
-		"boots": preload("res://assets/sprites/characters/Human/AXE/boots1_axe_strip10.png"),
-		"cloth": preload("res://assets/sprites/characters/Human/AXE/cloth1_axe_strip10.png"),
-		"hair": preload("res://assets/sprites/characters/Human/AXE/hair_merged_axe_strip10.png"),
-		"tools": preload("res://assets/sprites/characters/Human/AXE/tools_axe_strip10.png")
-	},
-	"mining": {
-		"frames": 10,
-		"base": preload("res://assets/sprites/characters/Human/MINING/base_mining_strip10.png"),
-		"boots": preload("res://assets/sprites/characters/Human/MINING/boots1_mining_strip10.png"),
-		"cloth": preload("res://assets/sprites/characters/Human/MINING/cloth1_mining_strip10.png"),
-		"hair": preload("res://assets/sprites/characters/Human/MINING/hair_merged_mining_strip10.png"),
-		"tools": preload("res://assets/sprites/characters/Human/MINING/tools_mining_strip10.png")
-	}
+const ANIM_MAP = {
+	"idle": { "row": 0, "frames": 6 },
+	"walk": { "row": 3, "frames": 6 },
+	"run": { "row": 3, "frames": 6 },
+	"attack": { "row": 6, "frames": 4 }, # 6 = Sword L->R, 9 = Right L->R, 12 = Up L->R
+	"hurt": { "row": 15, "frames": 4 }, # Using Fall Right (15) as hurt/death for now
+	"death": { "row": 15, "frames": 4 },
+	"axe": { "row": 32, "frames": 6 },
+	"mining": { "row": 35, "frames": 6 },
+	"swimming": { "row": 3, "frames": 6 }
 }
 
+var current_dir: int = 0 # 0=Down, 1=Right, 2=Up
+
 func _ready() -> void:
+	# Set up the sprite sheets
+	var tex_base = preload("res://assets/new_assets/Cute_Fantasy/Player/Player_Base/Player_Base_animations.png")
+	var tex_legs = preload("res://assets/new_assets/Cute_Fantasy/Player/Legs/Farmer_Pants/Farmer_Pants_1_Blue.png")
+	var tex_feet = preload("res://assets/new_assets/Cute_Fantasy/Player/Feet/Shoes_1_Brown.png")
+	var tex_chest = preload("res://assets/new_assets/Cute_Fantasy/Player/Chest/Farmer_Shirt/Farmer_Shirt_1_Red.png")
+	var tex_head = preload("res://assets/new_assets/Cute_Fantasy/Player/Head/Hair_1/Hair_1_Brown.png")
+	var tex_hands = preload("res://assets/new_assets/Cute_Fantasy/Player/Hands/Hands_1_Bare.png")
+	
+	# Preload tools
+	var tool_sprite = visuals.get_node_or_null("Tool")
+	if tool_sprite:
+		tool_sprite.visible = false
+	
+	for layer_name in LAYERS:
+		var sprite = visuals.get_node_or_null(layer_name)
+		if sprite:
+			sprite.hframes = 9
+			sprite.vframes = 56
+			if layer_name == "Base": sprite.texture = tex_base
+			if layer_name == "Legs": sprite.texture = tex_legs
+			if layer_name == "Feet": sprite.texture = tex_feet
+			if layer_name == "Chest": sprite.texture = tex_chest
+			if layer_name == "Head": sprite.texture = tex_head
+			if layer_name == "Hands": sprite.texture = tex_hands
 
-	var stats_ui = VBoxContainer.new()
-	stats_ui.position = Vector2(-16, -35)
-	stats_ui.custom_minimum_size = Vector2(32, 8)
-	stats_ui.add_theme_constant_override("separation", 1)
-	stats_ui.z_index = 50
-	
-	hp_bar = ProgressBar.new()
-	hp_bar.custom_minimum_size = Vector2(32, 4)
-	hp_bar.show_percentage = false
-	var hp_bg = StyleBoxFlat.new()
-	hp_bg.anti_aliasing = false
-	hp_bg.bg_color = Color(0.1, 0.1, 0.1, 0.8)
-	hp_bg.border_width_left = 1; hp_bg.border_width_top = 1; hp_bg.border_width_right = 1; hp_bg.border_width_bottom = 1
-	hp_bg.border_color = Color(0,0,0,1)
-	var hp_fill = StyleBoxFlat.new()
-	hp_fill.anti_aliasing = false
-	hp_fill.bg_color = Color(0.85, 0.15, 0.15, 1)
-	hp_fill.border_width_left = 1; hp_fill.border_width_top = 1; hp_fill.border_width_right = 1; hp_fill.border_width_bottom = 1
-	hp_fill.border_color = Color(0,0,0,0)
-	hp_bar.add_theme_stylebox_override("background", hp_bg)
-	hp_bar.add_theme_stylebox_override("fill", hp_fill)
-	
-	stamina_bar = ProgressBar.new()
-	stamina_bar.custom_minimum_size = Vector2(32, 4)
-	stamina_bar.show_percentage = false
-	var st_bg = StyleBoxFlat.new()
-	st_bg.anti_aliasing = false
-	st_bg.bg_color = Color(0.1, 0.1, 0.1, 0.8)
-	st_bg.border_width_left = 1; st_bg.border_width_top = 1; st_bg.border_width_right = 1; st_bg.border_width_bottom = 1
-	st_bg.border_color = Color(0,0,0,1)
-	var st_fill = StyleBoxFlat.new()
-	st_fill.anti_aliasing = false
-	st_fill.bg_color = Color(0.15, 0.85, 0.25, 1)
-	st_fill.border_width_left = 1; st_fill.border_width_top = 1; st_fill.border_width_right = 1; st_fill.border_width_bottom = 1
-	st_fill.border_color = Color(0,0,0,0)
-	stamina_bar.add_theme_stylebox_override("background", st_bg)
-
-	stamina_bar.add_theme_stylebox_override("background", st_bg)
-	stamina_bar.add_theme_stylebox_override("fill", st_fill)
-	
-	hunger_wrapper = Control.new()
-	hunger_wrapper.custom_minimum_size = Vector2(32, 4)
-	hunger_bar = ProgressBar.new()
-	hunger_bar.custom_minimum_size = Vector2(32, 4)
-	hunger_bar.show_percentage = false
-	var hu_bg = StyleBoxFlat.new()
-	hu_bg.anti_aliasing = false
-	hu_bg.bg_color = Color(0.1, 0.1, 0.1, 0.8)
-	hu_bg.border_width_left = 1; hu_bg.border_width_top = 1; hu_bg.border_width_right = 1; hu_bg.border_width_bottom = 1
-	hu_bg.border_color = Color(0,0,0,1)
-	var hu_fill = StyleBoxFlat.new()
-	hu_fill.anti_aliasing = false
-	hu_fill.bg_color = Color(0.9, 0.6, 0.1, 1) # Orange
-	hu_fill.border_width_left = 1; hu_fill.border_width_top = 1; hu_fill.border_width_right = 1; hu_fill.border_width_bottom = 1
-	hu_fill.border_color = Color(0,0,0,0)
-	hunger_bar.add_theme_stylebox_override("background", hu_bg)
-	hunger_bar.add_theme_stylebox_override("fill", hu_fill)
-	hunger_wrapper.add_child(hunger_bar)
-	
-	stats_ui.add_child(hp_bar)
-	stats_ui.add_child(stamina_bar)
-	stats_ui.add_child(hunger_wrapper)
-	add_child(stats_ui)
-
-	GameStateManager.player_hurt.connect(_on_hurt)
-	GameStateManager.player_died.connect(_on_died)
-	GameStateManager.item_consumed.connect(_on_item_consumed)
 	InventoryManager.equipment_changed.connect(_update_equipment_visuals)
 	_update_equipment_visuals()
 
@@ -246,23 +141,37 @@ func _physics_process(delta: float) -> void:
 		is_sprinting = direction.length() > 0.6
 		
 	var in_water = false
+	var current_biome = ""
 	var current_scene = get_tree().current_scene
 	var world_map = current_scene.get_node_or_null("WorldMap")
 	if world_map:
-		var water_layer = world_map.get_node_or_null("WaterLayer")
-		if water_layer:
-			var map_pos = water_layer.local_to_map(global_position + Vector2(0, -4))
-			if water_layer.get_cell_source_id(map_pos) != -1:
-				in_water = true
-				for child in world_map.get_children():
-					if child is TileMapLayer and child != water_layer:
-						if child.get_cell_source_id(map_pos) != -1:
-							in_water = false
-							break
+		# Проверяем слои сверху вниз (от верхнего грунта к океану)
+		var check_layers = ["RoadsLayer", "WaterLayer", "GroundLayer", "ShoreLayer", "OceanLayer"]
+		for layer_name in check_layers:
+			var layer = world_map.get_node_or_null(layer_name)
+			if layer and layer is TileMapLayer:
+				var map_pos = layer.local_to_map(global_position + Vector2(0, -4))
+				var cell_data = layer.get_cell_tile_data(map_pos)
+				if cell_data:
+					# Нашли самый верхний тайл, на котором стоит игрок!
+					in_water = cell_data.get_custom_data("is_water")
+					
+					# Если у вас есть кастомная дата "biome" (тип String), мы можем читать ее здесь:
+					# current_biome = cell_data.get_custom_data("biome")
+					
+					break # Прерываем поиск, так как нашли поверхность под ногами
 
 	if direction.length() > 0:
-		if direction.x != 0:
+		# 0=Down, 1=Right, 2=Up
+		if abs(direction.x) > abs(direction.y):
+			current_dir = 1
 			visuals.scale.x = -1 if direction.x < 0 else 1
+		elif direction.y > 0:
+			current_dir = 0
+			visuals.scale.x = 1
+		elif direction.y < 0:
+			current_dir = 2
+			visuals.scale.x = 1
 			
 		if in_water:
 			velocity = direction.normalized() * (speed * 0.5)
@@ -293,35 +202,37 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_process_animation(delta)
 
+var last_played_dir: int = -1
+
 func _play_anim(anim_name: String) -> void:
-	if current_anim == anim_name:
+	if current_anim == anim_name and current_dir == last_played_dir:
 		return
-	current_anim = anim_name
-	current_frame = 0
-	anim_timer = 0.0
 	
-	var data = anim_data[anim_name]
-	for layer_name in LAYERS:
-		var sprite: Sprite2D = visuals.get_node(layer_name.capitalize())
-		var tex = data[layer_name]
-		if tex:
-			sprite.texture = tex
-			sprite.hframes = data["frames"]
-			
-			if layer_name == "hair":
-				sprite.vframes = int(tex.get_height() / 64)
-			else:
-				sprite.vframes = 1
-				
-			sprite.frame_coords = Vector2i(0, hairstyle_index if layer_name == "hair" else 0)
+	if current_anim != anim_name:
+		current_frame = 0
+		anim_timer = 0.0
+		
+	current_anim = anim_name
+	last_played_dir = current_dir
+	
+	# Immediately update sprite frame when changing animation or direction
+	_update_sprites()
+
+func get_last_direction() -> int:
+	return current_dir
 
 func _process_animation(delta: float) -> void:
 	if current_anim == "": return
 	
+	var fps_mult = 1.0
+	if current_anim == "run": fps_mult = 1.5
+	
 	anim_timer += delta
-	if anim_timer >= 1.0 / fps:
-		anim_timer -= (1.0 / fps)
-		var frames = anim_data[current_anim]["frames"]
+	var frame_dur = 1.0 / (fps * fps_mult)
+	
+	if anim_timer >= frame_dur:
+		anim_timer -= frame_dur
+		var frames = ANIM_MAP[current_anim]["frames"]
 		current_frame += 1
 		
 		# Handle animation end
@@ -336,14 +247,57 @@ func _process_animation(delta: float) -> void:
 				current_frame = current_frame % frames
 				
 		# Handle action hit frame
-		if current_anim in ["axe", "mining", "attack"] and current_frame == 6:
+		var hit_frame = 3 # New animations are shorter (6 or 4 frames), hit around frame 3
+		if current_anim in ["axe", "mining", "attack"] and current_frame == hit_frame:
 			if current_target and is_instance_valid(current_target):
-				current_target.interact(self)
+				if current_target.has_method("interact"):
+					current_target.interact(self)
 		
-		for layer_name in LAYERS:
-			var sprite: Sprite2D = visuals.get_node(layer_name.capitalize())
-			if sprite.texture:
-				sprite.frame_coords = Vector2i(current_frame, hairstyle_index if layer_name == "hair" else 0)
+		var row = ANIM_MAP[current_anim]["row"]
+		# For attack (6, 9, 12), we multiply current_dir by 3.
+		# For most others, it's just + current_dir
+		var actual_row = row
+		if current_anim == "attack":
+			actual_row = row + (current_dir * 3)
+		else:
+			actual_row = row + current_dir
+			
+		_update_sprites()
+
+func _update_sprites() -> void:
+	var row = ANIM_MAP[current_anim]["row"]
+	var actual_row = row
+	if current_anim == "attack":
+		actual_row = row + (current_dir * 3)
+	else:
+		actual_row = row + current_dir
+		
+	for layer_name in LAYERS:
+		var sprite: Sprite2D = visuals.get_node_or_null(layer_name)
+		if sprite and sprite.texture:
+			sprite.frame_coords = Vector2i(current_frame, actual_row)
+			
+	var tool_sprite: Sprite2D = visuals.get_node_or_null("Tool")
+	if tool_sprite:
+		if current_anim in ["attack", "axe", "mining"]:
+			tool_sprite.visible = true
+			if current_anim == "attack":
+				tool_sprite.texture = load("res://assets/new_assets/Cute_Fantasy/Player/Tools/Iron/Iron_Sword.png")
+				tool_sprite.hframes = 4
+				tool_sprite.vframes = 9
+				# Attack row in player body is 6 + (dir*3). In sword it's 0 + (dir*3).
+				var sword_row = actual_row - 6
+				tool_sprite.frame_coords = Vector2i(current_frame, sword_row)
+			elif current_anim in ["axe", "mining"]:
+				tool_sprite.texture = load("res://assets/new_assets/Cute_Fantasy/Player/Tools/Iron/Iron_Tools.png")
+				tool_sprite.hframes = 6
+				tool_sprite.vframes = 12
+				# Axe row in player body is 32 + dir. In tools it's 0 + dir.
+				# Mining row in player body is 35 + dir. In tools it's 3 + dir.
+				var tool_row = actual_row - 32
+				tool_sprite.frame_coords = Vector2i(current_frame, tool_row)
+		else:
+			tool_sprite.visible = false
 
 func _update_auto_target() -> void:
 	var interactables: Array[Node2D] = []
@@ -378,7 +332,7 @@ func _try_interact() -> void:
 		if dir_to_target.x != 0:
 			visuals.scale.x = -1 if dir_to_target.x < 0 else 1
 			
-		if current_target is Destructible or current_target is EnemySkeleton:
+		if current_target is Stone or current_target is EnemySkeleton or current_target is TreeObject:
 			var has_tool = false
 			
 			if current_target is EnemySkeleton:
@@ -409,13 +363,17 @@ func _try_interact() -> void:
 		else:
 			# Instant interact (like Boat)
 			current_target.interact(self)
+	else:
+		_use_hoe()
 
 func _update_equipment_visuals() -> void:
-	var cloth_sprite = visuals.get_node("Cloth")
-	var boots_sprite = visuals.get_node("Boots")
+	var chest_sprite = visuals.get_node_or_null("Chest")
+	var feet_sprite = visuals.get_node_or_null("Feet")
 	
-	cloth_sprite.visible = (InventoryManager.equipment.get("chest", "") != "")
-	boots_sprite.visible = (InventoryManager.equipment.get("boots", "") != "")
+	if chest_sprite:
+		chest_sprite.visible = (InventoryManager.equipment.get("chest", "") != "")
+	if feet_sprite:
+		feet_sprite.visible = (InventoryManager.equipment.get("boots", "") != "")
 
 func _on_item_consumed(p_color: Color) -> void:
 	var particle_scene = load("res://scenes/vfx/eat_particles.tscn")
@@ -425,3 +383,41 @@ func _on_item_consumed(p_color: Color) -> void:
 		# Set at player's head/mouth height
 		inst.position = Vector2(0, -10)
 		add_child(inst)
+# trigger cache rebuild
+
+func _use_hoe() -> void:
+	is_acting = true
+	_play_anim("axe")
+	var timer = get_tree().create_timer(0.3)
+	await timer.timeout
+	
+	var world_map = get_tree().current_scene.get_node_or_null("WorldMap")
+	if world_map:
+		var ground = world_map.get_node_or_null("GroundLayer")
+		if ground:
+			var dir_vec = Vector2.ZERO
+			if current_dir == 0: dir_vec = Vector2(0, 16)
+			elif current_dir == 1: dir_vec = Vector2(16, 0)
+			elif current_dir == 2: dir_vec = Vector2(0, -16)
+			if visuals.scale.x < 0 and current_dir == 1: dir_vec.x = -16
+			
+			var target_pos = global_position + dir_vec
+			var map_pos = ground.local_to_map(target_pos)
+			
+			var ts = ground.tile_set
+			var farmland_id = -1
+			if ts:
+				for i in range(ts.get_terrains_count(0)):
+					if ts.get_terrain_name(0, i) == "FarmLand":
+						farmland_id = i
+						break
+						
+			if farmland_id != -1:
+				var cell_data = ground.get_cell_tile_data(map_pos)
+				if cell_data and cell_data.get_custom_data("can_hoe") == true:
+					ground.set_cells_terrain_connect([map_pos], 0, farmland_id)
+				else:
+					print("Здесь нельзя копать! Нужна земля.")
+				
+	is_acting = false
+	_play_anim("idle")

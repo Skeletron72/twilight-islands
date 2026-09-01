@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://dggeonxuxgaa1"]
+
+[ext_resource type="Script" uid="uid://bxlxnlyqy12to" path="res://scripts/components/stone.gd" id="1_dest"]
+[ext_resource type="Texture2D" uid="uid://cciho3li2u3kf" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Rock_Animations/Rock_2_Anim.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://btn8jgmg2d5an" path="res://scripts/components/occluder.gd" id="3_occ"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_stone"]
+radius = 16.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_static"]
+size = Vector2(12, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_occluder"]
+size = Vector2(16, 12)
+
+[node name="Stone_2" type="Area2D" unique_id=520440204]
+y_sort_enabled = true
+position = Vector2(0, 4)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_dest")
+rock_type = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=483234350]
+position = Vector2(0, 4)
+texture = ExtResource("2_tex")
+offset = Vector2(0, -8)
+hframes = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1940899981]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_stone")
+
+[node name="StaticBody" type="StaticBody2D" parent="." unique_id=707049002]
+position = Vector2(0, 4)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody" unique_id=2100849818]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_static")
+
+[node name="OccluderArea" type="Area2D" parent="." unique_id=362632796]
+position = Vector2(0, -8)
+collision_layer = 0
+script = ExtResource("3_occ")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OccluderArea" unique_id=1436825926]
+shape = SubResource("RectangleShape2D_occluder")
