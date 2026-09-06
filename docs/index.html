@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Сумеречные острова — Development Dashboard</title>
+<style>
+:root{--bg:#0d0b13;--panel:#17131f;--panel2:#211a2d;--text:#eeeaf5;--muted:#a9a0b8;--accent:#b46cff;--accent2:#7f5af0;--good:#63d39a;--warn:#f0bd62;--bad:#ee7080;--line:#30263e}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% -10%,#3a2059 0,transparent 35%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:28px 20px 60px}.hero{padding:34px 0 22px}.eyebrow{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px}.hero h1{font-size:38px;margin:8px 0}.hero p{max-width:760px;color:var(--muted);font-size:16px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.card{background:rgba(23,19,31,.9);border:1px solid var(--line);border-radius:14px;padding:16px}.stat{font-size:28px;font-weight:800}.muted{color:var(--muted)}.layout{display:grid;grid-template-columns:2fr 1fr;gap:16px}.section{background:rgba(23,19,31,.92);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:16px}.section h2{margin:0 0 14px;font-size:20px}.task{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line)}.task:first-child{border-top:0}.box{width:18px;height:18px;border:1px solid #665879;border-radius:5px;flex:0 0 auto}.done .box{background:var(--good);border-color:var(--good)}.done .name{text-decoration:line-through;color:var(--muted)}.badge{margin-left:auto;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:700}.p0{background:#4d1e31;color:#ffb4bf}.p1{background:#4a391b;color:#ffd98b}.p2{background:#25384a;color:#a8d8ff}.tag{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:3px 7px;color:var(--muted);font-size:12px;margin:2px}.callout{border-left:3px solid var(--accent);padding:10px 14px;background:rgba(180,108,255,.08);border-radius:0 10px 10px 0}.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.step{background:var(--panel2);padding:8px 10px;border-radius:9px}.arrow{color:var(--accent)}.links a{display:block;padding:9px 0;border-top:1px solid var(--line);text-decoration:none}.links a:first-child{border-top:0}.footer{color:var(--muted);font-size:12px;margin-top:20px}@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}}@media(max-width:520px){.grid{grid-template-columns:1fr 1fr}.hero h1{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<div class="eyebrow">TWILIGHT ISLANDS · DEVELOPMENT</div>
+<h1>Сумеречные острова</h1>
+<p>Главная цель текущей версии: доказать core loop — подготовка дома → экспедиция → риск → добыча Сумрака → эвакуация/потеря лута → апгрейд → следующая экспедиция.</p>
+<div class="callout"><b>Текущий фокус:</b> Vertical Slice / Expedition Prototype. Не расширяем мир, пока один рейд не становится интересным и стабильным.</div>
+</header>
+<div class="grid">
+<div class="card"><div class="muted">MVP прогресс</div><div class="stat">0%</div></div>
+<div class="card"><div class="muted">P0 задач</div><div class="stat">25</div></div>
+<div class="card"><div class="muted">Состояние</div><div class="stat">Prototype</div></div>
+<div class="card"><div class="muted">Приоритет</div><div class="stat">Core Loop</div></div>
+</div>
+<div class="layout">
+<main>
+<section class="section"><h2>Текущий спринт — Expedition Prototype</h2>
+<div class="task"><span class="box"></span><span class="name">Создать ExpeditionIsland.tscn</span><span class="badge p0">P0</span></div>
+<div class="task"><span class="box"></span><span class="name">Home → Expedition → Home</span><span class="badge p0">P0</span></div>
+<div class="task"><span class="box"></span><span class="name">Разделить Expedition Loot / Permanent</span><span class="badge p0">P0</span></div>
+<div class="task"><span class="box"></span><span class="name">HP игрока + смерть</span><span class="badge p0">P0</span></div>
+<div class="task"><span class="box"></span><span class="name">Первая атака</span><span class="badge p0">P0</span></div>
+<div class="task"><span class="box"></span><span class="name">Первый враг</span><span class="badge p0">P0</span></div>
+<div class="task"><span class="box"></span><span class="name">Жила Сумрака + добыча</span><span class="badge p0">P0</span></div>
+<div class="task"><span class="box"></span><span class="name">Таймер и приближение шторма</span><span class="badge p0">P0</span></div>
+<div class="task"><span class="box"></span><span class="name">Эвакуация через плот</span><span class="badge p0">P0</span></div>
+<div class="task"><span class="box"></span><span class="name">Потеря expedition loot при смерти</span><span class="badge p0">P0</span></div>
+<div class="task"><span class="box"></span><span class="name">Первый апгрейд из Сумрака</span><span class="badge p0">P0</span></div>
+</section>
+<section class="section"><h2>Уже реализовано</h2>
+<span class="tag">Инвентарь</span><span class="tag">Крафт</span><span class="tag">Задания</span><span class="tag">Настройки</span><span class="tag">Социальный экран</span><span class="tag">Деревья</span><span class="tag">Камни</span><span class="tag">Палки</span><span class="tag">Ягоды</span><span class="tag">Грибы</span><span class="tag">Палатка</span><span class="tag">Костёр</span><span class="tag">Ящик</span><span class="tag">Кровать</span><span class="tag">Куры</span>
+</section>
+<section class="section"><h2>Core Loop</h2><div class="flow"><span class="step">Тихая Гавань</span><span class="arrow">→</span><span class="step">Подготовка</span><span class="arrow">→</span><span class="step">Экспедиция</span><span class="arrow">→</span><span class="step">Лут + опасность</span><span class="arrow">→</span><span class="step">Сумрак</span><span class="arrow">→</span><span class="step">Рискнуть / уйти</span><span class="arrow">→</span><span class="step">Эвакуация</span><span class="arrow">→</span><span class="step">Апгрейд</span></div></section>
+<section class="section"><h2>Definition of Done для MVP</h2><ul><li>Игрок может начать экспедицию с домашнего острова.</li><li>На экспедиции есть исследование, враг, добываемый Сумрак и ограниченный риск.</li><li>Игрок может успешно эвакуироваться и сохранить добычу.</li><li>При смерти expedition loot теряется, постоянный прогресс сохраняется.</li><li>Сумрак превращается в ощутимый апгрейд.</li><li>Игрок добровольно повторяет рейд минимум 3 раза.</li><li>После этого 3–5 тестеров понимают цикл без объяснения разработчика.</li></ul></section>
+</main>
+<aside>
+<section class="section"><h2>Правила разработки</h2><ol><li>Сначала core loop, потом контент.</li><li>Каждая система: <b>ввести → проверить → исправить → зафиксировать</b>.</li><li>P0 блокирует MVP; P1 улучшает; P2 позже.</li><li>Не добавлять новые большие системы до плейтеста.</li></ol></section>
+<section class="section links"><h2>Рабочие ссылки</h2><a href="https://github.com/Skeletron72/twilight-islands/issues">GitHub Issues — задачи и баги →</a><a href="https://github.com/Skeletron72/twilight-islands">GitHub Repository — код и документы →</a></section>
+<section class="section"><h2>Следующий milestone</h2><p><b>Vertical Slice 0.1</b></p><p class="muted">Один домашний остров + один экспедиционный остров + один враг + Сумрак + эвакуация + первый апгрейд.</p></section>
+</aside>
+</div>
+<div class="footer">Dashboard maintained as part of the Twilight Islands repository. Статусы и задачи обновляются через GitHub Issues и этот dashboard.</div>
+</div>
+</body></html>
