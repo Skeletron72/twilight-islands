@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://c25a8hlndpru6"]
+
+[ext_resource type="Script" uid="uid://dr1rynh33tgef" path="res://scripts/components/tent.gd" id="1_tent"]
+[ext_resource type="Texture2D" uid="uid://blwtqab7cql2u" path="res://assets/new_assets/Cute_Fantasy/Buildings/Buildings/Tent/Tent_Small.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
+size = Vector2(20, 16)
+
+[node name="Tent" type="StaticBody2D" unique_id=1653837689 groups=["interactable"]]
+y_sort_enabled = true
+collision_layer = 5
+script = ExtResource("1_tent")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=600630150]
+texture = ExtResource("2_tex")
+offset = Vector2(0, -32)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1348726992]
+polygon = PackedVector2Array(-20, -4, -22, -22, -18, -42, 0, -50, 18, -42, 22, -22, 20, -4, 10, -4, 0, -4, 0, -4, -10, -4)
+
+[node name="DoorArea" type="Area2D" parent="." unique_id=1503708874]
+position = Vector2(0, -4)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorArea" unique_id=699111183]
+shape = SubResource("RectangleShape2D_door")

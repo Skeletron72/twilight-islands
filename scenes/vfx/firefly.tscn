@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://firefly_vfx_01"]
+
+[ext_resource type="Script" path="res://scripts/components/firefly.gd" id="1_ff"]
+[ext_resource type="Texture2D" uid="uid://pixel_light_circle_33" path="res://assets/textures/lights/pixel_light_circle.png" id="2_ltex"]
+
+[node name="Firefly" type="Node2D"]
+z_index = 6
+script = ExtResource("1_ff")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+texture_filter = 1
+color = Color(0.82, 0.98, 0.4, 0.85)
+energy = 0.2
+texture = ExtResource("2_ltex")

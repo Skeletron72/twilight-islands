@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://m0b1l3ctrl5" path="res://scenes/ui/mobile_controls.tscn" id="4_mob"]
 [ext_resource type="PackedScene" uid="uid://hotbar123" path="res://scenes/ui/hotbar_ui.tscn" id="5_hotbar"]
 [ext_resource type="PackedScene" uid="uid://storageui123" path="res://scenes/ui/storage_ui.tscn" id="6_storage"]
+[ext_resource type="PackedScene" uid="uid://boatui123" path="res://scenes/ui/boat_ui.tscn" id="7_boat"]
 
 
 
@@ -105,4 +106,6 @@ horizontal_alignment = 1
 [node name="MobileControls" parent="." unique_id=1148640189 instance=ExtResource("4_mob")]
 layout_mode = 3
 anchors_preset = 0
+[node name="BoatUI" parent="." instance=ExtResource("7_boat")]
+
 [node name="DebugPanel" parent="." instance=ExtResource("10_debug")]

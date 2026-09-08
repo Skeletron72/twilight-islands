@@ -87,15 +87,23 @@ func _spawn_leaf_particles() -> void:
 	var particles = CPUParticles2D.new()
 	particles.emitting = false
 	particles.one_shot = true
-	particles.explosiveness = 0.8
-	particles.lifetime = 2.0 # Last much longer
+	particles.explosiveness = 0.9
+	particles.lifetime = 1.0 # Исчезают быстрее над землей
+	
+	if tree_size == "big":
+		particles.amount = 15
+	elif tree_size == "medium":
+		particles.amount = 10
+	else:
+		particles.amount = 5
 	
 	var tex_path = "res://assets/new_assets/Cute_Fantasy/Trees/Oak_Leaf_Particle.png"
 	if tree_type == "birch":
 		tex_path = "res://assets/new_assets/Cute_Fantasy/Trees/Birch_Leaf_Particle.png"
 	elif tree_type == "spruce":
 		tex_path = "res://assets/new_assets/Cute_Fantasy/Trees/Spruce_Needle_Particle.png"
-		
+	elif tree_type == "palm":
+		tex_path = "res://assets/new_assets/Cute_Fantasy_Desert/Props/Fallen_Palm_Leaves.png"
 	particles.texture = load(tex_path)
 	particles.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
 	
@@ -115,24 +123,28 @@ func _spawn_leaf_particles() -> void:
 	particles.position = Vector2(0, y_pos)
 	
 	# Float gently like a feather
-	particles.gravity = Vector2(0, 60.0) 
-	particles.direction = Vector2(0, -1) # Burst slightly upwards first
-	particles.spread = 60.0
-	particles.initial_velocity_min = 10.0
-	particles.initial_velocity_max = 25.0
+	particles.gravity = Vector2(0, 30.0) # Падают медленнее
+	particles.direction = Vector2(0, -1) 
+	particles.spread = 180.0 # Разлетаются кружась во все стороны
+	particles.initial_velocity_min = 20.0
+	particles.initial_velocity_max = 40.0
 	
-	# Slower rotation
-	particles.angular_velocity_min = -45.0
-	particles.angular_velocity_max = 45.0
+	# Быстрее крутятся
+	particles.angular_velocity_min = -180.0
+	particles.angular_velocity_max = 180.0
 	
-	particles.scale_amount_min = 0.6
-	particles.scale_amount_max = 1.0
+	if tree_type == "palm":
+		particles.scale_amount_min = 0.2
+		particles.scale_amount_max = 0.4
+	else:
+		particles.scale_amount_min = 0.5
+		particles.scale_amount_max = 0.9
 	
-	# Smooth fade out at the end
+	# Smooth fade out at the end - исчезают еще в воздухе
 	var curve = Curve.new()
 	curve.add_point(Vector2(0, 1))
-	curve.add_point(Vector2(0.6, 1))
-	curve.add_point(Vector2(1, 0))
+	curve.add_point(Vector2(0.4, 1))
+	curve.add_point(Vector2(0.9, 0))
 	particles.scale_amount_curve = curve
 	
 	add_child(particles)
@@ -144,15 +156,18 @@ func _chop_down(player: Node2D) -> void:
 	is_animating = true
 	current_state = State.STUMP
 	
+	GameStateManager.register_tree_chopped()
 	_spawn_drops(tree_size == "big", false)
 	
 	# Create the falling top sprite
 	var falling_top = Sprite2D.new()
 	falling_top.texture = sprite.texture
-	falling_top.hframes = 3
-	falling_top.frame = 2 # Top only
+	falling_top.hframes = sprite.hframes
+	falling_top.frame = 2 if sprite.hframes >= 3 else 1 # Top only
 	falling_top.global_position = sprite.global_position
 	falling_top.offset = sprite.offset
+	falling_top.z_index = int(global_position.y) + 1
+	falling_top.z_as_relative = false
 	get_tree().current_scene.add_child(falling_top)
 	
 	# Determine fall direction (away from player)
@@ -163,12 +178,12 @@ func _chop_down(player: Node2D) -> void:
 	# Fall animation
 	var fall_tween = create_tween()
 	fall_tween.set_parallel(true)
-	fall_tween.tween_property(falling_top, "rotation", fall_dir * (PI / 2.5), 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	fall_tween.tween_property(falling_top, "modulate:a", 0.0, 0.5).set_delay(0.2)
+	fall_tween.tween_property(falling_top, "rotation", fall_dir * (PI / 2.5), 0.8).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	fall_tween.tween_property(falling_top, "modulate:a", 0.0, 0.4).set_delay(0.4)
 	
 	# When fall finishes, delete the temporary sprite and re-enable interaction
 	var cleanup_tween = create_tween()
-	cleanup_tween.tween_interval(0.6)
+	cleanup_tween.tween_interval(0.9)
 	cleanup_tween.tween_callback(func():
 		falling_top.queue_free()
 		is_animating = false
@@ -176,6 +191,13 @@ func _chop_down(player: Node2D) -> void:
 	
 	# Change our own sprite to the stump (frame 0)
 	sprite.frame = 0
+	
+	# Сбрасываем шейдер перед удалением — иначе пень остается прозрачным
+	if sprite.material:
+		var mat := sprite.material as ShaderMaterial
+		if mat:
+			mat.set_shader_parameter("occlusion_amount", 0.0)
+			mat.set_shader_parameter("is_occluded", false)
 	
 	# Disable the occluder since the top is gone
 	if occluder:

@@ -1,16 +1,17 @@
-[gd_scene format=3 uid="uid://hotbar123"]
+[gd_scene load_steps=6 format=3 uid="uid://hotbar123"]
 
 [ext_resource type="Script" path="res://scripts/components/hotbar_ui.gd" id="1_hotbar"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/inventory/UI.png" id="tex_ui"]
-[ext_resource type="FontFile" path="res://assets/fonts/WarmPixel.ttf" id="font_warm"]
+[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Frames.png" id="2_frames"]
+[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Selectors.png" id="3_sel"]
+[ext_resource type="FontFile" path="res://assets/fonts/WarmPixel.ttf" id="4_font"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_slot"]
-atlas = ExtResource("tex_ui")
-region = Rect2(416, 256, 16, 16)
+atlas = ExtResource("2_frames")
+region = Rect2(144, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_shadow"]
-atlas = ExtResource("tex_ui")
-region = Rect2(416, 288, 16, 16)
+[sub_resource type="AtlasTexture" id="AtlasTexture_sel"]
+atlas = ExtResource("3_sel")
+region = Rect2(96, 768, 48, 48)
 
 [node name="HotbarUI" type="Control"]
 layout_mode = 3
@@ -19,10 +20,10 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -120.0
-offset_top = -80.0
-offset_right = 120.0
-offset_bottom = -16.0
+offset_left = -140.0
+offset_top = -78.0
+offset_right = 140.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_hotbar")
@@ -34,270 +35,369 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 10
 alignment = 1
 
 [node name="Slot0" type="Control" parent="HBoxContainer"]
-custom_minimum_size = Vector2(48, 48)
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
 [node name="Base" type="TextureRect" parent="HBoxContainer/Slot0"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = SubResource("AtlasTexture_slot")
-texture_filter = 1
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Shadow" type="TextureRect" parent="HBoxContainer/Slot0"]
+[node name="Selector" type="TextureRect" parent="HBoxContainer/Slot0"]
 visible = false
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_shadow")
-texture_filter = 1
+mouse_filter = 2
+texture = SubResource("AtlasTexture_sel")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="Icon" type="TextureRect" parent="HBoxContainer/Slot0"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
+offset_left = -19.0
+offset_top = -19.0
+offset_right = 19.0
+offset_bottom = 19.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_filter = 1
+mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
+[node name="KeyBadge" type="Label" parent="HBoxContainer/Slot0"]
+texture_filter = 1
+layout_mode = 1
+offset_left = 6.0
+offset_top = 4.0
+offset_right = 18.0
+offset_bottom = 18.0
+theme_override_colors/font_color = Color(1, 0.9, 0.65, 1)
+theme_override_colors/font_shadow_color = Color(0.14, 0.08, 0.07, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 12
+text = "1"
+
 [node name="Amount" type="Label" parent="HBoxContainer/Slot0"]
+visible = false
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -23.0
+offset_left = -30.0
+offset_top = -16.0
+offset_right = -4.0
+offset_bottom = -2.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.14, 0.08, 0.07, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("font_warm")
+theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 12
-text = "99"
 horizontal_alignment = 2
 
 [node name="Slot1" type="Control" parent="HBoxContainer"]
-custom_minimum_size = Vector2(48, 48)
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
 [node name="Base" type="TextureRect" parent="HBoxContainer/Slot1"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = SubResource("AtlasTexture_slot")
-texture_filter = 1
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Shadow" type="TextureRect" parent="HBoxContainer/Slot1"]
+[node name="Selector" type="TextureRect" parent="HBoxContainer/Slot1"]
 visible = false
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_shadow")
-texture_filter = 1
+mouse_filter = 2
+texture = SubResource("AtlasTexture_sel")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="Icon" type="TextureRect" parent="HBoxContainer/Slot1"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
+offset_left = -19.0
+offset_top = -19.0
+offset_right = 19.0
+offset_bottom = 19.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_filter = 1
+mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
+[node name="KeyBadge" type="Label" parent="HBoxContainer/Slot1"]
+texture_filter = 1
+layout_mode = 1
+offset_left = 6.0
+offset_top = 4.0
+offset_right = 18.0
+offset_bottom = 18.0
+theme_override_colors/font_color = Color(1, 0.9, 0.65, 1)
+theme_override_colors/font_shadow_color = Color(0.14, 0.08, 0.07, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 12
+text = "2"
+
 [node name="Amount" type="Label" parent="HBoxContainer/Slot1"]
+visible = false
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -23.0
+offset_left = -30.0
+offset_top = -16.0
+offset_right = -4.0
+offset_bottom = -2.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.14, 0.08, 0.07, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("font_warm")
+theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 12
-text = "99"
 horizontal_alignment = 2
 
 [node name="Slot2" type="Control" parent="HBoxContainer"]
-custom_minimum_size = Vector2(48, 48)
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
 [node name="Base" type="TextureRect" parent="HBoxContainer/Slot2"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = SubResource("AtlasTexture_slot")
-texture_filter = 1
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Shadow" type="TextureRect" parent="HBoxContainer/Slot2"]
+[node name="Selector" type="TextureRect" parent="HBoxContainer/Slot2"]
 visible = false
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_shadow")
-texture_filter = 1
+mouse_filter = 2
+texture = SubResource("AtlasTexture_sel")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="Icon" type="TextureRect" parent="HBoxContainer/Slot2"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
+offset_left = -19.0
+offset_top = -19.0
+offset_right = 19.0
+offset_bottom = 19.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_filter = 1
+mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
+[node name="KeyBadge" type="Label" parent="HBoxContainer/Slot2"]
+texture_filter = 1
+layout_mode = 1
+offset_left = 6.0
+offset_top = 4.0
+offset_right = 18.0
+offset_bottom = 18.0
+theme_override_colors/font_color = Color(1, 0.9, 0.65, 1)
+theme_override_colors/font_shadow_color = Color(0.14, 0.08, 0.07, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 12
+text = "3"
+
 [node name="Amount" type="Label" parent="HBoxContainer/Slot2"]
+visible = false
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -23.0
+offset_left = -30.0
+offset_top = -16.0
+offset_right = -4.0
+offset_bottom = -2.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.14, 0.08, 0.07, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("font_warm")
+theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 12
-text = "99"
 horizontal_alignment = 2
 
 [node name="Slot3" type="Control" parent="HBoxContainer"]
-custom_minimum_size = Vector2(48, 48)
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 
 [node name="Base" type="TextureRect" parent="HBoxContainer/Slot3"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = SubResource("AtlasTexture_slot")
-texture_filter = 1
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Shadow" type="TextureRect" parent="HBoxContainer/Slot3"]
+[node name="Selector" type="TextureRect" parent="HBoxContainer/Slot3"]
 visible = false
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -6.0
+offset_top = -6.0
+offset_right = 6.0
+offset_bottom = 6.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_shadow")
-texture_filter = 1
+mouse_filter = 2
+texture = SubResource("AtlasTexture_sel")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="Icon" type="TextureRect" parent="HBoxContainer/Slot3"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -16.0
-offset_top = -16.0
-offset_right = 16.0
-offset_bottom = 16.0
+offset_left = -19.0
+offset_top = -19.0
+offset_right = 19.0
+offset_bottom = 19.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_filter = 1
+mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
+[node name="KeyBadge" type="Label" parent="HBoxContainer/Slot3"]
+texture_filter = 1
+layout_mode = 1
+offset_left = 6.0
+offset_top = 4.0
+offset_right = 18.0
+offset_bottom = 18.0
+theme_override_colors/font_color = Color(1, 0.9, 0.65, 1)
+theme_override_colors/font_shadow_color = Color(0.14, 0.08, 0.07, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 12
+text = "4"
+
 [node name="Amount" type="Label" parent="HBoxContainer/Slot3"]
+visible = false
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -23.0
+offset_left = -30.0
+offset_top = -16.0
+offset_right = -4.0
+offset_bottom = -2.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0.14, 0.08, 0.07, 1)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
-theme_override_constants/outline_size = 2
-theme_override_fonts/font = ExtResource("font_warm")
+theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 12
-text = "99"
 horizontal_alignment = 2
-

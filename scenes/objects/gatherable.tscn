@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cfflspc1066cc"]
+
+[ext_resource type="Script" uid="uid://ie8j4tpg0e56" path="res://scripts/components/gatherable.gd" id="1_gath"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 12.0
+
+[node name="Gatherable" type="Area2D"]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_gath")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1")

@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://fallen_log_horiz_01"]
+
+[ext_resource type="Script" path="res://scripts/components/fallen_log.gd" id="1_log"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_interact"]
+size = Vector2(30, 14)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_block"]
+radius = 3.5
+height = 24.0
+
+[node name="FallenLogHorizontal" type="Area2D"]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_log")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+offset = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_interact")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, -3.5)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_block")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+volume_db = -4.0
+max_distance = 400.0
+bus = &"SFX"

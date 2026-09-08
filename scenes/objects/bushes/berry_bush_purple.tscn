@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://berry_bush_purp_01"]
+
+[ext_resource type="Script" path="res://scripts/components/bush.gd" id="1_bush"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/nature/sfx_bush.mp3" id="2_sfx"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bush"]
+radius = 8.0
+
+[sub_resource type="Gradient" id="Gradient_purp_light"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.45, 0.9)
+colors = PackedColorArray(1, 1, 1, 1, 0.4, 0.4, 0.4, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_purp_light"]
+gradient = SubResource("Gradient_purp_light")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.85, 0.85)
+width = 24
+height = 24
+
+[node name="BerryBushPurple" type="Area2D"]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_bush")
+bush_type = "berry_bush"
+berry_type = "purple"
+has_berries = true
+bush_size = -1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+offset = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_bush")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_sfx")
+volume_db = -6.0
+max_distance = 400.0
+bus = &"SFX"
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -6)
+scale = Vector2(2.5, 2.5)
+color = Color(0.7, 0.3, 0.95, 0.8)
+energy = 0.35
+texture = SubResource("GradientTexture2D_purp_light")

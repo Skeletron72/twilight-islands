@@ -1,18 +1,10 @@
 [gd_scene format=3 uid="uid://dd2av7pbf5j11"]
 
 [ext_resource type="Script" path="res://scripts/components/storage_box.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://cya4nt1s47vy1" path="res://assets/sprites/tileset/spr_tileset_sunnysideworld_16px.png" id="1_tex"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_universal_shadow"]
-atlas = ExtResource("1_tex")
-region = Rect2(560, 176, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_box"]
-atlas = ExtResource("1_tex")
-region = Rect2(560, 160, 16, 16)
+[ext_resource type="Texture2D" uid="uid://crate_anim_tex" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Break_Animations/Crate_Anim.png" id="1_crate"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_col"]
-size = Vector2(16, 16)
+size = Vector2(14, 12)
 
 [node name="StorageBox" type="StaticBody2D" unique_id=1251090626 groups=["interactable"]]
 y_sort_enabled = true
@@ -20,12 +12,16 @@ collision_layer = 5
 collision_mask = 1
 script = ExtResource("1_script")
 
-[node name="Shadow" type="Sprite2D" parent="." unique_id=1263680804]
-position = Vector2(0, 16)
-texture = SubResource("AtlasTexture_universal_shadow")
-
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=891005811]
-texture = SubResource("AtlasTexture_box")
+texture = ExtResource("1_crate")
+hframes = 6
+frame = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1825473644]
+position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_col")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+volume_db = -3.0
+max_distance = 400.0
+bus = &"SFX"

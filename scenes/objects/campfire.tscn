@@ -1,30 +1,17 @@
-[gd_scene load_steps=12 format=3 uid="uid://campfire123"]
+[gd_scene load_steps=10 format=3 uid="uid://campfire123"]
 
-[ext_resource type="Texture2D" uid="uid://items_atlas" path="res://assets/sprites/tileset/spr_tileset_sunnysideworld_16px.png" id="1_tex"]
-[ext_resource type="Script" uid="uid://campfire_script_uid" path="res://scripts/components/campfire.gd" id="2_script"]
-[ext_resource type="Texture2D" uid="uid://fire_atlas" path="res://assets/sprites/vfx/Fire/spr_deco_fire_01_strip4.png" id="3_fire"]
+[ext_resource type="Script" path="res://scripts/components/campfire.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/textures/objects/campfire_unlit.png" id="2_unlit_tex"]
+[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Other_Animations/Campfire_Anim.png" id="3_fire_anim_tex"]
+[ext_resource type="Texture2D" path="res://assets/textures/lights/pixel_light_circle.png" id="4_light_tex"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/ambience/ambience_campfire.mp3" id="5_fire_sfx"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_campfire"]
-atlas = ExtResource("1_tex")
-region = Rect2(592, 336, 32, 32)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_col"]
-size = Vector2(28, 28)
-
-[sub_resource type="Gradient" id="Gradient_light"]
-colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_light"]
-gradient = SubResource("Gradient_light")
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(0.8, 0.8)
-width = 128
-height = 128
+[sub_resource type="CircleShape2D" id="CircleShape2D_col"]
+radius = 7.0
 
 [sub_resource type="Animation" id="Animation_burn"]
 resource_name = "burn"
-length = 0.4
+length = 0.8
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -33,10 +20,10 @@ tracks/0/path = NodePath("FireSprite:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [0, 1, 2, 3]
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -45,10 +32,10 @@ tracks/1/path = NodePath("PointLight2D:energy")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
+"times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [0.8, 0.9]
+"values": [0.85, 1.0]
 }
 
 [sub_resource type="Animation" id="Animation_reset"]
@@ -75,7 +62,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.8]
+"values": [0.85]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fire"]
@@ -84,31 +71,44 @@ _data = {
 "burn": SubResource("Animation_burn")
 }
 
-[node name="Campfire" type="StaticBody2D" groups=["interactable"]
-y_sort_enabled = true]
+[node name="Campfire" type="StaticBody2D" groups=["interactable"]]
+y_sort_enabled = true
 collision_layer = 5
 collision_mask = 1
-script = ExtResource("2_script")
+script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = SubResource("AtlasTexture_campfire")
+texture = ExtResource("2_unlit_tex")
+offset = Vector2(0, -16)
 
 [node name="FireSprite" type="Sprite2D" parent="."]
-position = Vector2(-1, -7)
-scale = Vector2(2, 2)
-texture = ExtResource("3_fire")
-hframes = 4
+visible = false
+texture = ExtResource("3_fire_anim_tex")
+offset = Vector2(0, -16)
+hframes = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 1)
-shape = SubResource("RectangleShape2D_col")
+position = Vector2(0, -5)
+shape = SubResource("CircleShape2D_col")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
-color = Color(1, 0.611765, 0.239216, 1)
-energy = 0.8
-texture = SubResource("GradientTexture2D_light")
+visible = false
+texture_filter = 1
+position = Vector2(0, -10)
+scale = Vector2(3.5, 3.5)
+color = Color(1, 0.65, 0.25, 1)
+energy = 0.85
+texture = ExtResource("4_light_tex")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_fire")
 }
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_fire_sfx")
+volume_db = -4.0
+max_distance = 280.0
+attenuation = 1.5
+panning_strength = 1.0
+bus = &"Ambience"

@@ -11,7 +11,13 @@ signal ui_slots_changed(index: int)
 var inventory: Dictionary = {}
 # Temp inventory for raids
 var temp_inventory: Dictionary = {}
-var equipment: Dictionary = {"chest": "cloth_basic", "boots": "boots_basic"}
+var equipment: Dictionary = {
+	"head": "",
+	"accessory": "",
+	"chest": "cloth_basic",
+	"artifact": "",
+	"boots": "boots_basic"
+}
 signal equipment_changed
 
 

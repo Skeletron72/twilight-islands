@@ -1,8 +1,17 @@
 [gd_scene format=3 uid="uid://h8mmu7quecxj"]
 
 [ext_resource type="Script" uid="uid://dqws33mrbjyps" path="res://scripts/components/tree.gd" id="1_script"]
+[ext_resource type="Shader" uid="uid://b6wfjmaa1k6f0" path="res://resources/shaders/tree_occlusion.gdshader" id="2_kgrrq"]
 [ext_resource type="Texture2D" uid="uid://btufrtp6k8jol" path="res://assets/new_assets/Cute_Fantasy/Trees/Small_Spruce_Tree.png" id="2_tex"]
 [ext_resource type="Script" uid="uid://btn8jgmg2d5an" path="res://scripts/components/occluder.gd" id="3_occ"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wgwwb"]
+resource_local_to_scene = true
+shader = ExtResource("2_kgrrq")
+shader_parameter/player_pos = Vector2(0, 0)
+shader_parameter/is_occluded = false
+shader_parameter/circle_radius = 28.0
+shader_parameter/pixel_size = 2.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
 size = Vector2(12, 6)
@@ -23,6 +32,7 @@ tree_type = "spruce"
 tree_size = "small"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2077549642]
+material = SubResource("ShaderMaterial_wgwwb")
 position = Vector2(0, 17)
 texture = ExtResource("2_tex")
 offset = Vector2(0, -32)

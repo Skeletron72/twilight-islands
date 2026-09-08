@@ -1,19 +1,22 @@
 [gd_scene load_steps=2 format=3 uid="uid://eatparticles"]
 
-[ext_resource type="Script" uid="uid://eatpartscript" path="res://scripts/vfx/eat_particles.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/vfx/eat_particles.gd" id="1_script"]
 
 [node name="EatParticles" type="CPUParticles2D"]
-z_index = 10
+z_index = 950
+z_as_relative = false
 emitting = false
-amount = 5
-lifetime = 0.6
+amount = 6
+lifetime = 0.55
 one_shot = true
-explosiveness = 0.8
+explosiveness = 0.85
 direction = Vector2(0, -1)
-spread = 60.0
-gravity = Vector2(0, 250)
-initial_velocity_min = 60.0
-initial_velocity_max = 100.0
-scale_amount_min = 1.0
-scale_amount_max = 2.0
+spread = 50.0
+gravity = Vector2(0, 180)
+initial_velocity_min = 40.0
+initial_velocity_max = 70.0
+angular_velocity_min = -120.0
+angular_velocity_max = 120.0
+scale_amount_min = 0.2
+scale_amount_max = 0.35
 script = ExtResource("1_script")

@@ -1,10 +1,10 @@
 extends CanvasModulate
 
-@export var morning_color: Color = Color(1.0, 1.0, 1.0)
+@export var morning_color: Color = Color(1.04, 0.96, 0.90)
 @export var day_color: Color = Color(1.0, 1.0, 1.0)
-@export var dusk_color: Color = Color(0.7, 0.5, 0.5)
-@export var night_color: Color = Color(0.2, 0.2, 0.4)
-@export var transition_time: float = 2.0
+@export var dusk_color: Color = Color(0.88, 0.58, 0.48)
+@export var night_color: Color = Color(0.20, 0.22, 0.42)
+@export var transition_time: float = 2.5
 
 func _ready() -> void:
 	GameStateManager.time_changed.connect(_on_time_changed)

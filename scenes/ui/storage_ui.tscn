@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://storageui123"]
 
 [ext_resource type="Script" path="res://scripts/components/storage_ui.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/sprites/ui/inventory/Book.png" id="2_tex"]
+[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy_UI/UI/Book_UI.png" id="2_tex"]
 [ext_resource type="FontFile" path="res://assets/fonts/Chalkboard.ttf" id="3_font"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_book"]
 atlas = ExtResource("2_tex")
-region = Rect2(16, 32, 160, 96)
+region = Rect2(0, 0, 240, 144)
 
 [sub_resource type="LabelSettings" id="LabelSettings_title"]
 font = ExtResource("3_font")
@@ -55,17 +55,20 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 40
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 22
 
 [node name="HBoxContainer" type="HBoxContainer" parent="DimBackground/CenterContainer/BookPanel/Pages"]
 layout_mode = 2
+theme_override_constants/separation = 40
 
 [node name="LeftPage" type="VBoxContainer" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
 theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage"]
@@ -77,11 +80,19 @@ horizontal_alignment = 1
 [node name="PlayerGrid" type="GridContainer" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage"]
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/h_separation = 3
+theme_override_constants/v_separation = 3
 columns = 4
+
+[node name="BottomSpacer" type="Control" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
 
 [node name="RightPage" type="VBoxContainer" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
 theme_override_constants/separation = 8
 
 [node name="Title" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage"]
@@ -93,4 +104,16 @@ horizontal_alignment = 1
 [node name="ChestGrid" type="GridContainer" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage"]
 layout_mode = 2
 size_flags_horizontal = 4
-columns = 4
+theme_override_constants/h_separation = 3
+theme_override_constants/v_separation = 3
+columns = 2
+
+[node name="BreakButton" type="Button" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.65, 0.2, 0.15, 1)
+text = "Разломать ящик"
+flat = true

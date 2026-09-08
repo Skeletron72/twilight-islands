@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://tent_interior_scene_01"]
+
+[ext_resource type="Script" path="res://scripts/components/tent_interior.gd" id="1_interior"]
+[ext_resource type="Texture2D" uid="uid://tent_interior_tex" path="res://assets/new_assets/Cute_Fantasy/Buildings/Buildings/Tent/Tent_Interior.png" id="2_tex"]
+[ext_resource type="Texture2D" uid="uid://pixel_light_circle_33" path="res://assets/textures/lights/pixel_light_circle.png" id="3_light"]
+[ext_resource type="Script" path="res://scripts/components/tent_exit.gd" id="4_exit"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bottom"]
+size = Vector2(48, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(20, 14)
+
+[node name="TentInterior" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_interior")
+
+[node name="DarkBackground" type="ColorRect" parent="."]
+z_index = -100
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
+color = Color(0.04, 0.03, 0.05, 1)
+
+[node name="TentSprite" type="Sprite2D" parent="."]
+z_index = -50
+texture = ExtResource("2_tex")
+
+[node name="Walls" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="LeftWall" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(-6, -42, -12, -32, -18, -22, -23, -10, -23, 44, -36, 44, -36, -45)
+
+[node name="RightWall" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(6, -42, 12, -32, 18, -22, 23, -10, 23, 44, 36, 44, 36, -45)
+
+[node name="TopWall" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(-8, -42, 0, -48, 8, -42, 0, -40)
+
+[node name="BottomBarrier" type="CollisionShape2D" parent="Walls"]
+position = Vector2(0, 48)
+shape = SubResource("RectangleShape2D_bottom")
+
+[node name="WarmLight" type="PointLight2D" parent="."]
+texture_filter = 1
+position = Vector2(0, 5)
+scale = Vector2(2.5, 2.5)
+color = Color(1, 0.82, 0.52, 0.95)
+energy = 0.75
+texture = ExtResource("3_light")
+
+[node name="ExitDoor" type="Area2D" parent="." groups=["interactable"]]
+position = Vector2(0, 36)
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("4_exit")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor"]
+shape = SubResource("RectangleShape2D_exit")

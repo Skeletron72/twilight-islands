@@ -7,11 +7,20 @@ extends CanvasLayer
 @onready var book_btn: TextureButton = $BookToggleContainer/BookToggleBtn
 @onready var book_key_lbl: Label = $BookToggleContainer/KeyLabel
 
+var health_container: HBoxContainer
+var health_bar: ProgressBar
+var health_label: Label
+var heart_icon: TextureRect
+
+var stamina_container: HBoxContainer
+var stamina_bar: ProgressBar
+var stamina_label: Label
+var stamina_icon: TextureRect
+var stamina_fill_style: StyleBoxFlat
+
 func _ready() -> void:
-
-	
-
 	show()
+	_setup_stats_hud()
 	GameStateManager.time_changed.connect(_on_time_changed)
 	GameStateManager.day_changed.connect(_on_day_changed)
 	GameStateManager.player_died.connect(_on_player_died)
@@ -147,3 +156,166 @@ func _update_book_btn_textures() -> void:
 	else:
 		book_btn.texture_normal = tex_closed
 		book_btn.texture_hover = tex_closed_hover
+
+func _setup_stats_hud() -> void:
+	# --- HEALTH BAR ---
+	health_container = HBoxContainer.new()
+	health_container.name = "HealthContainer"
+	health_container.position = Vector2(70, 18)
+	health_container.custom_minimum_size = Vector2(130, 16)
+	health_container.add_theme_constant_override("separation", 6)
+	health_container.alignment = BoxContainer.ALIGNMENT_BEGIN
+	
+	heart_icon = TextureRect.new()
+	heart_icon.name = "HeartIcon"
+	heart_icon.custom_minimum_size = Vector2(16, 16)
+	heart_icon.pivot_offset = Vector2(8, 8)
+	heart_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	heart_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	var heart_tex = AtlasTexture.new()
+	heart_tex.atlas = preload("res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Icons.png")
+	heart_tex.region = Rect2(0, 0, 16, 16)
+	heart_icon.texture = heart_tex
+	health_container.add_child(heart_icon)
+	
+	health_bar = ProgressBar.new()
+	health_bar.name = "HealthBar"
+	health_bar.custom_minimum_size = Vector2(64, 7)
+	health_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	health_bar.show_percentage = false
+	
+	var hp_bg = StyleBoxFlat.new()
+	hp_bg.anti_aliasing = false
+	hp_bg.bg_color = Color(0.1, 0.1, 0.12, 0.9)
+	hp_bg.border_width_left = 1; hp_bg.border_width_top = 1; hp_bg.border_width_right = 1; hp_bg.border_width_bottom = 1
+	hp_bg.border_color = Color(0.02, 0.02, 0.02, 1.0)
+	
+	var hp_fill = StyleBoxFlat.new()
+	hp_fill.anti_aliasing = false
+	hp_fill.bg_color = Color(0.9, 0.18, 0.22, 1.0)
+	hp_fill.border_width_left = 1; hp_fill.border_width_top = 1; hp_fill.border_width_right = 1; hp_fill.border_width_bottom = 1
+	hp_fill.border_color = Color(0, 0, 0, 0)
+	
+	health_bar.add_theme_stylebox_override("background", hp_bg)
+	health_bar.add_theme_stylebox_override("fill", hp_fill)
+	health_bar.max_value = GameStateManager.max_health
+	health_bar.value = GameStateManager.current_health
+	health_container.add_child(health_bar)
+	
+	health_label = Label.new()
+	health_label.name = "HealthLabel"
+	health_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var lbl_settings = LabelSettings.new()
+	lbl_settings.font = preload("res://assets/fonts/WarmPixel.ttf")
+	lbl_settings.font_size = 11
+	lbl_settings.font_color = Color(1, 1, 1, 1)
+	lbl_settings.outline_size = 3
+	lbl_settings.outline_color = Color(0, 0, 0, 1)
+	health_label.label_settings = lbl_settings
+	health_label.text = "%d/%d" % [int(ceil(GameStateManager.current_health)), int(GameStateManager.max_health)]
+	health_container.add_child(health_label)
+	
+	add_child(health_container)
+	GameStateManager.health_changed.connect(_on_health_changed)
+	GameStateManager.player_hurt.connect(_on_player_hurt_hud)
+
+	# --- STAMINA BAR ---
+	stamina_container = HBoxContainer.new()
+	stamina_container.name = "StaminaContainer"
+	stamina_container.position = Vector2(70, 36)
+	stamina_container.custom_minimum_size = Vector2(130, 16)
+	stamina_container.add_theme_constant_override("separation", 6)
+	stamina_container.alignment = BoxContainer.ALIGNMENT_BEGIN
+	
+	stamina_icon = TextureRect.new()
+	stamina_icon.name = "StaminaIcon"
+	stamina_icon.custom_minimum_size = Vector2(16, 16)
+	stamina_icon.pivot_offset = Vector2(8, 8)
+	stamina_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	stamina_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	var sta_tex = AtlasTexture.new()
+	sta_tex.atlas = preload("res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Icons.png")
+	sta_tex.region = Rect2(144, 0, 16, 16)
+	stamina_icon.texture = sta_tex
+	stamina_container.add_child(stamina_icon)
+	
+	stamina_bar = ProgressBar.new()
+	stamina_bar.name = "StaminaBar"
+	stamina_bar.custom_minimum_size = Vector2(64, 7)
+	stamina_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	stamina_bar.show_percentage = false
+	
+	var sta_bg = StyleBoxFlat.new()
+	sta_bg.anti_aliasing = false
+	sta_bg.bg_color = Color(0.1, 0.1, 0.12, 0.9)
+	sta_bg.border_width_left = 1; sta_bg.border_width_top = 1; sta_bg.border_width_right = 1; sta_bg.border_width_bottom = 1
+	sta_bg.border_color = Color(0.02, 0.02, 0.02, 1.0)
+	
+	stamina_fill_style = StyleBoxFlat.new()
+	stamina_fill_style.anti_aliasing = false
+	stamina_fill_style.bg_color = Color(0.2, 0.85, 0.35, 1.0)
+	stamina_fill_style.border_width_left = 1; stamina_fill_style.border_width_top = 1; stamina_fill_style.border_width_right = 1; stamina_fill_style.border_width_bottom = 1
+	stamina_fill_style.border_color = Color(0, 0, 0, 0)
+	
+	stamina_bar.add_theme_stylebox_override("background", sta_bg)
+	stamina_bar.add_theme_stylebox_override("fill", stamina_fill_style)
+	stamina_bar.max_value = GameStateManager.max_stamina
+	stamina_bar.value = GameStateManager.current_stamina
+	stamina_container.add_child(stamina_bar)
+	
+	stamina_label = Label.new()
+	stamina_label.name = "StaminaLabel"
+	stamina_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var sta_lbl_settings = LabelSettings.new()
+	sta_lbl_settings.font = preload("res://assets/fonts/WarmPixel.ttf")
+	sta_lbl_settings.font_size = 11
+	sta_lbl_settings.font_color = Color(1, 1, 1, 1)
+	sta_lbl_settings.outline_size = 3
+	sta_lbl_settings.outline_color = Color(0, 0, 0, 1)
+	stamina_label.label_settings = sta_lbl_settings
+	stamina_label.text = "%d/%d" % [int(ceil(GameStateManager.current_stamina)), int(GameStateManager.max_stamina)]
+	stamina_container.add_child(stamina_label)
+	
+	add_child(stamina_container)
+	GameStateManager.stamina_changed.connect(_on_stamina_changed_hud)
+
+func _on_health_changed(new_val: float, max_val: float) -> void:
+	if health_bar:
+		health_bar.max_value = max_val
+		var tw = create_tween()
+		tw.tween_property(health_bar, "value", new_val, 0.2)
+	if health_label:
+		health_label.text = "%d/%d" % [int(ceil(new_val)), int(max_val)]
+	if heart_icon:
+		var tw_h = create_tween()
+		tw_h.tween_property(heart_icon, "scale", Vector2(1.3, 1.3), 0.08)
+		tw_h.tween_property(heart_icon, "scale", Vector2(1.0, 1.0), 0.12)
+
+func _on_player_hurt_hud() -> void:
+	if health_container:
+		var tw = create_tween()
+		tw.tween_property(health_container, "position:x", 67.0, 0.03)
+		tw.tween_property(health_container, "position:x", 73.0, 0.04)
+		tw.tween_property(health_container, "position:x", 70.0, 0.03)
+
+func _on_stamina_changed_hud(new_val: float, max_val: float) -> void:
+	if stamina_bar:
+		stamina_bar.max_value = max_val
+		var tw = create_tween()
+		tw.tween_property(stamina_bar, "value", new_val, 0.12)
+	if stamina_label:
+		stamina_label.text = "%d/%d" % [int(ceil(new_val)), int(max_val)]
+	if stamina_fill_style:
+		if GameStateManager.is_exhausted:
+			stamina_fill_style.bg_color = Color(0.92, 0.35, 0.2, 1.0)
+			if stamina_container:
+				var tw_s = create_tween()
+				tw_s.tween_property(stamina_container, "position:x", 67.0, 0.03)
+				tw_s.tween_property(stamina_container, "position:x", 73.0, 0.04)
+				tw_s.tween_property(stamina_container, "position:x", 70.0, 0.03)
+		else:
+			stamina_fill_style.bg_color = Color(0.2, 0.85, 0.35, 1.0)
+	if stamina_icon:
+		var tw_i = create_tween()
+		tw_i.tween_property(stamina_icon, "scale", Vector2(1.2, 1.2), 0.06)
+		tw_i.tween_property(stamina_icon, "scale", Vector2(1.0, 1.0), 0.1)

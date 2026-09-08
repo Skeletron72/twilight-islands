@@ -12,28 +12,70 @@ var RECIPES = {
 	"stone_sword": {"stick": 1, "stone": 2},
 	"cloth_basic": {"wood": 10},
 	"campfire": {"wood": 5, "stone": 3},
-	"storage_box": {"wood": 10}
+	"storage_box": {"wood": 10},
+	"tent": {"wood": 6, "stick": 4},
+	"orange_bed": {"wood": 4, "stick": 2, "cloth_basic": 1}
 }
 
 var ITEMS = {
 	# --- РЕСУРСЫ ---
 		"red_berry": {
-		"name": "Рубиновая ягода",
-		"desc": "Сочная ягода. Отлично утоляет голод и немного лечит.",
+		"name": "Рубиника",
+		"desc": "Сочная алая ягода. Отлично утоляет голод и заживляет раны.",
 		"max_stack": 99,
-		"hunger_restore": 20.0,
-		"health_restore": 15.0,
-		"grid_pos": Vector2(13, 3),
-		"particle_color": Color(0.9, 0.1, 0.1, 1.0)
+		"hunger_restore": 25.0,
+		"health_restore": 20.0,
+		"stamina_restore": 5.0,
+		"custom_atlas": "res://assets/new_assets/Cute_Fantasy/Icons/No Outline/Food_Icons_NO_Outline.png",
+		"custom_region": Rect2(64, 128, 16, 16),
+		"particle_color": Color(0.95, 0.18, 0.22, 1.0)
 	},
-	"yellow_berry": {
-		"name": "Золотистая ягода",
-		"desc": "Терпкая ягода. Слегка утоляет голод и бодрит.",
+	"purple_berry": {
+		"name": "Сумеречница",
+		"desc": "Таинственная ночная ягода. Освежает дух, восстанавливает силы (и ману).",
 		"max_stack": 99,
 		"hunger_restore": 10.0,
+		"health_restore": 5.0,
+		"stamina_restore": 35.0,
+		"mana_restore": 25.0, # Задел на будущее для магии
+		"custom_atlas": "res://assets/new_assets/Cute_Fantasy/Icons/No Outline/Food_Icons_NO_Outline.png",
+		"custom_region": Rect2(80, 128, 16, 16),
+		"particle_color": Color(0.65, 0.25, 0.85, 1.0)
+	},
+	"red_mushroom": {
+		"name": "Огневик",
+		"desc": "Пряный гриб с алой шляпкой. Согревает кровь, утоляет голод и заживляет раны.",
+		"max_stack": 99,
+		"hunger_restore": 30.0,
+		"health_restore": 35.0,
+		"stamina_restore": 10.0,
+		"custom_atlas": "res://assets/new_assets/Cute_Fantasy/Icons/No Outline/Food_Icons_NO_Outline.png",
+		"custom_region": Rect2(64, 16, 16, 16),
+		"particle_color": Color(0.95, 0.25, 0.15, 1.0)
+	},
+	"blue_mushroom": {
+		"name": "Лазурник",
+		"desc": "Прохладный мерцающий гриб. Снимает усталость и мгновенно восстанавливает выносливость.",
+		"max_stack": 99,
+		"hunger_restore": 15.0,
+		"health_restore": 10.0,
+		"stamina_restore": 50.0,
+		"mana_restore": 15.0,
+		"custom_atlas": "res://assets/new_assets/Cute_Fantasy/Icons/No Outline/Food_Icons_NO_Outline.png",
+		"custom_region": Rect2(80, 16, 16, 16),
+		"particle_color": Color(0.25, 0.65, 1.0, 1.0)
+	},
+	"purple_mushroom": {
+		"name": "Сумеречник",
+		"desc": "Светящийся гриб, пропитанный ночным туманом. Дарует мощный прилив древней магии.",
+		"max_stack": 99,
+		"hunger_restore": 15.0,
+		"health_restore": 15.0,
 		"stamina_restore": 25.0,
-		"grid_pos": Vector2(12, 3),
-		"particle_color": Color(0.95, 0.85, 0.1, 1.0)
+		"mana_restore": 50.0,
+		"custom_atlas": "res://assets/new_assets/Cute_Fantasy/Icons/No Outline/Food_Icons_NO_Outline.png",
+		"custom_region": Rect2(80, 0, 16, 16),
+		"particle_color": Color(0.75, 0.35, 0.95, 1.0)
 	},
 
 	"wood": {
@@ -59,6 +101,13 @@ var ITEMS = {
 		"desc": "Светящаяся в темноте руда.",
 		"max_stack": 50,
 		"grid_pos": Vector2(5, 3)
+	},
+	"coin": {
+		"name": "Золотая монета",
+		"desc": "Блестящая золотая монета для торговли с жителями.",
+		"max_stack": 9999,
+		"custom_atlas": "res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Icons.png",
+		"custom_region": Rect2(208, 48, 16, 16)
 	},
 	
 	# --- ОДЕЖДА ---
@@ -137,7 +186,8 @@ var ITEMS = {
 		"max_stack": 10,
 		"placeable": true,
 		"scene": "res://scenes/objects/campfire.tscn",
-		"grid_pos": Vector2(2, 32)
+		"custom_atlas": "res://assets/textures/objects/campfire_unlit.png",
+		"custom_region": Rect2(0, 16, 16, 16)
 	},
 	"storage_box": {
 		"name": "Деревянный сундук",
@@ -146,6 +196,24 @@ var ITEMS = {
 		"placeable": true,
 		"scene": "res://scenes/objects/storage_box.tscn",
 		"grid_pos": Vector2(4, 32)
+	},
+	"tent": {
+		"name": "Палатка",
+		"desc": "Уютный походный шатёр. Защитит от ветра и ночного холода.",
+		"max_stack": 5,
+		"placeable": true,
+		"scene": "res://scenes/objects/buildings/tent.tscn",
+		"custom_atlas": "res://assets/textures/icons/tent_icon.png",
+		"custom_region": Rect2(0, 0, 16, 16)
+	},
+	"orange_bed": {
+		"name": "Оранжевая кровать",
+		"desc": "Уютная односпальная кровать. Позволяет скоротать ночь и набраться сил. (Крутить на R)",
+		"max_stack": 5,
+		"placeable": true,
+		"scene": "res://scenes/objects/furniture/orange_bed.tscn",
+		"custom_atlas": "res://assets/new_assets/Cute_Fantasy/Buildings/House_Decor/Beds.png",
+		"custom_region": Rect2(144, 8, 16, 16)
 	}
 }
 

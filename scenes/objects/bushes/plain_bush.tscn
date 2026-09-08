@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://plain_bush_01"]
+
+[ext_resource type="Script" path="res://scripts/components/bush.gd" id="1_bush"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/nature/sfx_bush.mp3" id="2_sfx"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bush"]
+radius = 8.0
+
+[node name="PlainBush" type="Area2D"]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_bush")
+bush_type = "plain_bush"
+berry_type = "none"
+has_berries = false
+bush_size = -1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+offset = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_bush")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_sfx")
+volume_db = -6.0
+max_distance = 400.0
+bus = &"SFX"
