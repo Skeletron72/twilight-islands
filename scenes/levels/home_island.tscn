@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://cxab3213x0x" path="res://scenes/characters/player/player.tscn" id="1_plr"]
 [ext_resource type="PackedScene" uid="uid://dfoo5613x3x" path="res://scenes/ui/ui_layer.tscn" id="4_ui"]
 [ext_resource type="PackedScene" path="res://scenes/objects/stones/stone_8.tscn" id="6_cycno"]
-[ext_resource type="Script" uid="uid://dqws33mrbjyps" path="res://scripts/components/tree.gd" id="6_tmrdu"]
 [ext_resource type="PackedScene" uid="uid://jpwd31ashmqw" path="res://scenes/levels/extraction_zone.tscn" id="8_boat"]
 [ext_resource type="PackedScene" path="res://scenes/objects/stones/stone_7.tscn" id="10_pvt85"]
 [ext_resource type="PackedScene" path="res://scenes/objects/stones/stone_6.tscn" id="11_cycno"]
@@ -19,7 +18,6 @@
 [ext_resource type="PackedScene" uid="uid://dggeonxuxgaa1" path="res://scenes/objects/stones/stone_2.tscn" id="22_noste"]
 [ext_resource type="PackedScene" path="res://scenes/objects/stones/stone_3.tscn" id="23_i51xp"]
 [ext_resource type="PackedScene" path="res://scenes/objects/stones/stone_5.tscn" id="25_817gm"]
-[ext_resource type="Script" uid="uid://bxlxnlyqy12to" path="res://scripts/components/stone.gd" id="27_glinh"]
 [ext_resource type="PackedScene" path="res://scenes/objects/stones/stone_9.tscn" id="29_gh1rs"]
 [ext_resource type="PackedScene" path="res://scenes/objects/stones/stone_10.tscn" id="30_3yv6x"]
 [ext_resource type="PackedScene" path="res://scenes/objects/stones/stone_12.tscn" id="32_07ioa"]
@@ -32,12 +30,9 @@
 [ext_resource type="PackedScene" uid="uid://bhgnlhg08wi5o" path="res://scenes/objects/trees/palm_tree_2.tscn" id="35_i51xp"]
 [ext_resource type="PackedScene" path="res://scenes/objects/bushes/desert_fern.tscn" id="36_gh1rs"]
 [ext_resource type="PackedScene" path="res://scenes/objects/bushes/desert_fern_dead.tscn" id="37_3yv6x"]
-[ext_resource type="Script" uid="uid://crtc3ip8n25rq" path="res://scripts/components/bush.gd" id="56_dpu66"]
-[ext_resource type="Script" uid="uid://0ybweohis8s3" path="res://scripts/components/fallen_log_vertical.gd" id="76_k8jqj"]
-[ext_resource type="Script" uid="uid://421rgsi0kxso" path="res://scripts/components/fallen_log.gd" id="77_gv8i2"]
 [ext_resource type="PackedScene" path="res://scenes/objects/buildings/cave_entrance.tscn" id="cave_entrance_scene"]
 [ext_resource type="PackedScene" uid="uid://bcon4px6fqy1w" path="res://scenes/characters/chicken.tscn" id="chicken_scene"]
-[ext_resource type="TileSet" uid="uid://dcinsxthwxsap" path="res://resources/cute_tileset.tres" id="cute_ts"]
+[ext_resource type="TileSet" uid="uid://dcinsxthwxsap" path="res://resources/cute_tileset_backup_cliffs.tres" id="cute_ts"]
 [ext_resource type="Script" uid="uid://dwwh8agna7gbs" path="res://scripts/components/day_night_cycle.gd" id="dnc_script"]
 [ext_resource type="PackedScene" path="res://scenes/objects/decor/fallen_log_horizontal.tscn" id="fallen_log_scene"]
 [ext_resource type="PackedScene" path="res://scenes/objects/decor/fallen_log_vertical.tscn" id="fallen_log_vert_scene"]
@@ -127,3472 +122,1381 @@ position = Vector2(420, 146)
 z_as_relative = false
 y_sort_enabled = true
 
-[node name="SpawnedTree_Meadow_0" type="Area2D" parent="Interactables" unique_id=236947659 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_0" parent="Interactables" unique_id=236947659 instance=ExtResource("20_noste")]
 position = Vector2(1990.4224, 665.27045)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_1" type="Area2D" parent="Interactables" unique_id=15937219 instance=ExtResource("19_5cwbm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_1" parent="Interactables" unique_id=15937219 instance=ExtResource("19_5cwbm")]
 position = Vector2(582.4807, 775.2515)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_2" type="Area2D" parent="Interactables" unique_id=1436146994 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_2" parent="Interactables" unique_id=1436146994 instance=ExtResource("17_cydvy")]
 position = Vector2(246.87578, 359.4365)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_3" type="Area2D" parent="Interactables" unique_id=961471965 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_3" parent="Interactables" unique_id=961471965 instance=ExtResource("14_oa5b6")]
 position = Vector2(1014.26355, 966.6521)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_4" type="Area2D" parent="Interactables" unique_id=802303853 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_4" parent="Interactables" unique_id=802303853 instance=ExtResource("21_i51xp")]
 position = Vector2(697.67505, 983.96924)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_5" type="Area2D" parent="Interactables" unique_id=72073010 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_5" parent="Interactables" unique_id=72073010 instance=ExtResource("22_817gm")]
 position = Vector2(2375.8064, 488.85464)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_6" type="Area2D" parent="Interactables" unique_id=1644925270 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_6" parent="Interactables" unique_id=1644925270 instance=ExtResource("20_noste")]
 position = Vector2(1030.6755, 1032.9678)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_7" type="Area2D" parent="Interactables" unique_id=900903967 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_7" parent="Interactables" unique_id=900903967 instance=ExtResource("17_cydvy")]
 position = Vector2(2502.5874, 280.7599)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_8" type="Area2D" parent="Interactables" unique_id=88230443 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_8" parent="Interactables" unique_id=88230443 instance=ExtResource("22_817gm")]
 position = Vector2(345.82367, 488.4415)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_9" type="Area2D" parent="Interactables" unique_id=424185621 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_9" parent="Interactables" unique_id=424185621 instance=ExtResource("20_noste")]
 position = Vector2(2232.2273, 183.968)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_10" type="Area2D" parent="Interactables" unique_id=1075804280 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_10" parent="Interactables" unique_id=1075804280 instance=ExtResource("20_noste")]
 position = Vector2(1846.9725, 822.67224)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_11" type="Area2D" parent="Interactables" unique_id=1874117018 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_11" parent="Interactables" unique_id=1874117018 instance=ExtResource("17_cydvy")]
 position = Vector2(1991.857, 1014.9492)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_12" type="Area2D" parent="Interactables" unique_id=1609787236 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_12" parent="Interactables" unique_id=1609787236 instance=ExtResource("21_i51xp")]
 position = Vector2(2470.6936, 168.7585)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_13" type="Area2D" parent="Interactables" unique_id=1747112549 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_13" parent="Interactables" unique_id=1747112549 instance=ExtResource("20_noste")]
 position = Vector2(2247.4565, 534.7626)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_14" type="Area2D" parent="Interactables" unique_id=648404006 instance=ExtResource("19_5cwbm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_14" parent="Interactables" unique_id=648404006 instance=ExtResource("19_5cwbm")]
 position = Vector2(568.0211, 982.15894)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_15" type="Area2D" parent="Interactables" unique_id=1730298658 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_15" parent="Interactables" unique_id=1730298658 instance=ExtResource("14_oa5b6")]
 position = Vector2(774.43475, 838.5)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_16" type="Area2D" parent="Interactables" unique_id=1474508246 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_16" parent="Interactables" unique_id=1474508246 instance=ExtResource("21_i51xp")]
 position = Vector2(265.61, 312.6165)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_17" type="Area2D" parent="Interactables" unique_id=1037092974 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_17" parent="Interactables" unique_id=1037092974 instance=ExtResource("21_i51xp")]
 position = Vector2(1449.8104, 312.45853)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_18" type="Area2D" parent="Interactables" unique_id=650738989 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_18" parent="Interactables" unique_id=650738989 instance=ExtResource("14_oa5b6")]
 position = Vector2(2345.253, 214.21056)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_19" type="Area2D" parent="Interactables" unique_id=1932251999 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_19" parent="Interactables" unique_id=1932251999 instance=ExtResource("17_cydvy")]
 position = Vector2(2520.8306, 518.1246)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_20" type="Area2D" parent="Interactables" unique_id=28583902 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_20" parent="Interactables" unique_id=28583902 instance=ExtResource("17_cydvy")]
 position = Vector2(952.2874, 326.72214)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_21" type="Area2D" parent="Interactables" unique_id=186723715 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_21" parent="Interactables" unique_id=186723715 instance=ExtResource("17_cydvy")]
 position = Vector2(969.38367, 857.49475)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_22" type="Area2D" parent="Interactables" unique_id=160669426 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_22" parent="Interactables" unique_id=160669426 instance=ExtResource("22_817gm")]
 position = Vector2(2616.1277, 937.5784)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_23" type="Area2D" parent="Interactables" unique_id=823421632 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_23" parent="Interactables" unique_id=823421632 instance=ExtResource("22_817gm")]
 position = Vector2(1990.9437, 248.15944)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_24" type="Area2D" parent="Interactables" unique_id=2125677037 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_24" parent="Interactables" unique_id=2125677037 instance=ExtResource("20_noste")]
 position = Vector2(2279.61, 984.4704)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_25" type="Area2D" parent="Interactables" unique_id=1773153694 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_25" parent="Interactables" unique_id=1773153694 instance=ExtResource("21_i51xp")]
 position = Vector2(841.18555, 231.61298)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_26" type="Area2D" parent="Interactables" unique_id=710977592 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_26" parent="Interactables" unique_id=710977592 instance=ExtResource("17_cydvy")]
 position = Vector2(2230.8848, 455.4957)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_27" type="Area2D" parent="Interactables" unique_id=1608715095 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_27" parent="Interactables" unique_id=1608715095 instance=ExtResource("22_817gm")]
 position = Vector2(2088.1616, 777.27985)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_28" type="Area2D" parent="Interactables" unique_id=457275408 instance=ExtResource("19_5cwbm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_28" parent="Interactables" unique_id=457275408 instance=ExtResource("19_5cwbm")]
 position = Vector2(1400.4369, 1016.1108)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_29" type="Area2D" parent="Interactables" unique_id=603204743 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_29" parent="Interactables" unique_id=603204743 instance=ExtResource("22_817gm")]
 position = Vector2(2119.2678, 439.74988)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_30" type="Area2D" parent="Interactables" unique_id=2004323551 instance=ExtResource("19_5cwbm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_30" parent="Interactables" unique_id=2004323551 instance=ExtResource("19_5cwbm")]
 position = Vector2(1815.072, 1257.0759)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_31" type="Area2D" parent="Interactables" unique_id=34847427 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_31" parent="Interactables" unique_id=34847427 instance=ExtResource("20_noste")]
 position = Vector2(1942.426, 1080.8674)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_32" type="Area2D" parent="Interactables" unique_id=8471957 instance=ExtResource("19_5cwbm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_32" parent="Interactables" unique_id=8471957 instance=ExtResource("19_5cwbm")]
 position = Vector2(1977.6324, 601.4701)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_33" type="Area2D" parent="Interactables" unique_id=1735599436 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_33" parent="Interactables" unique_id=1735599436 instance=ExtResource("20_noste")]
 position = Vector2(2294.5466, 150.33868)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_34" type="Area2D" parent="Interactables" unique_id=2144592671 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_34" parent="Interactables" unique_id=2144592671 instance=ExtResource("14_oa5b6")]
 position = Vector2(1864.989, 679.9794)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_35" type="Area2D" parent="Interactables" unique_id=606526656 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_35" parent="Interactables" unique_id=606526656 instance=ExtResource("20_noste")]
 position = Vector2(2248.1108, 119.01535)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_36" type="Area2D" parent="Interactables" unique_id=1453483811 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_36" parent="Interactables" unique_id=1453483811 instance=ExtResource("20_noste")]
 position = Vector2(1494.7683, 1078.1234)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_37" type="Area2D" parent="Interactables" unique_id=1473976331 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_37" parent="Interactables" unique_id=1473976331 instance=ExtResource("20_noste")]
 position = Vector2(2361.668, 535.9828)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_38" type="Area2D" parent="Interactables" unique_id=1255400341 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_38" parent="Interactables" unique_id=1255400341 instance=ExtResource("21_i51xp")]
 position = Vector2(2105.9893, 633.1146)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_39" type="Area2D" parent="Interactables" unique_id=176069924 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_39" parent="Interactables" unique_id=176069924 instance=ExtResource("20_noste")]
 position = Vector2(1686.9537, 168.78897)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_40" type="Area2D" parent="Interactables" unique_id=953751221 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_40" parent="Interactables" unique_id=953751221 instance=ExtResource("21_i51xp")]
 position = Vector2(1942.018, 616.18286)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_41" type="Area2D" parent="Interactables" unique_id=1295881710 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_41" parent="Interactables" unique_id=1295881710 instance=ExtResource("20_noste")]
 position = Vector2(2343.0803, 408.44125)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_42" type="Area2D" parent="Interactables" unique_id=446921649 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_42" parent="Interactables" unique_id=446921649 instance=ExtResource("17_cydvy")]
 position = Vector2(2694.1748, 246.88713)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_43" type="Area2D" parent="Interactables" unique_id=223742097 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_43" parent="Interactables" unique_id=223742097 instance=ExtResource("22_817gm")]
 position = Vector2(1320.4121, 345.85727)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_44" type="Area2D" parent="Interactables" unique_id=161370001 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_44" parent="Interactables" unique_id=161370001 instance=ExtResource("21_i51xp")]
 position = Vector2(2343.5657, 854.4145)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_45" type="Area2D" parent="Interactables" unique_id=762093815 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_45" parent="Interactables" unique_id=762093815 instance=ExtResource("17_cydvy")]
 position = Vector2(1302.4504, 1206.3329)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_46" type="Area2D" parent="Interactables" unique_id=443720007 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_46" parent="Interactables" unique_id=443720007 instance=ExtResource("20_noste")]
 position = Vector2(2280.5635, 1225.5702)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_47" type="Area2D" parent="Interactables" unique_id=1275899078 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_47" parent="Interactables" unique_id=1275899078 instance=ExtResource("17_cydvy")]
 position = Vector2(665.3482, 697.6154)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_48" type="Area2D" parent="Interactables" unique_id=1949343578 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_48" parent="Interactables" unique_id=1949343578 instance=ExtResource("14_oa5b6")]
 position = Vector2(184.79898, 264.08096)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_49" type="Area2D" parent="Interactables" unique_id=1636952831 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_49" parent="Interactables" unique_id=1636952831 instance=ExtResource("17_cydvy")]
 position = Vector2(2486.2258, 823.07874)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_50" type="Area2D" parent="Interactables" unique_id=831589904 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_50" parent="Interactables" unique_id=831589904 instance=ExtResource("20_noste")]
 position = Vector2(2696.1868, 456.86548)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_51" type="Area2D" parent="Interactables" unique_id=922825314 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_51" parent="Interactables" unique_id=922825314 instance=ExtResource("17_cydvy")]
 position = Vector2(1783.1788, 199.50696)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_52" type="Area2D" parent="Interactables" unique_id=750093640 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_52" parent="Interactables" unique_id=750093640 instance=ExtResource("21_i51xp")]
 position = Vector2(2582.7761, 713.87213)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_53" type="Area2D" parent="Interactables" unique_id=1344232926 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_53" parent="Interactables" unique_id=1344232926 instance=ExtResource("22_817gm")]
 position = Vector2(486.44147, 169.27904)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_54" type="Area2D" parent="Interactables" unique_id=181359693 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_54" parent="Interactables" unique_id=181359693 instance=ExtResource("20_noste")]
 position = Vector2(2328.479, 295.52304)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_55" type="Area2D" parent="Interactables" unique_id=157234854 instance=ExtResource("19_5cwbm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_55" parent="Interactables" unique_id=157234854 instance=ExtResource("19_5cwbm")]
 position = Vector2(663.878, 566.1517)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_56" type="Area2D" parent="Interactables" unique_id=848872848 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_56" parent="Interactables" unique_id=848872848 instance=ExtResource("20_noste")]
 position = Vector2(2376.5317, 601.1183)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_57" type="Area2D" parent="Interactables" unique_id=2022387846 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_57" parent="Interactables" unique_id=2022387846 instance=ExtResource("22_817gm")]
 position = Vector2(1015.22296, 313.7046)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_58" type="Area2D" parent="Interactables" unique_id=1191789797 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_58" parent="Interactables" unique_id=1191789797 instance=ExtResource("21_i51xp")]
 position = Vector2(2328.1597, 472.43524)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_59" type="Area2D" parent="Interactables" unique_id=1643615286 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_59" parent="Interactables" unique_id=1643615286 instance=ExtResource("14_oa5b6")]
 position = Vector2(486.23813, 697.2915)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_60" type="Area2D" parent="Interactables" unique_id=222606661 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_60" parent="Interactables" unique_id=222606661 instance=ExtResource("20_noste")]
 position = Vector2(1864.473, 1160.9996)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_61" type="Area2D" parent="Interactables" unique_id=277171527 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_61" parent="Interactables" unique_id=277171527 instance=ExtResource("22_817gm")]
 position = Vector2(679.7618, 1033.3971)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_62" type="Area2D" parent="Interactables" unique_id=1571776320 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_62" parent="Interactables" unique_id=1571776320 instance=ExtResource("14_oa5b6")]
 position = Vector2(1561.8549, 184.6034)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_63" type="Area2D" parent="Interactables" unique_id=204157123 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_63" parent="Interactables" unique_id=204157123 instance=ExtResource("21_i51xp")]
 position = Vector2(2599.8984, 617.4622)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_64" type="Area2D" parent="Interactables" unique_id=543506166 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_64" parent="Interactables" unique_id=543506166 instance=ExtResource("21_i51xp")]
 position = Vector2(1878.3015, 1064.4971)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_65" type="Area2D" parent="Interactables" unique_id=2051829581 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_65" parent="Interactables" unique_id=2051829581 instance=ExtResource("20_noste")]
 position = Vector2(2136.1455, 887.14636)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_66" type="Area2D" parent="Interactables" unique_id=191260052 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_66" parent="Interactables" unique_id=191260052 instance=ExtResource("21_i51xp")]
 position = Vector2(2039.7737, 1015.8285)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_67" type="Area2D" parent="Interactables" unique_id=802566318 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_67" parent="Interactables" unique_id=802566318 instance=ExtResource("20_noste")]
 position = Vector2(1335.0752, 969.82874)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_68" type="Area2D" parent="Interactables" unique_id=1071720410 instance=ExtResource("19_5cwbm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_68" parent="Interactables" unique_id=1071720410 instance=ExtResource("19_5cwbm")]
 position = Vector2(1334.8309, 1176.7306)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_69" type="Area2D" parent="Interactables" unique_id=1194484264 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_69" parent="Interactables" unique_id=1194484264 instance=ExtResource("14_oa5b6")]
 position = Vector2(760.9988, 294.4812)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_70" type="Area2D" parent="Interactables" unique_id=1979682998 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_70" parent="Interactables" unique_id=1979682998 instance=ExtResource("14_oa5b6")]
 position = Vector2(1271.9855, 231.05959)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_71" type="Area2D" parent="Interactables" unique_id=1643543066 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_71" parent="Interactables" unique_id=1643543066 instance=ExtResource("14_oa5b6")]
 position = Vector2(615.0804, 646.3561)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_72" type="Area2D" parent="Interactables" unique_id=644974495 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_72" parent="Interactables" unique_id=644974495 instance=ExtResource("22_817gm")]
 position = Vector2(2456.7915, 742.0523)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_73" type="Area2D" parent="Interactables" unique_id=722871252 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_73" parent="Interactables" unique_id=722871252 instance=ExtResource("22_817gm")]
 position = Vector2(441.48776, 711.82495)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_74" type="Area2D" parent="Interactables" unique_id=1445355933 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_74" parent="Interactables" unique_id=1445355933 instance=ExtResource("21_i51xp")]
 position = Vector2(2056.3774, 454.55374)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_75" type="Area2D" parent="Interactables" unique_id=704467688 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_75" parent="Interactables" unique_id=704467688 instance=ExtResource("14_oa5b6")]
 position = Vector2(1720.1793, 807.7797)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_76" type="Area2D" parent="Interactables" unique_id=2109709577 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_76" parent="Interactables" unique_id=2109709577 instance=ExtResource("20_noste")]
 position = Vector2(1782.4663, 1030.3406)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_77" type="Area2D" parent="Interactables" unique_id=1666802965 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_77" parent="Interactables" unique_id=1666802965 instance=ExtResource("21_i51xp")]
 position = Vector2(838.9471, 360.9437)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_78" type="Area2D" parent="Interactables" unique_id=240143934 instance=ExtResource("19_5cwbm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_78" parent="Interactables" unique_id=240143934 instance=ExtResource("19_5cwbm")]
 position = Vector2(2409.2341, 984.955)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_79" type="Area2D" parent="Interactables" unique_id=1740785885 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_79" parent="Interactables" unique_id=1740785885 instance=ExtResource("21_i51xp")]
 position = Vector2(2342.8516, 569.94214)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_80" type="Area2D" parent="Interactables" unique_id=2014213927 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_80" parent="Interactables" unique_id=2014213927 instance=ExtResource("14_oa5b6")]
 position = Vector2(2392.6416, 1126.3018)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_81" type="Area2D" parent="Interactables" unique_id=1336056750 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_81" parent="Interactables" unique_id=1336056750 instance=ExtResource("22_817gm")]
 position = Vector2(1497.4779, 824.6205)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_82" type="Area2D" parent="Interactables" unique_id=1431514608 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_82" parent="Interactables" unique_id=1431514608 instance=ExtResource("17_cydvy")]
 position = Vector2(1783.6252, 712.5374)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_83" type="Area2D" parent="Interactables" unique_id=1494590468 instance=ExtResource("17_cydvy")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_83" parent="Interactables" unique_id=1494590468 instance=ExtResource("17_cydvy")]
 position = Vector2(2473.0667, 921.11487)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_84" type="Area2D" parent="Interactables" unique_id=952913853 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_84" parent="Interactables" unique_id=952913853 instance=ExtResource("14_oa5b6")]
 position = Vector2(311.63113, 393.95615)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_85" type="Area2D" parent="Interactables" unique_id=1919239992 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_85" parent="Interactables" unique_id=1919239992 instance=ExtResource("21_i51xp")]
 position = Vector2(1784.1018, 153.06064)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_86" type="Area2D" parent="Interactables" unique_id=1145254184 instance=ExtResource("19_5cwbm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_86" parent="Interactables" unique_id=1145254184 instance=ExtResource("19_5cwbm")]
 position = Vector2(2136.3535, 1128.4874)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "small"
 
-[node name="SpawnedTree_Meadow_87" type="Area2D" parent="Interactables" unique_id=929695316 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_87" parent="Interactables" unique_id=929695316 instance=ExtResource("14_oa5b6")]
 position = Vector2(1878.4463, 727.33154)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_88" type="Area2D" parent="Interactables" unique_id=219532590 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_88" parent="Interactables" unique_id=219532590 instance=ExtResource("20_noste")]
 position = Vector2(1639.3643, 518.9417)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_89" type="Area2D" parent="Interactables" unique_id=101077774 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_89" parent="Interactables" unique_id=101077774 instance=ExtResource("21_i51xp")]
 position = Vector2(2406.7778, 775.15356)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_90" type="Area2D" parent="Interactables" unique_id=2047376190 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_90" parent="Interactables" unique_id=2047376190 instance=ExtResource("20_noste")]
 position = Vector2(2199.1252, 888.2279)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_91" type="Area2D" parent="Interactables" unique_id=555345642 instance=ExtResource("14_oa5b6")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_91" parent="Interactables" unique_id=555345642 instance=ExtResource("14_oa5b6")]
 position = Vector2(742.2397, 758.31256)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_92" type="Area2D" parent="Interactables" unique_id=229970393 instance=ExtResource("21_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_92" parent="Interactables" unique_id=229970393 instance=ExtResource("21_i51xp")]
 position = Vector2(1158.7091, 247.35605)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
 
-[node name="SpawnedTree_Meadow_93" type="Area2D" parent="Interactables" unique_id=2025084890 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_93" parent="Interactables" unique_id=2025084890 instance=ExtResource("22_817gm")]
 position = Vector2(536.6613, 519.4183)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_94" type="Area2D" parent="Interactables" unique_id=1158792945 instance=ExtResource("22_817gm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_94" parent="Interactables" unique_id=1158792945 instance=ExtResource("22_817gm")]
 position = Vector2(2633.7202, 838.6824)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
 
-[node name="SpawnedTree_Meadow_95" type="Area2D" parent="Interactables" unique_id=2039480582 instance=ExtResource("20_noste")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_95" parent="Interactables" unique_id=2039480582 instance=ExtResource("20_noste")]
 position = Vector2(2440.638, 375.64383)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "fruit"
-tree_size = "medium"
 
-[node name="SpawnedTree_Meadow_96" type="Area2D" parent="Interactables" unique_id=1548542487 instance=ExtResource("19_5cwbm")]
-y_sort_enabled = true
+[node name="SpawnedTree_Meadow_96" parent="Interactables" unique_id=1548542487 instance=ExtResource("19_5cwbm")]
 position = Vector2(2281.0696, 598.5954)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_size = "small"
 
-[node name="SpawnedPalm_Beach_0" type="Area2D" parent="Interactables" unique_id=1 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_0" parent="Interactables" unique_id=1 instance=ExtResource("34_noste")]
 position = Vector2(167.77321, 440.88464)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_1" type="Area2D" parent="Interactables" unique_id=2 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_1" parent="Interactables" unique_id=2 instance=ExtResource("35_i51xp")]
 position = Vector2(294.6717, 761.53503)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_2" type="Area2D" parent="Interactables" unique_id=457182610 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_2" parent="Interactables" unique_id=457182610 instance=ExtResource("34_noste")]
 position = Vector2(345.80524, 982.7985)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_3" type="Area2D" parent="Interactables" unique_id=504274102 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_3" parent="Interactables" unique_id=504274102 instance=ExtResource("35_i51xp")]
 position = Vector2(2631.1802, -22.778353)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_4" type="Area2D" parent="Interactables" unique_id=1162320357 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_4" parent="Interactables" unique_id=1162320357 instance=ExtResource("35_i51xp")]
 position = Vector2(297.71136, 647.69836)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_5" type="Area2D" parent="Interactables" unique_id=2030932664 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_5" parent="Interactables" unique_id=2030932664 instance=ExtResource("35_i51xp")]
 position = Vector2(294.8778, 25.52333)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_6" type="Area2D" parent="Interactables" unique_id=804336171 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_6" parent="Interactables" unique_id=804336171 instance=ExtResource("35_i51xp")]
 position = Vector2(2537.7175, 7.0176544)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_7" type="Area2D" parent="Interactables" unique_id=1411689040 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_7" parent="Interactables" unique_id=1411689040 instance=ExtResource("35_i51xp")]
 position = Vector2(585.87854, 1177.7344)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_8" type="Area2D" parent="Interactables" unique_id=159911226 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_8" parent="Interactables" unique_id=159911226 instance=ExtResource("34_noste")]
 position = Vector2(2935.5322, 694.6966)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_9" type="Area2D" parent="Interactables" unique_id=1183571953 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_9" parent="Interactables" unique_id=1183571953 instance=ExtResource("34_noste")]
 position = Vector2(102.03657, 486.3882)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_10" type="Area2D" parent="Interactables" unique_id=1434903169 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_10" parent="Interactables" unique_id=1434903169 instance=ExtResource("34_noste")]
 position = Vector2(903.25446, 1255.7611)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_11" type="Area2D" parent="Interactables" unique_id=416848901 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_11" parent="Interactables" unique_id=416848901 instance=ExtResource("34_noste")]
 position = Vector2(615.1874, 38.947514)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_12" type="Area2D" parent="Interactables" unique_id=7488620 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_12" parent="Interactables" unique_id=7488620 instance=ExtResource("34_noste")]
 position = Vector2(2617.1494, 1240.5802)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_13" type="Area2D" parent="Interactables" unique_id=61774716 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_13" parent="Interactables" unique_id=61774716 instance=ExtResource("35_i51xp")]
 position = Vector2(777.00995, 86.888794)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_14" type="Area2D" parent="Interactables" unique_id=1103210234 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_14" parent="Interactables" unique_id=1103210234 instance=ExtResource("34_noste")]
 position = Vector2(2809.0051, 1000.67834)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_15" type="Area2D" parent="Interactables" unique_id=1545343009 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_15" parent="Interactables" unique_id=1545343009 instance=ExtResource("35_i51xp")]
 position = Vector2(345.2767, 695.92303)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_16" type="Area2D" parent="Interactables" unique_id=746997765 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_16" parent="Interactables" unique_id=746997765 instance=ExtResource("35_i51xp")]
 position = Vector2(537.1569, 1047.8903)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_17" type="Area2D" parent="Interactables" unique_id=1165921005 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_17" parent="Interactables" unique_id=1165921005 instance=ExtResource("34_noste")]
 position = Vector2(2935.8938, 535.1975)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_18" type="Area2D" parent="Interactables" unique_id=2040055440 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_18" parent="Interactables" unique_id=2040055440 instance=ExtResource("35_i51xp")]
 position = Vector2(264.82568, 854.2179)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_19" type="Area2D" parent="Interactables" unique_id=1289700106 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_19" parent="Interactables" unique_id=1289700106 instance=ExtResource("35_i51xp")]
 position = Vector2(2264.2673, -7.2385464)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_20" type="Area2D" parent="Interactables" unique_id=2119439289 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_20" parent="Interactables" unique_id=2119439289 instance=ExtResource("34_noste")]
 position = Vector2(1352.6165, 72.47639)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_21" type="Area2D" parent="Interactables" unique_id=1408954200 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_21" parent="Interactables" unique_id=1408954200 instance=ExtResource("34_noste")]
 position = Vector2(550.8344, 1192.8043)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_22" type="Area2D" parent="Interactables" unique_id=1604137337 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_22" parent="Interactables" unique_id=1604137337 instance=ExtResource("34_noste")]
 position = Vector2(2614.221, 70.87486)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_23" type="Area2D" parent="Interactables" unique_id=1322684488 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_23" parent="Interactables" unique_id=1322684488 instance=ExtResource("35_i51xp")]
 position = Vector2(2536.3213, 57.709145)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_24" type="Area2D" parent="Interactables" unique_id=987338623 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_24" parent="Interactables" unique_id=987338623 instance=ExtResource("34_noste")]
 position = Vector2(921.3915, 1319.5222)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_25" type="Area2D" parent="Interactables" unique_id=833271292 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_25" parent="Interactables" unique_id=833271292 instance=ExtResource("35_i51xp")]
 position = Vector2(248.64766, 694.6827)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_26" type="Area2D" parent="Interactables" unique_id=744267989 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_26" parent="Interactables" unique_id=744267989 instance=ExtResource("35_i51xp")]
 position = Vector2(89.78717, 105.4605)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_27" type="Area2D" parent="Interactables" unique_id=2115086630 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_27" parent="Interactables" unique_id=2115086630 instance=ExtResource("35_i51xp")]
 position = Vector2(1095.9456, 1304.1941)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_28" type="Area2D" parent="Interactables" unique_id=1068449321 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_28" parent="Interactables" unique_id=1068449321 instance=ExtResource("34_noste")]
 position = Vector2(262.04208, 984.96606)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_29" type="Area2D" parent="Interactables" unique_id=499776018 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_29" parent="Interactables" unique_id=499776018 instance=ExtResource("34_noste")]
 position = Vector2(1798.3691, 1353.8099)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_30" type="Area2D" parent="Interactables" unique_id=1850710490 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_30" parent="Interactables" unique_id=1850710490 instance=ExtResource("34_noste")]
 position = Vector2(710.14355, 1273.6262)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_31" type="Area2D" parent="Interactables" unique_id=1625873731 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_31" parent="Interactables" unique_id=1625873731 instance=ExtResource("35_i51xp")]
 position = Vector2(889.70447, 88.80606)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_32" type="Area2D" parent="Interactables" unique_id=161056865 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_32" parent="Interactables" unique_id=161056865 instance=ExtResource("34_noste")]
 position = Vector2(680.3753, 1208.2191)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_33" type="Area2D" parent="Interactables" unique_id=427728739 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_33" parent="Interactables" unique_id=427728739 instance=ExtResource("34_noste")]
 position = Vector2(440.13486, 1047.6346)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_34" type="Area2D" parent="Interactables" unique_id=1495572753 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_34" parent="Interactables" unique_id=1495572753 instance=ExtResource("35_i51xp")]
 position = Vector2(2167.284, 1382.4398)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_35" type="Area2D" parent="Interactables" unique_id=909764794 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_35" parent="Interactables" unique_id=909764794 instance=ExtResource("34_noste")]
 position = Vector2(2648.9348, 104.97223)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_36" type="Area2D" parent="Interactables" unique_id=2012392248 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_36" parent="Interactables" unique_id=2012392248 instance=ExtResource("34_noste")]
 position = Vector2(583.1981, 103.99372)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_37" type="Area2D" parent="Interactables" unique_id=392069664 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_37" parent="Interactables" unique_id=392069664 instance=ExtResource("34_noste")]
 position = Vector2(198.74226, 489.28787)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_38" type="Area2D" parent="Interactables" unique_id=1625235943 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_38" parent="Interactables" unique_id=1625235943 instance=ExtResource("35_i51xp")]
 position = Vector2(1609.0376, 1415.7932)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_39" type="Area2D" parent="Interactables" unique_id=2092807847 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_39" parent="Interactables" unique_id=2092807847 instance=ExtResource("35_i51xp")]
 position = Vector2(1977.4788, 1432.7849)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_40" type="Area2D" parent="Interactables" unique_id=625009069 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_40" parent="Interactables" unique_id=625009069 instance=ExtResource("34_noste")]
 position = Vector2(985.3587, 120.1029)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_41" type="Area2D" parent="Interactables" unique_id=342766989 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_41" parent="Interactables" unique_id=342766989 instance=ExtResource("34_noste")]
 position = Vector2(2217.2422, 1448.3638)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_42" type="Area2D" parent="Interactables" unique_id=1404160532 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_42" parent="Interactables" unique_id=1404160532 instance=ExtResource("34_noste")]
 position = Vector2(824.74646, 1209.7826)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_43" type="Area2D" parent="Interactables" unique_id=1156565883 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_43" parent="Interactables" unique_id=1156565883 instance=ExtResource("34_noste")]
 position = Vector2(393.27023, 984.45624)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_44" type="Area2D" parent="Interactables" unique_id=2002498627 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_44" parent="Interactables" unique_id=2002498627 instance=ExtResource("35_i51xp")]
 position = Vector2(1655.6384, 1398.7372)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_45" type="Area2D" parent="Interactables" unique_id=1733248706 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_45" parent="Interactables" unique_id=1733248706 instance=ExtResource("35_i51xp")]
 position = Vector2(745.8052, 56.942085)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_46" type="Area2D" parent="Interactables" unique_id=380555575 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_46" parent="Interactables" unique_id=380555575 instance=ExtResource("35_i51xp")]
 position = Vector2(967.70447, 1272.1259)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_47" type="Area2D" parent="Interactables" unique_id=929623374 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_47" parent="Interactables" unique_id=929623374 instance=ExtResource("34_noste")]
 position = Vector2(327.50552, 838.79004)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_48" type="Area2D" parent="Interactables" unique_id=1118713147 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_48" parent="Interactables" unique_id=1118713147 instance=ExtResource("34_noste")]
 position = Vector2(246.0861, 601.79565)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_49" type="Area2D" parent="Interactables" unique_id=766660978 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_49" parent="Interactables" unique_id=766660978 instance=ExtResource("35_i51xp")]
 position = Vector2(393.31155, 41.230633)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_50" type="Area2D" parent="Interactables" unique_id=955580693 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_50" parent="Interactables" unique_id=955580693 instance=ExtResource("34_noste")]
 position = Vector2(678.9757, 150.08772)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_51" type="Area2D" parent="Interactables" unique_id=398320374 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_51" parent="Interactables" unique_id=398320374 instance=ExtResource("34_noste")]
 position = Vector2(472.87317, 1095.5062)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_52" type="Area2D" parent="Interactables" unique_id=2138272661 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_52" parent="Interactables" unique_id=2138272661 instance=ExtResource("35_i51xp")]
 position = Vector2(1878.9241, 70.27515)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_53" type="Area2D" parent="Interactables" unique_id=1184588272 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_53" parent="Interactables" unique_id=1184588272 instance=ExtResource("35_i51xp")]
 position = Vector2(2568.4563, 1254.8445)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_54" type="Area2D" parent="Interactables" unique_id=1917835006 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_54" parent="Interactables" unique_id=1917835006 instance=ExtResource("34_noste")]
 position = Vector2(1976.5145, 105.80413)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedPalm_Beach_55" type="Area2D" parent="Interactables" unique_id=2146303239 instance=ExtResource("35_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_55" parent="Interactables" unique_id=2146303239 instance=ExtResource("35_i51xp")]
 position = Vector2(2857.8198, 744.8987)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
-tree_size = "medium"
 
-[node name="SpawnedPalm_Beach_56" type="Area2D" parent="Interactables" unique_id=2103451613 instance=ExtResource("34_noste")]
-y_sort_enabled = true
+[node name="SpawnedPalm_Beach_56" parent="Interactables" unique_id=2103451613 instance=ExtResource("34_noste")]
 position = Vector2(1449.548, 72.933716)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("6_tmrdu")
-tree_type = "palm"
 
-[node name="SpawnedStoneB_Beach_0" type="Area2D" parent="Interactables" unique_id=1288605621 instance=ExtResource("30_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_0" parent="Interactables" unique_id=1288605621 instance=ExtResource("30_3yv6x")]
 position = Vector2(2198.7322, 1417.991)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 10
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_1" type="Area2D" parent="Interactables" unique_id=872720873 instance=ExtResource("25_817gm")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_1" parent="Interactables" unique_id=872720873 instance=ExtResource("25_817gm")]
 position = Vector2(2822.254, 215.9492)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 5
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_2" type="Area2D" parent="Interactables" unique_id=1248835628 instance=ExtResource("23_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_2" parent="Interactables" unique_id=1248835628 instance=ExtResource("23_i51xp")]
 position = Vector2(521.2714, 1063.4434)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 3
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_3" type="Area2D" parent="Interactables" unique_id=996697704 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_3" parent="Interactables" unique_id=996697704 instance=ExtResource("6_cycno")]
 position = Vector2(680.87415, 54.276146)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_4" type="Area2D" parent="Interactables" unique_id=227505556 instance=ExtResource("10_pvt85")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_4" parent="Interactables" unique_id=227505556 instance=ExtResource("10_pvt85")]
 position = Vector2(185.34859, 697.1692)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 7
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_5" type="Area2D" parent="Interactables" unique_id=201968437 instance=ExtResource("25_817gm")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_5" parent="Interactables" unique_id=201968437 instance=ExtResource("25_817gm")]
 position = Vector2(1911.053, 89.90685)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 5
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_6" type="Area2D" parent="Interactables" unique_id=1111933475 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_6" parent="Interactables" unique_id=1111933475 instance=ExtResource("33_4gqsg")]
 position = Vector2(2470.3684, 56.6438)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_7" type="Area2D" parent="Interactables" unique_id=1275545281 instance=ExtResource("34_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_7" parent="Interactables" unique_id=1275545281 instance=ExtResource("34_ltu66")]
 position = Vector2(2934.5645, 632.1887)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 14
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_8" type="Area2D" parent="Interactables" unique_id=876654446 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_8" parent="Interactables" unique_id=876654446 instance=ExtResource("32_07ioa")]
 position = Vector2(136.60417, 473.14597)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_9" type="Area2D" parent="Interactables" unique_id=321961877 instance=ExtResource("25_817gm")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_9" parent="Interactables" unique_id=321961877 instance=ExtResource("25_817gm")]
 position = Vector2(2456.2668, 1273.3824)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 5
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_10" type="Area2D" parent="Interactables" unique_id=346805610 instance=ExtResource("12_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_10" parent="Interactables" unique_id=346805610 instance=ExtResource("12_cycno")]
 position = Vector2(40.047882, 215.96204)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 4
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_11" type="Area2D" parent="Interactables" unique_id=520440204 instance=ExtResource("22_noste")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_11" parent="Interactables" unique_id=520440204 instance=ExtResource("22_noste")]
 position = Vector2(2007.9384, 1464.5961)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 2
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_12" type="Area2D" parent="Interactables" unique_id=483566146 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_12" parent="Interactables" unique_id=483566146 instance=ExtResource("32_07ioa")]
 position = Vector2(1030.6655, 1319.636)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_13" type="Area2D" parent="Interactables" unique_id=1396352969 instance=ExtResource("25_817gm")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_13" parent="Interactables" unique_id=1396352969 instance=ExtResource("25_817gm")]
 position = Vector2(375.44077, 870.32574)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 5
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_14" type="Area2D" parent="Interactables" unique_id=110794064 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_14" parent="Interactables" unique_id=110794064 instance=ExtResource("6_cycno")]
 position = Vector2(681.1031, 1270.619)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_15" type="Area2D" parent="Interactables" unique_id=1334974142 instance=ExtResource("25_817gm")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_15" parent="Interactables" unique_id=1334974142 instance=ExtResource("25_817gm")]
 position = Vector2(680.1229, 1239.1493)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 5
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_16" type="Area2D" parent="Interactables" unique_id=956761266 instance=ExtResource("30_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_16" parent="Interactables" unique_id=956761266 instance=ExtResource("30_3yv6x")]
 position = Vector2(438.49377, 985.92316)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 10
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_17" type="Area2D" parent="Interactables" unique_id=855203541 instance=ExtResource("23_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_17" parent="Interactables" unique_id=855203541 instance=ExtResource("23_i51xp")]
 position = Vector2(1145.597, 1289.491)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 3
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_18" type="Area2D" parent="Interactables" unique_id=458095264 instance=ExtResource("30_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_18" parent="Interactables" unique_id=458095264 instance=ExtResource("30_3yv6x")]
 position = Vector2(438.81866, 952.5193)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 10
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_19" type="Area2D" parent="Interactables" unique_id=1277161803 instance=ExtResource("22_noste")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_19" parent="Interactables" unique_id=1277161803 instance=ExtResource("22_noste")]
 position = Vector2(54.001656, 297.99356)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 2
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_20" type="Area2D" parent="Interactables" unique_id=162471772 instance=ExtResource("29_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_20" parent="Interactables" unique_id=162471772 instance=ExtResource("29_gh1rs")]
 position = Vector2(294.6518, 822.81866)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 9
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_21" type="Area2D" parent="Interactables" unique_id=688595949 instance=ExtResource("12_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_21" parent="Interactables" unique_id=688595949 instance=ExtResource("12_cycno")]
 position = Vector2(2745.576, 1144.2933)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 4
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_22" type="Area2D" parent="Interactables" unique_id=1962934900 instance=ExtResource("29_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_22" parent="Interactables" unique_id=1962934900 instance=ExtResource("29_gh1rs")]
 position = Vector2(840.7131, 72.41231)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 9
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_23" type="Area2D" parent="Interactables" unique_id=532420717 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_23" parent="Interactables" unique_id=532420717 instance=ExtResource("32_07ioa")]
 position = Vector2(232.14026, 839.1942)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_24" type="Area2D" parent="Interactables" unique_id=2107723310 instance=ExtResource("14_8hc5p")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_24" parent="Interactables" unique_id=2107723310 instance=ExtResource("14_8hc5p")]
 position = Vector2(1574.6515, 1352.0841)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 11
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_25" type="Area2D" parent="Interactables" unique_id=561328452 instance=ExtResource("10_pvt85")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_25" parent="Interactables" unique_id=561328452 instance=ExtResource("10_pvt85")]
 position = Vector2(2584.7837, -8.350254)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 7
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_26" type="Area2D" parent="Interactables" unique_id=1161644178 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_26" parent="Interactables" unique_id=1161644178 instance=ExtResource("33_4gqsg")]
 position = Vector2(1574.7043, 1432.2083)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_27" type="Area2D" parent="Interactables" unique_id=1311464185 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_27" parent="Interactables" unique_id=1311464185 instance=ExtResource("32_07ioa")]
 position = Vector2(614.58777, 1192.4297)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_28" type="Area2D" parent="Interactables" unique_id=66312072 instance=ExtResource("14_8hc5p")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_28" parent="Interactables" unique_id=66312072 instance=ExtResource("14_8hc5p")]
 position = Vector2(135.68417, 409.6568)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 11
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_29" type="Area2D" parent="Interactables" unique_id=1111137705 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_29" parent="Interactables" unique_id=1111137705 instance=ExtResource("6_cycno")]
 position = Vector2(2743.7192, 135.83586)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_30" type="Area2D" parent="Interactables" unique_id=240800506 instance=ExtResource("14_8hc5p")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_30" parent="Interactables" unique_id=240800506 instance=ExtResource("14_8hc5p")]
 position = Vector2(2504.1528, -25.38034)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 11
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_31" type="Area2D" parent="Interactables" unique_id=1790886401 instance=ExtResource("10_pvt85")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_31" parent="Interactables" unique_id=1790886401 instance=ExtResource("10_pvt85")]
 position = Vector2(679.4692, 103.22268)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 7
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_32" type="Area2D" parent="Interactables" unique_id=1926068096 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_32" parent="Interactables" unique_id=1926068096 instance=ExtResource("33_4gqsg")]
 position = Vector2(2393.6926, -9.342989)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_33" type="Area2D" parent="Interactables" unique_id=501265667 instance=ExtResource("11_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_33" parent="Interactables" unique_id=501265667 instance=ExtResource("11_cycno")]
 position = Vector2(472.04416, 1046.7732)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 6
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_34" type="Area2D" parent="Interactables" unique_id=1983570722 instance=ExtResource("12_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_34" parent="Interactables" unique_id=1983570722 instance=ExtResource("12_cycno")]
 position = Vector2(457.41998, 967.24335)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 4
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_35" type="Area2D" parent="Interactables" unique_id=745043946 instance=ExtResource("14_8hc5p")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_35" parent="Interactables" unique_id=745043946 instance=ExtResource("14_8hc5p")]
 position = Vector2(630.4937, 183.73798)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 11
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_36" type="Area2D" parent="Interactables" unique_id=1781639265 instance=ExtResource("34_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_36" parent="Interactables" unique_id=1781639265 instance=ExtResource("34_ltu66")]
 position = Vector2(1574.358, 1401.0756)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 14
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_37" type="Area2D" parent="Interactables" unique_id=1795675306 instance=ExtResource("10_pvt85")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_37" parent="Interactables" unique_id=1795675306 instance=ExtResource("10_pvt85")]
 position = Vector2(1657.6659, 55.390022)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 7
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_38" type="Area2D" parent="Interactables" unique_id=359615002 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_38" parent="Interactables" unique_id=359615002 instance=ExtResource("33_4gqsg")]
 position = Vector2(649.2805, 1255.5687)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_39" type="Area2D" parent="Interactables" unique_id=836652558 instance=ExtResource("11_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_39" parent="Interactables" unique_id=836652558 instance=ExtResource("11_cycno")]
 position = Vector2(774.8473, 1191.2416)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 6
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_40" type="Area2D" parent="Interactables" unique_id=2134919221 instance=ExtResource("11_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_40" parent="Interactables" unique_id=2134919221 instance=ExtResource("11_cycno")]
 position = Vector2(2759.134, 152.8748)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 6
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_41" type="Area2D" parent="Interactables" unique_id=2114740522 instance=ExtResource("23_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_41" parent="Interactables" unique_id=2114740522 instance=ExtResource("23_i51xp")]
 position = Vector2(199.75644, 40.294193)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 3
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_42" type="Area2D" parent="Interactables" unique_id=479130275 instance=ExtResource("10_pvt85")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_42" parent="Interactables" unique_id=479130275 instance=ExtResource("10_pvt85")]
 position = Vector2(327.75964, 953.4299)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 7
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_43" type="Area2D" parent="Interactables" unique_id=398714580 instance=ExtResource("12_janh6")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_43" parent="Interactables" unique_id=398714580 instance=ExtResource("12_janh6")]
 position = Vector2(134.53871, 518.0824)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_44" type="Area2D" parent="Interactables" unique_id=4013552 instance=ExtResource("12_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_44" parent="Interactables" unique_id=4013552 instance=ExtResource("12_cycno")]
 position = Vector2(345.82248, 1096.4498)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 4
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_45" type="Area2D" parent="Interactables" unique_id=1288388104 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_45" parent="Interactables" unique_id=1288388104 instance=ExtResource("32_07ioa")]
 position = Vector2(791.8393, 1303.4666)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_46" type="Area2D" parent="Interactables" unique_id=24971577 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_46" parent="Interactables" unique_id=24971577 instance=ExtResource("33_4gqsg")]
 position = Vector2(2424.865, 22.903671)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_47" type="Area2D" parent="Interactables" unique_id=475998725 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_47" parent="Interactables" unique_id=475998725 instance=ExtResource("33_4gqsg")]
 position = Vector2(2598.2314, 40.459557)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Beach_48" type="Area2D" parent="Interactables" unique_id=1596307471 instance=ExtResource("23_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Beach_48" parent="Interactables" unique_id=1596307471 instance=ExtResource("23_i51xp")]
 position = Vector2(374.42422, 998.8142)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 3
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_49" type="Area2D" parent="Interactables" unique_id=186286192 instance=ExtResource("25_817gm")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_49" parent="Interactables" unique_id=186286192 instance=ExtResource("25_817gm")]
 position = Vector2(998.2062, 744.5411)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 5
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_50" type="Area2D" parent="Interactables" unique_id=227037033 instance=ExtResource("12_janh6")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_50" parent="Interactables" unique_id=227037033 instance=ExtResource("12_janh6")]
 position = Vector2(2167.7366, 985.4804)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_51" type="Area2D" parent="Interactables" unique_id=1101065542 instance=ExtResource("14_8hc5p")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_51" parent="Interactables" unique_id=1101065542 instance=ExtResource("14_8hc5p")]
 position = Vector2(887.9689, 791.1767)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 11
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_52" type="Area2D" parent="Interactables" unique_id=1658745973 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_52" parent="Interactables" unique_id=1658745973 instance=ExtResource("33_4gqsg")]
 position = Vector2(758.0966, 168.28143)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_53" type="Area2D" parent="Interactables" unique_id=253295884 instance=ExtResource("12_janh6")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_53" parent="Interactables" unique_id=253295884 instance=ExtResource("12_janh6")]
 position = Vector2(2374.097, 342.96112)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_54" type="Area2D" parent="Interactables" unique_id=1173829874 instance=ExtResource("29_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_54" parent="Interactables" unique_id=1173829874 instance=ExtResource("29_gh1rs")]
 position = Vector2(2728.4814, 616.66595)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 9
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_55" type="Area2D" parent="Interactables" unique_id=2042332342 instance=ExtResource("10_pvt85")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_55" parent="Interactables" unique_id=2042332342 instance=ExtResource("10_pvt85")]
 position = Vector2(2215.6807, 487.30072)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 7
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_56" type="Area2D" parent="Interactables" unique_id=1938726049 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_56" parent="Interactables" unique_id=1938726049 instance=ExtResource("6_cycno")]
 position = Vector2(2009.8563, 1206.3715)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_57" type="Area2D" parent="Interactables" unique_id=1726931170 instance=ExtResource("25_817gm")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_57" parent="Interactables" unique_id=1726931170 instance=ExtResource("25_817gm")]
 position = Vector2(1256.2028, 328.9036)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 5
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_58" type="Area2D" parent="Interactables" unique_id=1755012691 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_58" parent="Interactables" unique_id=1755012691 instance=ExtResource("6_cycno")]
 position = Vector2(1750.5328, 135.46672)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_59" type="Area2D" parent="Interactables" unique_id=1132506063 instance=ExtResource("25_817gm")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_59" parent="Interactables" unique_id=1132506063 instance=ExtResource("25_817gm")]
 position = Vector2(1863.6406, 745.151)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 5
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_60" type="Area2D" parent="Interactables" unique_id=1201096897 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_60" parent="Interactables" unique_id=1201096897 instance=ExtResource("32_07ioa")]
 position = Vector2(983.05023, 1095.9418)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_61" type="Area2D" parent="Interactables" unique_id=1522322851 instance=ExtResource("10_pvt85")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_61" parent="Interactables" unique_id=1522322851 instance=ExtResource("10_pvt85")]
 position = Vector2(2262.0354, 761.9146)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 7
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_62" type="Area2D" parent="Interactables" unique_id=181730145 instance=ExtResource("22_noste")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_62" parent="Interactables" unique_id=181730145 instance=ExtResource("22_noste")]
 position = Vector2(1592.5399, 215.86423)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 2
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_63" type="Area2D" parent="Interactables" unique_id=1071944860 instance=ExtResource("14_8hc5p")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_63" parent="Interactables" unique_id=1071944860 instance=ExtResource("14_8hc5p")]
 position = Vector2(2057.954, 569.4944)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 11
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_64" type="Area2D" parent="Interactables" unique_id=1498660561 instance=ExtResource("34_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_64" parent="Interactables" unique_id=1498660561 instance=ExtResource("34_ltu66")]
 position = Vector2(2278.4702, 1110.3395)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 14
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_65" type="Area2D" parent="Interactables" unique_id=1720798481 instance=ExtResource("23_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_65" parent="Interactables" unique_id=1720798481 instance=ExtResource("23_i51xp")]
 position = Vector2(1222.5012, 534.8619)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 3
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_66" type="Area2D" parent="Interactables" unique_id=286345426 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_66" parent="Interactables" unique_id=286345426 instance=ExtResource("6_cycno")]
 position = Vector2(2470.6016, 569.9733)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_67" type="Area2D" parent="Interactables" unique_id=1607345055 instance=ExtResource("25_817gm")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_67" parent="Interactables" unique_id=1607345055 instance=ExtResource("25_817gm")]
 position = Vector2(2215.5117, 278.43085)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 5
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_68" type="Area2D" parent="Interactables" unique_id=379433884 instance=ExtResource("25_817gm")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_68" parent="Interactables" unique_id=379433884 instance=ExtResource("25_817gm")]
 position = Vector2(809.25836, 536.29144)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 5
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_69" type="Area2D" parent="Interactables" unique_id=1857936728 instance=ExtResource("22_noste")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_69" parent="Interactables" unique_id=1857936728 instance=ExtResource("22_noste")]
 position = Vector2(1462.3356, 1207.0848)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 2
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_70" type="Area2D" parent="Interactables" unique_id=1479672351 instance=ExtResource("23_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_70" parent="Interactables" unique_id=1479672351 instance=ExtResource("23_i51xp")]
 position = Vector2(2600.2285, 646.7566)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 3
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_71" type="Area2D" parent="Interactables" unique_id=540407749 instance=ExtResource("11_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_71" parent="Interactables" unique_id=540407749 instance=ExtResource("11_cycno")]
 position = Vector2(726.9138, 1032.6638)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 6
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_72" type="Area2D" parent="Interactables" unique_id=1361315323 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_72" parent="Interactables" unique_id=1361315323 instance=ExtResource("6_cycno")]
 position = Vector2(2441.9304, 696.6289)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_73" type="Area2D" parent="Interactables" unique_id=396859207 instance=ExtResource("29_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_73" parent="Interactables" unique_id=396859207 instance=ExtResource("29_gh1rs")]
 position = Vector2(2664.8909, 329.4642)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 9
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_74" type="Area2D" parent="Interactables" unique_id=464583566 instance=ExtResource("12_janh6")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_74" parent="Interactables" unique_id=464583566 instance=ExtResource("12_janh6")]
 position = Vector2(470.23773, 119.33661)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_75" type="Area2D" parent="Interactables" unique_id=2092417352 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_75" parent="Interactables" unique_id=2092417352 instance=ExtResource("33_4gqsg")]
 position = Vector2(1191.2769, 265.90665)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_76" type="Area2D" parent="Interactables" unique_id=1593382886 instance=ExtResource("30_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_76" parent="Interactables" unique_id=1593382886 instance=ExtResource("30_3yv6x")]
 position = Vector2(2520.0874, 680.9418)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 10
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_77" type="Area2D" parent="Interactables" unique_id=339599931 instance=ExtResource("11_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_77" parent="Interactables" unique_id=339599931 instance=ExtResource("11_cycno")]
 position = Vector2(2119.0955, 264.86624)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 6
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_78" type="Area2D" parent="Interactables" unique_id=559534025 instance=ExtResource("34_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_78" parent="Interactables" unique_id=559534025 instance=ExtResource("34_ltu66")]
 position = Vector2(646.75146, 854.1297)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 14
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_79" type="Area2D" parent="Interactables" unique_id=701262312 instance=ExtResource("29_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_79" parent="Interactables" unique_id=701262312 instance=ExtResource("29_gh1rs")]
 position = Vector2(1175.6632, 953.9395)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 9
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_80" type="Area2D" parent="Interactables" unique_id=2054287592 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_80" parent="Interactables" unique_id=2054287592 instance=ExtResource("33_4gqsg")]
 position = Vector2(1688.5911, 982.74567)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_81" type="Area2D" parent="Interactables" unique_id=1664845842 instance=ExtResource("12_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_81" parent="Interactables" unique_id=1664845842 instance=ExtResource("12_cycno")]
 position = Vector2(1481.9103, 918.55585)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 4
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_82" type="Area2D" parent="Interactables" unique_id=431209748 instance=ExtResource("12_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_82" parent="Interactables" unique_id=431209748 instance=ExtResource("12_cycno")]
 position = Vector2(2039.227, 1288.84)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 4
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_83" type="Area2D" parent="Interactables" unique_id=195840639 instance=ExtResource("23_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_83" parent="Interactables" unique_id=195840639 instance=ExtResource("23_i51xp")]
 position = Vector2(1161.445, 311.05975)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 3
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_84" type="Area2D" parent="Interactables" unique_id=1469288848 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_84" parent="Interactables" unique_id=1469288848 instance=ExtResource("32_07ioa")]
 position = Vector2(2280.181, 361.32748)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_85" type="Area2D" parent="Interactables" unique_id=1699053531 instance=ExtResource("22_noste")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_85" parent="Interactables" unique_id=1699053531 instance=ExtResource("22_noste")]
 position = Vector2(2696.0327, 886.78174)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 2
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_86" type="Area2D" parent="Interactables" unique_id=308488867 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_86" parent="Interactables" unique_id=308488867 instance=ExtResource("32_07ioa")]
 position = Vector2(1369.844, 295.5323)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_87" type="Area2D" parent="Interactables" unique_id=1934111468 instance=ExtResource("30_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_87" parent="Interactables" unique_id=1934111468 instance=ExtResource("30_3yv6x")]
 position = Vector2(2584.4893, 1049.8507)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 10
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_88" type="Area2D" parent="Interactables" unique_id=1697787344 instance=ExtResource("30_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_88" parent="Interactables" unique_id=1697787344 instance=ExtResource("30_3yv6x")]
 position = Vector2(790.9253, 342.18472)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 10
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_89" type="Area2D" parent="Interactables" unique_id=1738049411 instance=ExtResource("10_pvt85")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_89" parent="Interactables" unique_id=1738049411 instance=ExtResource("10_pvt85")]
 position = Vector2(1704.0096, 231.00313)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 7
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_90" type="Area2D" parent="Interactables" unique_id=217302055 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_90" parent="Interactables" unique_id=217302055 instance=ExtResource("32_07ioa")]
 position = Vector2(1961.1182, 169.9819)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_91" type="Area2D" parent="Interactables" unique_id=205429463 instance=ExtResource("30_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_91" parent="Interactables" unique_id=205429463 instance=ExtResource("30_3yv6x")]
 position = Vector2(2342.6829, 1046.0952)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 10
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_92" type="Area2D" parent="Interactables" unique_id=905011265 instance=ExtResource("10_pvt85")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_92" parent="Interactables" unique_id=905011265 instance=ExtResource("10_pvt85")]
 position = Vector2(1623.9158, 966.7508)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 7
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_93" type="Area2D" parent="Interactables" unique_id=331040305 instance=ExtResource("11_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_93" parent="Interactables" unique_id=331040305 instance=ExtResource("11_cycno")]
 position = Vector2(2070.4875, 903.6378)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 6
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_94" type="Area2D" parent="Interactables" unique_id=2010148013 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_94" parent="Interactables" unique_id=2010148013 instance=ExtResource("33_4gqsg")]
 position = Vector2(2472.0667, 886.9123)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_95" type="Area2D" parent="Interactables" unique_id=444616208 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_95" parent="Interactables" unique_id=444616208 instance=ExtResource("32_07ioa")]
 position = Vector2(1894.3826, 199.3727)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_96" type="Area2D" parent="Interactables" unique_id=1649541414 instance=ExtResource("23_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_96" parent="Interactables" unique_id=1649541414 instance=ExtResource("23_i51xp")]
 position = Vector2(1671.9379, 870.9333)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 3
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_97" type="Area2D" parent="Interactables" unique_id=1778311533 instance=ExtResource("29_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_97" parent="Interactables" unique_id=1778311533 instance=ExtResource("29_gh1rs")]
 position = Vector2(1975.8759, 425.35458)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 9
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_98" type="Area2D" parent="Interactables" unique_id=1264211076 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_98" parent="Interactables" unique_id=1264211076 instance=ExtResource("32_07ioa")]
 position = Vector2(2680.3538, 776.29016)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_99" type="Area2D" parent="Interactables" unique_id=210670073 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_99" parent="Interactables" unique_id=210670073 instance=ExtResource("6_cycno")]
 position = Vector2(808.3943, 215.75912)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_100" type="Area2D" parent="Interactables" unique_id=5181466 instance=ExtResource("14_8hc5p")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_100" parent="Interactables" unique_id=5181466 instance=ExtResource("14_8hc5p")]
 position = Vector2(1192.7709, 599.80444)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 11
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_101" type="Area2D" parent="Interactables" unique_id=1804356509 instance=ExtResource("29_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_101" parent="Interactables" unique_id=1804356509 instance=ExtResource("29_gh1rs")]
 position = Vector2(1991.9215, 760.19965)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 9
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_102" type="Area2D" parent="Interactables" unique_id=157273435 instance=ExtResource("12_janh6")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_102" parent="Interactables" unique_id=157273435 instance=ExtResource("12_janh6")]
 position = Vector2(777.47375, 248.04051)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_103" type="Area2D" parent="Interactables" unique_id=1966112489 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_103" parent="Interactables" unique_id=1966112489 instance=ExtResource("33_4gqsg")]
 position = Vector2(327.1847, 310.68884)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_104" type="Area2D" parent="Interactables" unique_id=1913973330 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_104" parent="Interactables" unique_id=1913973330 instance=ExtResource("6_cycno")]
 position = Vector2(2390.33, 119.15182)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_105" type="Area2D" parent="Interactables" unique_id=359239636 instance=ExtResource("12_janh6")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_105" parent="Interactables" unique_id=359239636 instance=ExtResource("12_janh6")]
 position = Vector2(1273.9286, 391.6075)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_106" type="Area2D" parent="Interactables" unique_id=682690567 instance=ExtResource("30_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_106" parent="Interactables" unique_id=682690567 instance=ExtResource("30_3yv6x")]
 position = Vector2(697.03015, 888.5013)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 10
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_107" type="Area2D" parent="Interactables" unique_id=1162388317 instance=ExtResource("10_pvt85")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_107" parent="Interactables" unique_id=1162388317 instance=ExtResource("10_pvt85")]
 position = Vector2(2214.2449, 1145.1765)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 7
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_108" type="Area2D" parent="Interactables" unique_id=1694823192 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_108" parent="Interactables" unique_id=1694823192 instance=ExtResource("6_cycno")]
 position = Vector2(2791.2979, 312.49872)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_109" type="Area2D" parent="Interactables" unique_id=433638655 instance=ExtResource("29_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_109" parent="Interactables" unique_id=433638655 instance=ExtResource("29_gh1rs")]
 position = Vector2(1287.7938, 550.9941)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 9
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_110" type="Area2D" parent="Interactables" unique_id=1761991471 instance=ExtResource("12_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_110" parent="Interactables" unique_id=1761991471 instance=ExtResource("12_cycno")]
 position = Vector2(744.07385, 230.40668)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 4
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_111" type="Area2D" parent="Interactables" unique_id=1619838817 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_111" parent="Interactables" unique_id=1619838817 instance=ExtResource("6_cycno")]
 position = Vector2(1001.60034, 1030.0834)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_112" type="Area2D" parent="Interactables" unique_id=1550198958 instance=ExtResource("12_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_112" parent="Interactables" unique_id=1550198958 instance=ExtResource("12_cycno")]
 position = Vector2(1848.404, 199.49965)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 4
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_113" type="Area2D" parent="Interactables" unique_id=2038333629 instance=ExtResource("12_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_113" parent="Interactables" unique_id=2038333629 instance=ExtResource("12_cycno")]
 position = Vector2(1609.1116, 1159.1754)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 4
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_114" type="Area2D" parent="Interactables" unique_id=223640174 instance=ExtResource("11_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_114" parent="Interactables" unique_id=223640174 instance=ExtResource("11_cycno")]
 position = Vector2(838.5082, 678.4864)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 6
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_115" type="Area2D" parent="Interactables" unique_id=1240782797 instance=ExtResource("10_pvt85")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_115" parent="Interactables" unique_id=1240782797 instance=ExtResource("10_pvt85")]
 position = Vector2(1625.0215, 182.39449)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 7
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_116" type="Area2D" parent="Interactables" unique_id=995785196 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_116" parent="Interactables" unique_id=995785196 instance=ExtResource("33_4gqsg")]
 position = Vector2(1049.1754, 873.9848)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_117" type="Area2D" parent="Interactables" unique_id=408830117 instance=ExtResource("33_4gqsg")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_117" parent="Interactables" unique_id=408830117 instance=ExtResource("33_4gqsg")]
 position = Vector2(2663.0452, 1095.2411)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 13
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_118" type="Area2D" parent="Interactables" unique_id=911505098 instance=ExtResource("12_janh6")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_118" parent="Interactables" unique_id=911505098 instance=ExtResource("12_janh6")]
 position = Vector2(1110.8967, 937.2314)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_119" type="Area2D" parent="Interactables" unique_id=906275425 instance=ExtResource("23_i51xp")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_119" parent="Interactables" unique_id=906275425 instance=ExtResource("23_i51xp")]
 position = Vector2(617.1988, 856.0823)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 3
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_120" type="Area2D" parent="Interactables" unique_id=180499197 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_120" parent="Interactables" unique_id=180499197 instance=ExtResource("6_cycno")]
 position = Vector2(2407.2485, 952.38727)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_121" type="Area2D" parent="Interactables" unique_id=1371767133 instance=ExtResource("14_8hc5p")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_121" parent="Interactables" unique_id=1371767133 instance=ExtResource("14_8hc5p")]
 position = Vector2(1318.6752, 857.8579)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 11
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_122" type="Area2D" parent="Interactables" unique_id=624886654 instance=ExtResource("6_cycno")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_122" parent="Interactables" unique_id=624886654 instance=ExtResource("6_cycno")]
 position = Vector2(1750.8104, 182.7782)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 8
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_123" type="Area2D" parent="Interactables" unique_id=263112627 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_123" parent="Interactables" unique_id=263112627 instance=ExtResource("32_07ioa")]
 position = Vector2(2151.525, 345.5972)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_124" type="Area2D" parent="Interactables" unique_id=1883536405 instance=ExtResource("10_pvt85")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_124" parent="Interactables" unique_id=1883536405 instance=ExtResource("10_pvt85")]
 position = Vector2(2553.06, 519.02576)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 7
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_125" type="Area2D" parent="Interactables" unique_id=101888500 instance=ExtResource("32_07ioa")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_125" parent="Interactables" unique_id=101888500 instance=ExtResource("32_07ioa")]
 position = Vector2(2071.7454, 230.24695)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 12
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_126" type="Area2D" parent="Interactables" unique_id=1643697923 instance=ExtResource("12_janh6")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_126" parent="Interactables" unique_id=1643697923 instance=ExtResource("12_janh6")]
 position = Vector2(806.2453, 296.07996)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
 is_permanent = true
 
-[node name="SpawnedStoneB_Clearing_127" type="Area2D" parent="Interactables" unique_id=2097410154 instance=ExtResource("14_8hc5p")]
-y_sort_enabled = true
+[node name="SpawnedStoneB_Clearing_127" parent="Interactables" unique_id=2097410154 instance=ExtResource("14_8hc5p")]
 position = Vector2(999.28357, 823.9437)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("27_glinh")
-rock_type = 11
 is_permanent = true
 
-[node name="SpawnedLog_Clearing_0" type="Area2D" parent="Interactables" unique_id=1650621984 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_0" parent="Interactables" unique_id=1650621984 instance=ExtResource("fallen_log_scene")]
 position = Vector2(1640.6295, 1078.2058)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_1" type="Area2D" parent="Interactables" unique_id=200551114 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_1" parent="Interactables" unique_id=200551114 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(840.034, 903.7523)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_2" type="Area2D" parent="Interactables" unique_id=1008280417 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_2" parent="Interactables" unique_id=1008280417 instance=ExtResource("fallen_log_scene")]
 position = Vector2(1414.4374, 1318.8744)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_3" type="Area2D" parent="Interactables" unique_id=1395286252 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_3" parent="Interactables" unique_id=1395286252 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(2249.6626, 1224.0781)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_4" type="Area2D" parent="Interactables" unique_id=1300766297 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_4" parent="Interactables" unique_id=1300766297 instance=ExtResource("fallen_log_scene")]
 position = Vector2(615.22974, 952.3113)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_5" type="Area2D" parent="Interactables" unique_id=1485253312 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_5" parent="Interactables" unique_id=1485253312 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(1126.8651, 790.53436)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_6" type="Area2D" parent="Interactables" unique_id=2032475137 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_6" parent="Interactables" unique_id=2032475137 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(982.66583, 328.4845)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_7" type="Area2D" parent="Interactables" unique_id=1511905341 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_7" parent="Interactables" unique_id=1511905341 instance=ExtResource("fallen_log_scene")]
 position = Vector2(806.3762, 601.50977)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_8" type="Area2D" parent="Interactables" unique_id=831534858 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_8" parent="Interactables" unique_id=831534858 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(1480.3883, 983.9005)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_9" type="Area2D" parent="Interactables" unique_id=1388530859 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_9" parent="Interactables" unique_id=1388530859 instance=ExtResource("fallen_log_scene")]
 position = Vector2(1304.8542, 1129.3428)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_10" type="Area2D" parent="Interactables" unique_id=610081730 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_10" parent="Interactables" unique_id=610081730 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(2102.322, 934.2312)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_11" type="Area2D" parent="Interactables" unique_id=533649920 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_11" parent="Interactables" unique_id=533649920 instance=ExtResource("fallen_log_scene")]
 position = Vector2(361.8055, 425.75943)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_12" type="Area2D" parent="Interactables" unique_id=279753099 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_12" parent="Interactables" unique_id=279753099 instance=ExtResource("fallen_log_scene")]
 position = Vector2(503.74124, 889.22327)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_13" type="Area2D" parent="Interactables" unique_id=1024141874 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_13" parent="Interactables" unique_id=1024141874 instance=ExtResource("fallen_log_scene")]
 position = Vector2(1671.4249, 936.80115)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_14" type="Area2D" parent="Interactables" unique_id=141875114 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_14" parent="Interactables" unique_id=141875114 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(2054.4634, 759.1463)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_15" type="Area2D" parent="Interactables" unique_id=280711075 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_15" parent="Interactables" unique_id=280711075 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(2134.9353, 1286.093)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_16" type="Area2D" parent="Interactables" unique_id=1807903292 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_16" parent="Interactables" unique_id=1807903292 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(2440.9548, 470.9645)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_17" type="Area2D" parent="Interactables" unique_id=1369114982 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_17" parent="Interactables" unique_id=1369114982 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(1638.0602, 295.3675)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_18" type="Area2D" parent="Interactables" unique_id=373101638 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_18" parent="Interactables" unique_id=373101638 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(1592.4729, 1000.45746)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_19" type="Area2D" parent="Interactables" unique_id=858222686 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_19" parent="Interactables" unique_id=858222686 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(1449.1425, 904.55707)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_20" type="Area2D" parent="Interactables" unique_id=765080097 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_20" parent="Interactables" unique_id=765080097 instance=ExtResource("fallen_log_scene")]
 position = Vector2(1334.2389, 1097.7618)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_21" type="Area2D" parent="Interactables" unique_id=1507701018 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_21" parent="Interactables" unique_id=1507701018 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(2198.0789, 1208.1586)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_22" type="Area2D" parent="Interactables" unique_id=1734183060 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_22" parent="Interactables" unique_id=1734183060 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(505.73004, 120.51363)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_23" type="Area2D" parent="Interactables" unique_id=1308369891 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_23" parent="Interactables" unique_id=1308369891 instance=ExtResource("fallen_log_scene")]
 position = Vector2(1065.6299, 248.59764)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_24" type="Area2D" parent="Interactables" unique_id=1482762769 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_24" parent="Interactables" unique_id=1482762769 instance=ExtResource("fallen_log_scene")]
 position = Vector2(2425.6084, 265.5641)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_25" type="Area2D" parent="Interactables" unique_id=121751081 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_25" parent="Interactables" unique_id=121751081 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(1160.4928, 343.76996)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_26" type="Area2D" parent="Interactables" unique_id=1004479101 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_26" parent="Interactables" unique_id=1004479101 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(1847.9066, 854.38617)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_27" type="Area2D" parent="Interactables" unique_id=723713623 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_27" parent="Interactables" unique_id=723713623 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(1593.397, 520.1438)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_28" type="Area2D" parent="Interactables" unique_id=882263641 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_28" parent="Interactables" unique_id=882263641 instance=ExtResource("fallen_log_scene")]
 position = Vector2(2519.9763, 710.1482)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_29" type="Area2D" parent="Interactables" unique_id=316437458 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_29" parent="Interactables" unique_id=316437458 instance=ExtResource("fallen_log_scene")]
 position = Vector2(1863.7426, 985.42365)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_30" type="Area2D" parent="Interactables" unique_id=1658453003 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_30" parent="Interactables" unique_id=1658453003 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(1031.392, 935.15344)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_31" type="Area2D" parent="Interactables" unique_id=681013854 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_31" parent="Interactables" unique_id=681013854 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(1639.2867, 806.10016)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_32" type="Area2D" parent="Interactables" unique_id=903813564 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_32" parent="Interactables" unique_id=903813564 instance=ExtResource("fallen_log_scene")]
 position = Vector2(2119.4902, 488.4865)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_33" type="Area2D" parent="Interactables" unique_id=1342471024 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_33" parent="Interactables" unique_id=1342471024 instance=ExtResource("fallen_log_scene")]
 position = Vector2(630.83813, 615.14325)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_34" type="Area2D" parent="Interactables" unique_id=1579955966 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_34" parent="Interactables" unique_id=1579955966 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(1798.6343, 969.22)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_35" type="Area2D" parent="Interactables" unique_id=2038554712 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_35" parent="Interactables" unique_id=2038554712 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(345.34952, 552.8527)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_36" type="Area2D" parent="Interactables" unique_id=1484391818 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_36" parent="Interactables" unique_id=1484391818 instance=ExtResource("fallen_log_scene")]
 position = Vector2(2393.9016, 889.6472)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedLog_Clearing_37" type="Area2D" parent="Interactables" unique_id=812633027 instance=ExtResource("fallen_log_vert_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_37" parent="Interactables" unique_id=812633027 instance=ExtResource("fallen_log_vert_scene")]
 position = Vector2(1240.6338, 825.2084)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("76_k8jqj")
 
-[node name="SpawnedLog_Clearing_38" type="Area2D" parent="Interactables" unique_id=823612054 instance=ExtResource("fallen_log_scene")]
-y_sort_enabled = true
+[node name="SpawnedLog_Clearing_38" parent="Interactables" unique_id=823612054 instance=ExtResource("fallen_log_scene")]
 position = Vector2(2503.8306, 902.1017)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("77_gv8i2")
 
-[node name="SpawnedBush_Beach_0" type="Area2D" parent="Interactables" unique_id=745886687 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_0" parent="Interactables" unique_id=745886687 instance=ExtResource("37_3yv6x")]
 position = Vector2(806.28577, 1240.7599)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Clearing_1" type="Area2D" parent="Interactables" unique_id=203728878 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_1" parent="Interactables" unique_id=203728878 instance=ExtResource("33_ltu66")]
 position = Vector2(1718.9169, 121.27374)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_2" type="Area2D" parent="Interactables" unique_id=1312027995 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_2" parent="Interactables" unique_id=1312027995 instance=ExtResource("33_ltu66")]
 position = Vector2(2264.508, 729.93506)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_3" type="Area2D" parent="Interactables" unique_id=1988170658 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_3" parent="Interactables" unique_id=1988170658 instance=ExtResource("34_4qboe")]
 position = Vector2(2040.0873, 486.31747)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_4" type="Area2D" parent="Interactables" unique_id=387596974 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_4" parent="Interactables" unique_id=387596974 instance=ExtResource("34_4qboe")]
 position = Vector2(760.4682, 1063.9594)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_5" type="Area2D" parent="Interactables" unique_id=1750926803 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_5" parent="Interactables" unique_id=1750926803 instance=ExtResource("36_gh1rs")]
 position = Vector2(1193.2401, 552.12555)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_6" type="Area2D" parent="Interactables" unique_id=1627978706 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_6" parent="Interactables" unique_id=1627978706 instance=ExtResource("36_gh1rs")]
 position = Vector2(1447.5054, 182.03589)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Beach_7" type="Area2D" parent="Interactables" unique_id=742564914 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_7" parent="Interactables" unique_id=742564914 instance=ExtResource("37_3yv6x")]
 position = Vector2(2680.0627, 24.40917)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Clearing_8" type="Area2D" parent="Interactables" unique_id=1866124117 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_8" parent="Interactables" unique_id=1866124117 instance=ExtResource("36_gh1rs")]
 position = Vector2(2294.6611, 454.65045)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_9" type="Area2D" parent="Interactables" unique_id=406486520 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_9" parent="Interactables" unique_id=406486520 instance=ExtResource("36_gh1rs")]
 position = Vector2(2567.1836, 1128.9855)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_10" type="Area2D" parent="Interactables" unique_id=881858283 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_10" parent="Interactables" unique_id=881858283 instance=ExtResource("35_a0fn8")]
 position = Vector2(854.14246, 824.7745)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_11" type="Area2D" parent="Interactables" unique_id=1366154463 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_11" parent="Interactables" unique_id=1366154463 instance=ExtResource("35_a0fn8")]
 position = Vector2(2438.858, 790.29504)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_12" type="Area2D" parent="Interactables" unique_id=32263048 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_12" parent="Interactables" unique_id=32263048 instance=ExtResource("35_a0fn8")]
 position = Vector2(2473.07, 375.11)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_13" type="Area2D" parent="Interactables" unique_id=154659454 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_13" parent="Interactables" unique_id=154659454 instance=ExtResource("35_a0fn8")]
 position = Vector2(1159.6301, 822.9398)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_14" type="Area2D" parent="Interactables" unique_id=528293146 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_14" parent="Interactables" unique_id=528293146 instance=ExtResource("34_4qboe")]
 position = Vector2(968.5531, 681.7588)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_15" type="Area2D" parent="Interactables" unique_id=1815634426 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_15" parent="Interactables" unique_id=1815634426 instance=ExtResource("33_ltu66")]
 position = Vector2(1367.1028, 249.5049)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_16" type="Area2D" parent="Interactables" unique_id=708668669 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_16" parent="Interactables" unique_id=708668669 instance=ExtResource("33_ltu66")]
 position = Vector2(696.4413, 552.405)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_17" type="Area2D" parent="Interactables" unique_id=2123558000 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_17" parent="Interactables" unique_id=2123558000 instance=ExtResource("33_ltu66")]
 position = Vector2(710.11115, 1095.0645)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_18" type="Area2D" parent="Interactables" unique_id=1363127272 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_18" parent="Interactables" unique_id=1363127272 instance=ExtResource("36_gh1rs")]
 position = Vector2(2758.0344, 761.14246)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_19" type="Area2D" parent="Interactables" unique_id=268096727 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_19" parent="Interactables" unique_id=268096727 instance=ExtResource("33_ltu66")]
 position = Vector2(809.2025, 967.1377)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_20" type="Area2D" parent="Interactables" unique_id=348559339 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_20" parent="Interactables" unique_id=348559339 instance=ExtResource("34_4qboe")]
 position = Vector2(1543.7656, 134.60481)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_21" type="Area2D" parent="Interactables" unique_id=552832927 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_21" parent="Interactables" unique_id=552832927 instance=ExtResource("34_4qboe")]
 position = Vector2(184.85127, 313.08325)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_22" type="Area2D" parent="Interactables" unique_id=1795891644 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_22" parent="Interactables" unique_id=1795891644 instance=ExtResource("34_4qboe")]
 position = Vector2(2201.8083, 374.92743)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_23" type="Area2D" parent="Interactables" unique_id=184971002 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_23" parent="Interactables" unique_id=184971002 instance=ExtResource("35_a0fn8")]
 position = Vector2(1913.55, 264.78616)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_24" type="Area2D" parent="Interactables" unique_id=1786126294 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_24" parent="Interactables" unique_id=1786126294 instance=ExtResource("35_a0fn8")]
 position = Vector2(857.326, 263.45966)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Beach_25" type="Area2D" parent="Interactables" unique_id=1702992314 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_25" parent="Interactables" unique_id=1702992314 instance=ExtResource("37_3yv6x")]
 position = Vector2(2120.223, 24.381548)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Beach_26" type="Area2D" parent="Interactables" unique_id=659201906 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_26" parent="Interactables" unique_id=659201906 instance=ExtResource("37_3yv6x")]
 position = Vector2(2425.8982, -38.25897)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Clearing_27" type="Area2D" parent="Interactables" unique_id=869219437 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_27" parent="Interactables" unique_id=869219437 instance=ExtResource("33_ltu66")]
 position = Vector2(598.2914, 745.58966)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_28" type="Area2D" parent="Interactables" unique_id=228858111 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_28" parent="Interactables" unique_id=228858111 instance=ExtResource("35_a0fn8")]
 position = Vector2(647.01245, 809.4935)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_29" type="Area2D" parent="Interactables" unique_id=1132112308 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_29" parent="Interactables" unique_id=1132112308 instance=ExtResource("34_4qboe")]
 position = Vector2(1862.3833, 1078.6184)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_30" type="Area2D" parent="Interactables" unique_id=1157522406 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_30" parent="Interactables" unique_id=1157522406 instance=ExtResource("34_4qboe")]
 position = Vector2(1449.7109, 1286.9921)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_31" type="Area2D" parent="Interactables" unique_id=1693126817 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_31" parent="Interactables" unique_id=1693126817 instance=ExtResource("36_gh1rs")]
 position = Vector2(1209.2025, 567.2104)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_32" type="Area2D" parent="Interactables" unique_id=1283603428 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_32" parent="Interactables" unique_id=1283603428 instance=ExtResource("33_ltu66")]
 position = Vector2(2697.0886, 1079.7463)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_33" type="Area2D" parent="Interactables" unique_id=1683566272 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_33" parent="Interactables" unique_id=1683566272 instance=ExtResource("35_a0fn8")]
 position = Vector2(1833.4316, 1238.8904)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_34" type="Area2D" parent="Interactables" unique_id=450807320 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_34" parent="Interactables" unique_id=450807320 instance=ExtResource("34_4qboe")]
 position = Vector2(2582.9932, 520.9016)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_35" type="Area2D" parent="Interactables" unique_id=1667611952 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_35" parent="Interactables" unique_id=1667611952 instance=ExtResource("34_4qboe")]
 position = Vector2(1704.2448, 840.6537)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_36" type="Area2D" parent="Interactables" unique_id=687510344 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_36" parent="Interactables" unique_id=687510344 instance=ExtResource("34_4qboe")]
 position = Vector2(2393.229, 630.3125)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Beach_37" type="Area2D" parent="Interactables" unique_id=2062474693 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_37" parent="Interactables" unique_id=2062474693 instance=ExtResource("37_3yv6x")]
 position = Vector2(2856.1113, 776.8929)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Clearing_38" type="Area2D" parent="Interactables" unique_id=1402683362 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_38" parent="Interactables" unique_id=1402683362 instance=ExtResource("36_gh1rs")]
 position = Vector2(1015.1587, 870.8136)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_39" type="Area2D" parent="Interactables" unique_id=1908391227 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_39" parent="Interactables" unique_id=1908391227 instance=ExtResource("36_gh1rs")]
 position = Vector2(569.57385, 297.05084)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Beach_40" type="Area2D" parent="Interactables" unique_id=2094165734 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_40" parent="Interactables" unique_id=2094165734 instance=ExtResource("37_3yv6x")]
 position = Vector2(2487.9119, 1350.1652)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Clearing_41" type="Area2D" parent="Interactables" unique_id=1800364696 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_41" parent="Interactables" unique_id=1800364696 instance=ExtResource("34_4qboe")]
 position = Vector2(1270.2996, 1014.6242)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Beach_42" type="Area2D" parent="Interactables" unique_id=1672591366 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_42" parent="Interactables" unique_id=1672591366 instance=ExtResource("37_3yv6x")]
 position = Vector2(1256.4353, 1416.9637)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Clearing_43" type="Area2D" parent="Interactables" unique_id=1086732740 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_43" parent="Interactables" unique_id=1086732740 instance=ExtResource("36_gh1rs")]
 position = Vector2(1462.9419, 249.11275)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Beach_44" type="Area2D" parent="Interactables" unique_id=627769746 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_44" parent="Interactables" unique_id=627769746 instance=ExtResource("37_3yv6x")]
 position = Vector2(584.7639, 39.494175)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Clearing_45" type="Area2D" parent="Interactables" unique_id=815047799 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_45" parent="Interactables" unique_id=815047799 instance=ExtResource("34_4qboe")]
 position = Vector2(2104.1936, 583.3026)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_46" type="Area2D" parent="Interactables" unique_id=1173231493 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_46" parent="Interactables" unique_id=1173231493 instance=ExtResource("33_ltu66")]
 position = Vector2(1769.847, 1158.4391)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_47" type="Area2D" parent="Interactables" unique_id=61204374 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_47" parent="Interactables" unique_id=61204374 instance=ExtResource("35_a0fn8")]
 position = Vector2(1881.4199, 823.80255)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Beach_48" type="Area2D" parent="Interactables" unique_id=723229694 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_48" parent="Interactables" unique_id=723229694 instance=ExtResource("37_3yv6x")]
 position = Vector2(103.14503, 121.449524)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Clearing_49" type="Area2D" parent="Interactables" unique_id=1441263628 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_49" parent="Interactables" unique_id=1441263628 instance=ExtResource("36_gh1rs")]
 position = Vector2(1928.3599, 758.777)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_50" type="Area2D" parent="Interactables" unique_id=1689248125 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_50" parent="Interactables" unique_id=1689248125 instance=ExtResource("34_4qboe")]
 position = Vector2(1222.8984, 231.79587)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_51" type="Area2D" parent="Interactables" unique_id=1451857199 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_51" parent="Interactables" unique_id=1451857199 instance=ExtResource("34_4qboe")]
 position = Vector2(2057.4226, 278.25287)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_52" type="Area2D" parent="Interactables" unique_id=586980921 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_52" parent="Interactables" unique_id=586980921 instance=ExtResource("34_4qboe")]
 position = Vector2(2280.264, 856.889)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_53" type="Area2D" parent="Interactables" unique_id=403483876 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_53" parent="Interactables" unique_id=403483876 instance=ExtResource("35_a0fn8")]
 position = Vector2(2025.7333, 727.33344)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Beach_54" type="Area2D" parent="Interactables" unique_id=848209522 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_54" parent="Interactables" unique_id=848209522 instance=ExtResource("37_3yv6x")]
 position = Vector2(518.1091, 1208.2439)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Beach_55" type="Area2D" parent="Interactables" unique_id=1131166051 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_55" parent="Interactables" unique_id=1131166051 instance=ExtResource("37_3yv6x")]
 position = Vector2(1689.7249, 1383.7794)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Clearing_56" type="Area2D" parent="Interactables" unique_id=563170390 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_56" parent="Interactables" unique_id=563170390 instance=ExtResource("34_4qboe")]
 position = Vector2(2729.0186, 456.75214)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_57" type="Area2D" parent="Interactables" unique_id=1933630574 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_57" parent="Interactables" unique_id=1933630574 instance=ExtResource("36_gh1rs")]
 position = Vector2(457.30368, 647.2205)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_58" type="Area2D" parent="Interactables" unique_id=944144608 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_58" parent="Interactables" unique_id=944144608 instance=ExtResource("34_4qboe")]
 position = Vector2(808.48285, 377.07422)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_59" type="Area2D" parent="Interactables" unique_id=1834688425 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_59" parent="Interactables" unique_id=1834688425 instance=ExtResource("35_a0fn8")]
 position = Vector2(2136.1929, 553.08514)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_60" type="Area2D" parent="Interactables" unique_id=1695506937 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_60" parent="Interactables" unique_id=1695506937 instance=ExtResource("35_a0fn8")]
 position = Vector2(2505.3513, 1096.6653)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_61" type="Area2D" parent="Interactables" unique_id=792773985 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_61" parent="Interactables" unique_id=792773985 instance=ExtResource("36_gh1rs")]
 position = Vector2(1113.9999, 758.7349)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_62" type="Area2D" parent="Interactables" unique_id=1285698790 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_62" parent="Interactables" unique_id=1285698790 instance=ExtResource("33_ltu66")]
 position = Vector2(1559.8872, 265.84653)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_63" type="Area2D" parent="Interactables" unique_id=1041832661 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_63" parent="Interactables" unique_id=1041832661 instance=ExtResource("34_4qboe")]
 position = Vector2(985.3886, 1129.4684)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_64" type="Area2D" parent="Interactables" unique_id=268801533 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_64" parent="Interactables" unique_id=268801533 instance=ExtResource("34_4qboe")]
 position = Vector2(1799.5339, 935.04504)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Beach_65" type="Area2D" parent="Interactables" unique_id=1442007498 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_65" parent="Interactables" unique_id=1442007498 instance=ExtResource("37_3yv6x")]
 position = Vector2(2008.0621, 1431.3646)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Clearing_66" type="Area2D" parent="Interactables" unique_id=338689515 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_66" parent="Interactables" unique_id=338689515 instance=ExtResource("35_a0fn8")]
 position = Vector2(2008.8099, 710.4188)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_67" type="Area2D" parent="Interactables" unique_id=1575222207 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_67" parent="Interactables" unique_id=1575222207 instance=ExtResource("36_gh1rs")]
 position = Vector2(678.0584, 631.3196)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_68" type="Area2D" parent="Interactables" unique_id=300809758 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_68" parent="Interactables" unique_id=300809758 instance=ExtResource("33_ltu66")]
 position = Vector2(2040.1731, 598.7136)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_69" type="Area2D" parent="Interactables" unique_id=1309931799 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_69" parent="Interactables" unique_id=1309931799 instance=ExtResource("33_ltu66")]
 position = Vector2(1272.6824, 1238.3876)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_70" type="Area2D" parent="Interactables" unique_id=558497538 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_70" parent="Interactables" unique_id=558497538 instance=ExtResource("33_ltu66")]
 position = Vector2(2582.291, 856.90704)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_71" type="Area2D" parent="Interactables" unique_id=728862247 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_71" parent="Interactables" unique_id=728862247 instance=ExtResource("36_gh1rs")]
 position = Vector2(2391.1765, 1174.316)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_72" type="Area2D" parent="Interactables" unique_id=1174995670 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_72" parent="Interactables" unique_id=1174995670 instance=ExtResource("33_ltu66")]
 position = Vector2(1977.5287, 504.6397)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_73" type="Area2D" parent="Interactables" unique_id=1359672045 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_73" parent="Interactables" unique_id=1359672045 instance=ExtResource("35_a0fn8")]
 position = Vector2(2470.3452, 438.95886)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_74" type="Area2D" parent="Interactables" unique_id=1923898697 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_74" parent="Interactables" unique_id=1923898697 instance=ExtResource("35_a0fn8")]
 position = Vector2(1510.0498, 1222.445)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_75" type="Area2D" parent="Interactables" unique_id=691754385 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_75" parent="Interactables" unique_id=691754385 instance=ExtResource("36_gh1rs")]
 position = Vector2(294.97675, 232.80098)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_76" type="Area2D" parent="Interactables" unique_id=105648517 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_76" parent="Interactables" unique_id=105648517 instance=ExtResource("35_a0fn8")]
 position = Vector2(2025.1309, 870.8329)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_77" type="Area2D" parent="Interactables" unique_id=1756406041 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_77" parent="Interactables" unique_id=1756406041 instance=ExtResource("36_gh1rs")]
 position = Vector2(2616.8115, 729.31824)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_78" type="Area2D" parent="Interactables" unique_id=284076 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_78" parent="Interactables" unique_id=284076 instance=ExtResource("36_gh1rs")]
 position = Vector2(936.949, 1158.3533)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_79" type="Area2D" parent="Interactables" unique_id=680305845 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_79" parent="Interactables" unique_id=680305845 instance=ExtResource("34_4qboe")]
 position = Vector2(2456.1658, 247.42517)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_80" type="Area2D" parent="Interactables" unique_id=11197315 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_80" parent="Interactables" unique_id=11197315 instance=ExtResource("34_4qboe")]
 position = Vector2(855.90924, 377.91995)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Beach_81" type="Area2D" parent="Interactables" unique_id=1311343281 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_81" parent="Interactables" unique_id=1311343281 instance=ExtResource("37_3yv6x")]
 position = Vector2(342.49072, 758.66296)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Clearing_82" type="Area2D" parent="Interactables" unique_id=1046412949 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_82" parent="Interactables" unique_id=1046412949 instance=ExtResource("36_gh1rs")]
 position = Vector2(2150.4048, 409.57535)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Beach_83" type="Area2D" parent="Interactables" unique_id=745586630 instance=ExtResource("37_3yv6x")]
-y_sort_enabled = true
+[node name="SpawnedBush_Beach_83" parent="Interactables" unique_id=745586630 instance=ExtResource("37_3yv6x")]
 position = Vector2(38.64485, 249.43164)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "dead_fern"
 
-[node name="SpawnedBush_Clearing_84" type="Area2D" parent="Interactables" unique_id=1660137202 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_84" parent="Interactables" unique_id=1660137202 instance=ExtResource("34_4qboe")]
 position = Vector2(1303.5841, 1001.3421)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_85" type="Area2D" parent="Interactables" unique_id=1861861447 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_85" parent="Interactables" unique_id=1861861447 instance=ExtResource("35_a0fn8")]
 position = Vector2(2054.6602, 1273.4078)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_86" type="Area2D" parent="Interactables" unique_id=1468643639 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_86" parent="Interactables" unique_id=1468643639 instance=ExtResource("34_4qboe")]
 position = Vector2(2007.7177, 569.3465)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_87" type="Area2D" parent="Interactables" unique_id=332901192 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_87" parent="Interactables" unique_id=332901192 instance=ExtResource("36_gh1rs")]
 position = Vector2(953.3586, 374.5056)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_88" type="Area2D" parent="Interactables" unique_id=1836850048 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_88" parent="Interactables" unique_id=1836850048 instance=ExtResource("34_4qboe")]
 position = Vector2(1112.7534, 887.0013)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_89" type="Area2D" parent="Interactables" unique_id=967770777 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_89" parent="Interactables" unique_id=967770777 instance=ExtResource("33_ltu66")]
 position = Vector2(615.68854, 598.2167)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_90" type="Area2D" parent="Interactables" unique_id=632443323 instance=ExtResource("36_gh1rs")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_90" parent="Interactables" unique_id=632443323 instance=ExtResource("36_gh1rs")]
 position = Vector2(2153.108, 200.0244)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "desert_fern"
 
-[node name="SpawnedBush_Clearing_91" type="Area2D" parent="Interactables" unique_id=376108236 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_91" parent="Interactables" unique_id=376108236 instance=ExtResource("34_4qboe")]
 position = Vector2(2409.3447, 905.54614)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_92" type="Area2D" parent="Interactables" unique_id=1644104225 instance=ExtResource("34_4qboe")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_92" parent="Interactables" unique_id=1644104225 instance=ExtResource("34_4qboe")]
 position = Vector2(1817.6902, 952.66736)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "purple"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_93" type="Area2D" parent="Interactables" unique_id=847411311 instance=ExtResource("33_ltu66")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_93" parent="Interactables" unique_id=847411311 instance=ExtResource("33_ltu66")]
 position = Vector2(1174.8999, 921.24866)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-berry_type = "red"
-has_berries = true
-bush_size = -1
 
-[node name="SpawnedBush_Clearing_94" type="Area2D" parent="Interactables" unique_id=1889598494 instance=ExtResource("35_a0fn8")]
-y_sort_enabled = true
+[node name="SpawnedBush_Clearing_94" parent="Interactables" unique_id=1889598494 instance=ExtResource("35_a0fn8")]
 position = Vector2(856.9186, 327.0312)
-collision_layer = 2
-script = ExtResource("56_dpu66")
-bush_type = "plain_bush"
-bush_size = -1
 
 [node name="DayNightModulate" type="CanvasModulate" parent="." unique_id=751614024]
 z_as_relative = false

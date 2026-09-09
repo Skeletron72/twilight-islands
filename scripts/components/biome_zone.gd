@@ -47,7 +47,7 @@ func _update_visuals() -> void:
 		if not visual_polygon:
 			visual_polygon = Polygon2D.new()
 			visual_polygon.name = "VisualPolygon"
-			add_child(visual_polygon)
+			call_deferred("add_child", visual_polygon)
 			if Engine.is_editor_hint():
 				var scene_owner = owner if owner else (get_tree().edited_scene_root if get_tree() else null)
 				if scene_owner:

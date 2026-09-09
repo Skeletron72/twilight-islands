@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://firefly_vfx_01"]
 
 [ext_resource type="Script" path="res://scripts/components/firefly.gd" id="1_ff"]
-[ext_resource type="Texture2D" uid="uid://pixel_light_circle_33" path="res://assets/textures/lights/pixel_light_circle.png" id="2_ltex"]
+[ext_resource type="Texture2D" path="res://assets/textures/lights/pixel_light_circle.png" id="2_ltex"]
 
 [node name="Firefly" type="Node2D"]
 z_index = 6
