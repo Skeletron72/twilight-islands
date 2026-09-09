@@ -4,6 +4,16 @@ enum TimeOfDay { MORNING, DAY, DUSK, NIGHT }
 
 var current_time: TimeOfDay = TimeOfDay.MORNING
 var current_day: int = 1
+var current_raid_seed: int = 123456
+
+func get_or_create_raid_seed() -> int:
+	if current_raid_seed == 0:
+		current_raid_seed = randi()
+	return current_raid_seed
+
+func generate_new_raid_seed() -> int:
+	current_raid_seed = randi()
+	return current_raid_seed
 
 var max_health: float = 100.0
 var current_health: float = 100.0
@@ -73,6 +83,7 @@ func set_time(new_time: TimeOfDay) -> void:
 func advance_day() -> void:
 	current_day += 1
 	current_time = TimeOfDay.MORNING
+	generate_new_raid_seed()
 	day_changed.emit(current_day)
 	time_changed.emit(current_time)
 
@@ -135,6 +146,33 @@ func register_campfire_lit() -> void:
 
 func register_bush_harvested() -> void:
 	stat_bushes_harvested += 1
+
+func add_stat(stat_name: String, amount: Variant = 1) -> void:
+	match stat_name:
+		"items_gathered":
+			register_item_gathered(int(amount))
+		"trees_chopped":
+			register_tree_chopped()
+		"stones_mined":
+			register_stone_mined()
+		"items_crafted":
+			register_item_crafted()
+		"monsters_killed":
+			register_monster_killed()
+		"fish_caught":
+			register_fish_caught()
+		"treasures_found":
+			register_treasure_found()
+		"chests_opened":
+			register_chest_opened()
+		"campfires_lit":
+			register_campfire_lit()
+		"bushes_harvested":
+			register_bush_harvested()
+		_:
+			var var_name = "stat_" + stat_name
+			if var_name in self:
+				set(var_name, get(var_name) + amount)
 
 func update_player_position(pos: Vector2) -> void:
 	if _last_player_position != Vector2.ZERO:

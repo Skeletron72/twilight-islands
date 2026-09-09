@@ -37,6 +37,12 @@ func _ready() -> void:
 	collision_layer = 2
 	collision_mask = 0
 	
+	var current_scene = get_tree().current_scene
+	var is_home = (current_scene and current_scene.name == "HomeIsland")
+	if is_home and HomeStateManager and HomeStateManager.is_destroyed(get_path()):
+		queue_free()
+		return
+		
 	if variant < 0 or variant >= LOG_REGIONS.size():
 		variant = randi() % LOG_REGIONS.size()
 		
@@ -143,6 +149,10 @@ func _spawn_hit_particles() -> void:
 
 func _break_log() -> void:
 	is_broken = true
+	var current_scene = get_tree().current_scene
+	var is_home = (current_scene and current_scene.name == "HomeIsland")
+	if is_home and HomeStateManager:
+		HomeStateManager.mark_destroyed(get_path())
 	GameStateManager.register_tree_chopped()
 	
 	# Звук раскалывания

@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/components/cave_torch.gd" id="1_torch"]
+
+[sub_resource type="Gradient" id="Gradient_torch"]
+colors = PackedColorArray(1, 0.85, 0.6, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_torch"]
+gradient = SubResource("Gradient_torch")
+width = 160
+height = 160
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.85, 0.5)
+
+[node name="CaveTorch" type="Node2D"]
+script = ExtResource("1_torch")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+texture_filter = 1
+color = Color(1, 0.72, 0.38, 0.9)
+energy = 0.85
+texture = SubResource("GradientTexture2D_torch")

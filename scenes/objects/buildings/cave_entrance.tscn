@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/components/cave_entrance.gd" id="1_cave"]
+[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_1_Cave_Entrance.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
+size = Vector2(36, 36)
+
+[node name="CaveEntrance" type="StaticBody2D" groups=["interactable"]]
+y_sort_enabled = true
+collision_layer = 5
+collision_mask = 0
+script = ExtResource("1_cave")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+offset = Vector2(0, -24)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-24, 0, -24, -44, 24, -44, 24, 0, 8, 0, 8, -16, -8, -16, -8, 0)
+
+[node name="InteractionArea" type="Area2D" parent="."]
+position = Vector2(0, 0)
+collision_layer = 2
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("RectangleShape2D_door")

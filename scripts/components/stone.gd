@@ -20,16 +20,17 @@ func _ready() -> void:
 	super._ready()
 	collision_layer = 2
 	
+	var current_scene = get_tree().current_scene
+	var is_home = (current_scene and current_scene.name == "HomeIsland")
+	if (is_permanent or is_home) and HomeStateManager and HomeStateManager.is_destroyed(get_path()):
+		queue_free()
+		return
+	
 	if is_gatherable():
 		prompt_text = "Поднять камень"
 		# Small loose rocks lying on the ground do not block player movement
 		if static_shape:
 			static_shape.disabled = true
-		var current_scene = get_tree().current_scene
-		var is_home = (current_scene and current_scene.name == "HomeIsland")
-		if (is_permanent or is_home) and HomeStateManager and HomeStateManager.is_destroyed(get_path()):
-			queue_free()
-			return
 	else:
 		prompt_text = "Добыть камень"
 		var is_large = rock_type >= 11
@@ -69,6 +70,10 @@ func interact(player: Node2D) -> void:
 	
 	if hp <= 0:
 		is_dead = true
+		var current_scene = get_tree().current_scene
+		var is_home = (current_scene and current_scene.name == "HomeIsland")
+		if (is_permanent or is_home) and HomeStateManager:
+			HomeStateManager.mark_destroyed(get_path())
 		GameStateManager.register_stone_mined()
 		_spawn_drops()
 		

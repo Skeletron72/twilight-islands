@@ -1,0 +1,69 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/dungeon.gd" id="1_dng"]
+[ext_resource type="TileSet" uid="uid://dcinsxthwxsap" path="res://resources/cute_tileset.tres" id="2_ts"]
+[ext_resource type="PackedScene" uid="uid://cxab3213x0x" path="res://scenes/characters/player/player.tscn" id="3_plr"]
+[ext_resource type="PackedScene" uid="uid://dfoo5613x3x" path="res://scenes/ui/ui_layer.tscn" id="4_ui"]
+[ext_resource type="FontFile" uid="uid://cp5m6git4cdoo" path="res://assets/fonts/Chalkboard.ttf" id="5_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_badge"]
+bg_color = Color(0.12, 0.12, 0.16, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45, 0.4, 0.35, 0.9)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Dungeon" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_dng")
+
+[node name="CaveModulate" type="CanvasModulate" parent="."]
+color = Color(0.24, 0.24, 0.3, 1)
+
+[node name="FloorLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("2_ts")
+
+[node name="WallLayer" type="TileMapLayer" parent="."]
+y_sort_enabled = true
+tile_set = ExtResource("2_ts")
+
+[node name="BoundaryWalls" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="Interactables" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("3_plr")]
+position = Vector2(56, 72)
+
+[node name="UILayer" parent="." instance=ExtResource("4_ui")]
+
+[node name="DungeonHUD" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="FloorBadge" type="PanelContainer" parent="DungeonHUD"]
+offset_left = 12.0
+offset_top = 10.0
+offset_right = 110.0
+offset_bottom = 28.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_badge")
+
+[node name="MarginContainer" type="MarginContainer" parent="DungeonHUD/FloorBadge"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 2
+
+[node name="FloorLabel" type="Label" parent="DungeonHUD/FloorBadge/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 10
+text = "Шахта • Этаж 1"

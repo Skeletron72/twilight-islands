@@ -25,6 +25,18 @@ class_name ResourceSpawner
 		if val and is_inside_tree():
 			_update_spawn_area()
 
+@export var prune_border_violators_now: bool = false:
+	set(val):
+		prune_border_violators_now = false
+		if val and is_inside_tree():
+			_prune_border_violators()
+
+@export var reload_tileset_now: bool = false:
+	set(val):
+		reload_tileset_now = false
+		if val and is_inside_tree():
+			_reload_tileset()
+
 @export var refresh_biomes_view: bool = false:
 	set(val):
 		refresh_biomes_view = false
@@ -46,6 +58,7 @@ class_name ResourceSpawner
 		queue_redraw()
 
 @export var is_raid_override: bool = false
+@export var world_seed: int = 0
 
 @export_group("Visualization & Biome Overlay")
 @export var show_biome_overlay: bool = true:
@@ -95,20 +108,21 @@ class_name ResourceSpawner
 @export_range(0.0, 2.5, 0.1) var gatherable_density: float = 1.0
 
 @export_group("Spacing & Biome Buffers")
-## Дистанция между деревьями (пиксели, 32-36px исключает наложение спрайтов крон деревьев и пальм)
-@export var tree_min_dist: float = 34.0
-@export var boulder_min_dist: float = 20.0
+## Дистанция между деревьями (пиксели, 38px исключает наложение спрайтов крон деревьев и пальм)
+@export var tree_min_dist: float = 38.0
+@export var boulder_min_dist: float = 22.0
 @export var bush_min_dist: float = 20.0
 @export var log_min_dist: float = 28.0
 @export var gatherable_min_dist: float = 16.0
 
-## Буфер от границ чужих биомов (24px = 1.5 тайла).
+## Буфер от границ чужих биомов (32px = 2 полных тайла).
 ## Полностью исключает спавн деревьев прямо на стыке разных биомов (например, берез в хвойном лесу)!
-@export var biome_border_buffer: float = 24.0
-@export var water_clearance_trees: float = 10.0
-@export var water_clearance_boulders: float = 6.0
-@export var water_clearance_bushes: float = 4.0
-@export var beach_border_clearance: float = 24.0
+@export var biome_border_buffer: float = 32.0
+@export var water_clearance_trees: float = 12.0
+@export var water_clearance_palms: float = 14.0
+@export var water_clearance_boulders: float = 8.0
+@export var water_clearance_bushes: float = 8.0
+@export var beach_border_clearance: float = 32.0
 
 @export_group("Manual Counts Override (при use_density_generation = false)")
 @export var tree_count: int = 48
@@ -125,6 +139,7 @@ var _last_fail_reason: String = ""
 
 # Кэш ячеек биомов для быстрой отрисовки и спавна
 var _cached_biome_cells: Dictionary = {}
+var _cached_biome_core_cells: Dictionary = {}
 var _cached_ref_layer: TileMapLayer = null
 
 const BIOME_PALETTE = {
@@ -232,6 +247,7 @@ func _refresh_biome_cache() -> void:
 	var world_map = _get_world_map()
 	if not world_map:
 		_cached_biome_cells.clear()
+		_cached_biome_core_cells.clear()
 		_cached_ref_layer = null
 		return
 		
@@ -241,6 +257,13 @@ func _refresh_biome_cache() -> void:
 	
 	_cached_ref_layer = ground if ground else (shore if shore else (grass if grass else world_map.get_child(0) as TileMapLayer))
 	_cached_biome_cells = {
+		"clearing": [],
+		"forest": [],
+		"dry": [],
+		"magic": [],
+		"beach": []
+	}
+	_cached_biome_core_cells = {
 		"clearing": [],
 		"forest": [],
 		"dry": [],
@@ -259,6 +282,7 @@ func _refresh_biome_cache() -> void:
 		for c in grass.get_used_cells():
 			all_cells_dict[c] = true
 			
+	var cell_to_biome: Dictionary = {}
 	for c in all_cells_dict.keys():
 		# Определяем биом с соблюдением приоритета слоев: GrassLayer -> GroundLayer -> ShoreLayer
 		var chosen_data: TileData = null
@@ -278,15 +302,31 @@ func _refresh_biome_cache() -> void:
 			if is_shore_only and (b == "clearing" or b == "void"):
 				b = "beach"
 				
+		cell_to_biome[c] = b
 		if _cached_biome_cells.has(b):
 			_cached_biome_cells[b].append(c)
-		else:
-			_cached_biome_cells["clearing"].append(c)
+
+	# Выделяем внутренние ячейки (Core Cells) — у которых все 8 соседей принадлежат тому же биому
+	for b_name in _cached_biome_core_cells.keys():
+		for c in _cached_biome_cells[b_name]:
+			var is_core = true
+			for dx in [-1, 0, 1]:
+				for dy in [-1, 0, 1]:
+					if dx == 0 and dy == 0: continue
+					var nc = c + Vector2i(dx, dy)
+					if not cell_to_biome.has(nc) or cell_to_biome[nc] != b_name:
+						is_core = false
+						break
+				if not is_core:
+					break
+			if is_core:
+				_cached_biome_core_cells[b_name].append(c)
 			
 	print("ResourceSpawner: Biome scan completed:")
 	for k in _cached_biome_cells.keys():
 		if _cached_biome_cells[k].size() > 0:
-			print("  - ", BIOME_NAMES.get(k, k), ": ", _cached_biome_cells[k].size(), " tiles")
+			var core_count = _cached_biome_core_cells.get(k, []).size()
+			print("  - ", BIOME_NAMES.get(k, k), ": ", _cached_biome_cells[k].size(), " tiles (core: ", core_count, ")")
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -303,13 +343,17 @@ func _ready() -> void:
 			if _count_spawned_type("Spawned") == 0:
 				_generate_all()
 			else:
+				_prune_border_violators()
 				_replenish_home_resources()
-			if GameStateManager:
-				if not GameStateManager.day_changed.is_connected(_on_day_changed):
-					GameStateManager.day_changed.connect(_on_day_changed)
+			var gsm = get_node_or_null("/root/GameStateManager")
+			if gsm:
+				if not gsm.day_changed.is_connected(_on_day_changed):
+					gsm.day_changed.connect(_on_day_changed)
 		else:
 			if _count_spawned_type("Spawned") == 0:
 				_generate_all()
+			else:
+				_prune_border_violators()
 
 func _check_is_home(scene: Node = null) -> bool:
 	if is_raid_override:
@@ -425,8 +469,56 @@ func _gather_candidate_cells(world_map: Node) -> Dictionary:
 	_refresh_biome_cache()
 	return {
 		"biomes": _cached_biome_cells,
+		"core_biomes": _cached_biome_core_cells,
 		"ref_layer": _cached_ref_layer
 	}
+
+func _prune_border_violators() -> void:
+	var parent_node = _get_parent_node()
+	if not parent_node: return
+	var world_map = _get_world_map()
+	if not world_map: return
+	
+	var violators: Array[Node] = []
+	for child in parent_node.get_children():
+		if not is_instance_valid(child) or not child.name.begins_with("Spawned"):
+			continue
+		var res_id = ""
+		if child.name.begins_with("SpawnedTree_"):
+			res_id = "wood"
+		elif child.name.begins_with("SpawnedPalm_"):
+			res_id = "palm"
+		elif child.name.begins_with("SpawnedStoneB_"):
+			res_id = "boulder"
+		elif child.name.begins_with("SpawnedBush_"):
+			res_id = "bush"
+		elif child.name.begins_with("SpawnedLog_"):
+			res_id = "log"
+		elif child.name.begins_with("SpawnedSmallStone_") or child.name.begins_with("SpawnedStick_"):
+			# Летающие собираемые палки и мелкие камни упразднены - удаляем их
+			violators.append(child)
+			continue
+			
+		if res_id != "" and not _is_valid_spawn(child.global_position, world_map, res_id):
+			violators.append(child)
+			
+	print("ResourceSpawner: Pruning ", violators.size(), " border violators...")
+	for node in violators:
+		parent_node.remove_child(node)
+		node.queue_free()
+	print("ResourceSpawner: Pruned ", violators.size(), " invalid nodes.")
+
+func _reload_tileset() -> void:
+	var new_ts = ResourceLoader.load("res://resources/cute_tileset.tres", "", ResourceLoader.CACHE_MODE_REPLACE) as TileSet
+	if not new_ts:
+		push_error("ResourceSpawner: failed to reload cute_tileset.tres")
+		return
+	var wm = _get_world_map()
+	if wm:
+		for child in wm.get_children():
+			if child is TileMapLayer:
+				child.tile_set = new_ts
+	print("ResourceSpawner: RELOADED TILESET IN EDITOR! Source 52 tiles: ", (new_ts.get_source(52) as TileSetAtlasSource).get_tiles_count())
 
 func _generate_all() -> void:
 	print("ResourceSpawner: starting _generate_all...")
@@ -454,7 +546,16 @@ func _generate_all() -> void:
 		return
 		
 	var rng = RandomNumberGenerator.new()
-	rng.randomize()
+	if world_seed != 0:
+		rng.seed = world_seed
+	elif is_home:
+		rng.seed = 4242
+	else:
+		var gsm = get_node_or_null("/root/GameStateManager")
+		if gsm and "current_raid_seed" in gsm and gsm.current_raid_seed != 0:
+			rng.seed = gsm.current_raid_seed
+		else:
+			rng.randomize()
 	
 	if spawned_positions == null: spawned_positions = []
 	else: spawned_positions.clear()
@@ -467,8 +568,6 @@ func _generate_all() -> void:
 	var eff_boulders = 6 if is_home else boulder_count
 	var eff_bushes = 6 if is_home else bush_count
 	var eff_logs = 2 if is_home else log_count
-	var eff_sticks = 4 if is_home else stick_count
-	var eff_stones = 3 if is_home else small_stone_count
 
 	# 1. Деревья по биомам (дубы/ели/березы в лесу, только березы на сухой траве, дубы/плодовые на лугу)
 	_spawn_inland_trees(eff_trees, is_home, parent_node, rng, candidate_data)
@@ -476,58 +575,23 @@ func _generate_all() -> void:
 	# 2. Пальмы на песчаном пляже
 	_spawn_beach_palms(eff_palms, is_home, parent_node, rng, candidate_data)
 	
-	# 3. Валуны и камни (распределяются по всему острову)
+	# 3. Валуны и камни (распределяются по всему острову, типы 1-9 собираются как мелкие камни)
 	_spawn_boulders(eff_boulders, is_home, parent_node, rng, candidate_data)
 	
 	# 4. Поваленные бревна (в лесах и на сухой траве)
 	_spawn_fallen_logs(eff_logs, is_home, parent_node, rng, candidate_data)
 	
-	# 5. Кусты и папоротники (ягодные кусты, папоротники)
+	# 5. Кусты и папоротники (ягодные кусты, папоротники - основной источник веток)
 	_spawn_bushes_and_ferns(eff_bushes, is_home, parent_node, rng, candidate_data)
 	
-	# 6. Собираемые палочки и мелкие камни
-	_spawn_gatherables(eff_sticks, eff_stones, is_home, parent_node, rng, candidate_data)
+	# 6. Летающие палки и мелкие камни упразднены: палки собираются с кустов, а камни — с лежащих на земле камней
+	
 	print("ResourceSpawner: generation complete! Total spawned: ", parent_node.get_child_count())
 
 func _replenish_home_resources() -> void:
-	var parent_node = _get_parent_node()
-	if not parent_node: return
-	var world_map = _get_world_map()
-	if not world_map: return
-	
-	if auto_detect_spawn_area:
-		_update_spawn_area()
-			
-	var current_sticks = _count_spawned_type("SpawnedStick_")
-	var current_stones = _count_spawned_type("SpawnedSmallStone_")
-	var target_sticks = stick_count
-	var target_stones = small_stone_count
-	
-	var candidate_data = _gather_candidate_cells(world_map)
-	if use_density_generation:
-		var biomes: Dictionary = candidate_data["biomes"]
-		var total_cells = 0
-		for k in biomes.keys():
-			total_cells += biomes[k].size()
-		var stick_rate = 0.016
-		var stone_rate = 0.014
-		target_sticks = max(2, int(round(total_cells * stick_rate * gatherable_density * global_density * 0.5)))
-		target_stones = max(2, int(round(total_cells * stone_rate * gatherable_density * global_density * 0.5)))
-	
-	var needed_sticks = max(0, target_sticks - current_sticks)
-	var needed_stones = max(0, target_stones - current_stones)
-	if needed_sticks == 0 and needed_stones == 0:
-		return
-		
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-	var g_scene = _get_cached_scene("res://scenes/objects/gatherable.tscn")
-	if not g_scene: return
-	
-	if needed_sticks > 0:
-		_spawn_gatherable_items("stick", needed_sticks, "SpawnedStick_", true, parent_node, rng, world_map, g_scene, candidate_data)
-	if needed_stones > 0:
-		_spawn_gatherable_items("stone", needed_stones, "SpawnedSmallStone_", true, parent_node, rng, world_map, g_scene, candidate_data)
+	# Летающие палки и мелкие камни упразднены.
+	# Источники ресурсов в мире: кусты (палки), лежащие камни (камни), деревья (древесина).
+	pass
 
 func _get_radial_probe_offsets(radius: float) -> Array[Vector2]:
 	var r1 = radius
@@ -600,11 +664,13 @@ func _is_valid_spawn(pos: Vector2, world_map: Node, resource_id: String = "") ->
 	if resource_id == "wood":
 		water_check_radius = water_clearance_trees
 	elif resource_id == "palm":
-		water_check_radius = max(6.0, water_clearance_trees * 0.6)
+		water_check_radius = water_clearance_palms
 	elif resource_id in ["boulder", "log"]:
 		water_check_radius = water_clearance_boulders
 	elif resource_id == "bush":
 		water_check_radius = water_clearance_bushes
+	elif resource_id in ["stick", "stone"]:
+		water_check_radius = 6.0
 	
 	if water_check_radius > 0.0:
 		var water_offsets = _get_radial_probe_offsets(water_check_radius)
@@ -613,18 +679,36 @@ func _is_valid_spawn(pos: Vector2, world_map: Node, resource_id: String = "") ->
 				_last_fail_reason = "too close to water edge"
 				return false
 
-	# 2. ПРОВЕРКА ГРАНИЦЫ ПЛЯЖ / ТРАВА
+	# 2. ПРОВЕРКА ГРАНИЦЫ ПЛЯЖ / ТРАВА И МЕЖДУ БИОМАМИ
+	if tile_info.biome == "transition":
+		_last_fail_reason = "on transition tile"
+		return false
+
 	if tile_info.biome == "beach":
 		if resource_id == "palm":
-			# Пальма на пляже: не должна стоять на стыке с материковой травой (clearing, forest, dry, magic)
+			# Пальма на пляже: не должна стоять на стыке с материковой травой (clearing, forest, dry, magic, transition)
 			var beach_probes = _get_radial_probe_offsets(beach_border_clearance)
 			for off in beach_probes:
 				var b = BiomeService.get_biome_at(pos + off, world_map)
-				if b in ["clearing", "forest", "dry", "magic"]:
+				if b in ["clearing", "forest", "dry", "magic", "transition"]:
 					_last_fail_reason = "palm too close to grass border (%s)" % b
 					return false
-		elif resource_id in ["boulder", "stone", "bush"]:
-			pass # Валуны, мелкие камни и сухие кусты отлично стоят на песке!
+		elif resource_id in ["boulder", "bush"]:
+			# На пляже валуны и кусты не должны касаться материковой травы (буфер 24px)
+			var beach_b_probes = _get_radial_probe_offsets(24.0)
+			for off in beach_b_probes:
+				var b = BiomeService.get_biome_at(pos + off, world_map)
+				if b in ["clearing", "forest", "dry", "magic", "transition"]:
+					_last_fail_reason = "%s on beach too close to grass (%s)" % [resource_id, b]
+					return false
+		elif resource_id in ["stone", "stick"]:
+			# На пляже мелкие камни не должны касаться материковой травы (буфер 16px)
+			var beach_g_probes = _get_radial_probe_offsets(16.0)
+			for off in beach_g_probes:
+				var b = BiomeService.get_biome_at(pos + off, world_map)
+				if b in ["clearing", "forest", "dry", "magic", "transition"]:
+					_last_fail_reason = "%s on beach too close to grass (%s)" % [resource_id, b]
+					return false
 		else:
 			# Обычные деревья, бревна и ветки не спавнятся на пляже
 			_last_fail_reason = "sand/beach tile"
@@ -637,11 +721,11 @@ func _is_valid_spawn(pos: Vector2, world_map: Node, resource_id: String = "") ->
 				_last_fail_reason = "tree on shore layer"
 				return false
 				
-			# 1) Буфер с пляжем/водой/пустотой (по всем 8 направлениям на глубину beach_border_clearance)
+			# 1) Буфер с пляжем/водой/пустотой/переходом (по всем 16 направлениям на глубину beach_border_clearance)
 			var border_probes = _get_radial_probe_offsets(beach_border_clearance)
 			for off in border_probes:
 				var b = BiomeService.get_biome_at(pos + off, world_map)
-				if b in ["beach", "water", "void", "ocean"]:
+				if b in ["beach", "water", "void", "ocean", "transition"]:
 					_last_fail_reason = "tree too close to beach border (%s)" % b
 					return false
 			
@@ -654,17 +738,47 @@ func _is_valid_spawn(pos: Vector2, world_map: Node, resource_id: String = "") ->
 						_last_fail_reason = "tree too close to biome boundary (%s -> %s)" % [tile_info.biome, nb]
 						return false
 		elif resource_id == "log":
-			if biome_border_buffer > 0.0:
-				var log_offsets = _get_radial_probe_offsets(16.0)
-				for off in log_offsets:
-					var nb = BiomeService.get_biome_at(pos + off, world_map)
-					if nb != tile_info.biome:
-						_last_fail_reason = "log on biome boundary"
-						return false
+			var log_offsets = _get_radial_probe_offsets(24.0)
+			for off in log_offsets:
+				var nb = BiomeService.get_biome_at(pos + off, world_map)
+				if nb in ["beach", "water", "void", "ocean", "transition"] or nb != tile_info.biome:
+					_last_fail_reason = "log on biome boundary (%s)" % nb
+					return false
+		elif resource_id in ["boulder", "bush"]:
+			# Валуны и кусты на материке тоже не должны стоять на стыках! (буфер 24px)
+			var item_offsets = _get_radial_probe_offsets(24.0)
+			for off in item_offsets:
+				var nb = BiomeService.get_biome_at(pos + off, world_map)
+				if nb in ["beach", "water", "void", "ocean", "transition"]:
+					_last_fail_reason = "%s too close to beach border (%s)" % [resource_id, nb]
+					return false
+				if nb != tile_info.biome:
+					_last_fail_reason = "%s on biome boundary (%s -> %s)" % [resource_id, tile_info.biome, nb]
+					return false
+		elif resource_id in ["stick", "stone"]:
+			var g_offsets = _get_radial_probe_offsets(16.0)
+			for off in g_offsets:
+				var nb = BiomeService.get_biome_at(pos + off, world_map)
+				if nb in ["beach", "water", "void", "ocean", "transition"]:
+					_last_fail_reason = "%s too close to beach/water border (%s)" % [resource_id, nb]
+					return false
 		elif resource_id == "palm":
 			return false # Пальмы только на пляже!
 			
 	return true
+
+func _assign_node_owner(inst: Node, parent_node: Node) -> void:
+	var scene_root: Node = null
+	if Engine.is_editor_hint() and get_tree().edited_scene_root:
+		scene_root = get_tree().edited_scene_root
+	elif is_inside_tree() and get_tree().current_scene:
+		scene_root = get_tree().current_scene
+	elif parent_node and parent_node.owner:
+		scene_root = parent_node.owner
+	elif parent_node:
+		scene_root = parent_node
+	if scene_root and is_instance_valid(scene_root) and inst != scene_root:
+		inst.owner = scene_root
 
 func _spawn_inland_trees(amount: int, is_home: bool, parent_node: Node, rng: RandomNumberGenerator, candidate_data: Dictionary) -> void:
 	var biomes: Dictionary = candidate_data["biomes"]
@@ -709,16 +823,16 @@ func _spawn_inland_trees(amount: int, is_home: bool, parent_node: Node, rng: Ran
 			var share: float = float(b_cells.size()) / float(total_inland_cells)
 			b_target = max(1, int(round(share * amount)))
 			
-		if b_target <= 0:
-			continue
-			
+		var core_cells: Array = candidate_data.get("core_biomes", {}).get(b_key, [])
+		var pool: Array = core_cells if core_cells.size() >= 8 else b_cells
+		
 		var b_spawned = 0
 		var b_attempts = 0
 		var b_max_attempts = b_target * 100
 		
 		while b_spawned < b_target and b_attempts < b_max_attempts:
 			b_attempts += 1
-			var c = b_cells[rng.randi() % b_cells.size()]
+			var c = pool[rng.randi() % pool.size()]
 			var center = ref_layer.to_global(ref_layer.map_to_local(c))
 			var test_pos = center + Vector2(rng.randf_range(-2, 2), rng.randf_range(-2, 2))
 			
@@ -777,8 +891,7 @@ func _spawn_inland_trees(amount: int, is_home: bool, parent_node: Node, rng: Ran
 			inst.name = prefix + str(total_spawned)
 			inst.global_position = test_pos
 			parent_node.add_child(inst)
-			if Engine.is_editor_hint():
-				inst.owner = get_tree().edited_scene_root
+			_assign_node_owner(inst, parent_node)
 			b_spawned += 1
 			total_spawned += 1
 			
@@ -801,16 +914,16 @@ func _spawn_beach_palms(amount: int, is_home: bool, parent_node: Node, rng: Rand
 	else:
 		target_palms = 4 if is_home else amount
 		
-	if target_palms <= 0:
-		return
-		
+	var core_beach: Array = candidate_data.get("core_biomes", {}).get("beach", [])
+	var palm_pool: Array = core_beach if core_beach.size() >= 8 else beach_cells
+	
 	var spawned = 0
 	var attempts = 0
 	var max_attempts = target_palms * 100
 	
 	while spawned < target_palms and attempts < max_attempts:
 		attempts += 1
-		var c = beach_cells[rng.randi() % beach_cells.size()]
+		var c = palm_pool[rng.randi() % palm_pool.size()]
 		var center = ref_layer.to_global(ref_layer.map_to_local(c))
 		var test_pos = center + Vector2(rng.randf_range(-2, 2), rng.randf_range(-2, 2))
 		
@@ -837,8 +950,7 @@ func _spawn_beach_palms(amount: int, is_home: bool, parent_node: Node, rng: Rand
 		inst.name = "SpawnedPalm_Beach_" + str(spawned)
 		inst.global_position = test_pos
 		parent_node.add_child(inst)
-		if Engine.is_editor_hint():
-			inst.owner = get_tree().edited_scene_root
+		_assign_node_owner(inst, parent_node)
 		spawned += 1
 		
 	print("Spawned ", spawned, " Beach Palms")
@@ -885,13 +997,16 @@ func _spawn_boulders(amount: int, is_home: bool, parent_node: Node, rng: RandomN
 		if b_target <= 0:
 			continue
 			
+		var core_cells: Array = candidate_data.get("core_biomes", {}).get(b_key, [])
+		var pool: Array = core_cells if core_cells.size() >= 8 else b_cells
+		
 		var b_spawned = 0
 		var b_attempts = 0
 		var b_max_attempts = b_target * 80
 		
 		while b_spawned < b_target and b_attempts < b_max_attempts:
 			b_attempts += 1
-			var c = b_cells[rng.randi() % b_cells.size()]
+			var c = pool[rng.randi() % pool.size()]
 			var center = ref_layer.to_global(ref_layer.map_to_local(c))
 			var test_pos = center + Vector2(rng.randf_range(-2, 2), rng.randf_range(-2, 2))
 			
@@ -923,8 +1038,7 @@ func _spawn_boulders(amount: int, is_home: bool, parent_node: Node, rng: RandomN
 				inst.is_permanent = is_home
 				
 			parent_node.add_child(inst)
-			if Engine.is_editor_hint():
-				inst.owner = get_tree().edited_scene_root
+			_assign_node_owner(inst, parent_node)
 			b_spawned += 1
 			spawned += 1
 			
@@ -993,8 +1107,7 @@ func _spawn_fallen_logs(amount: int, is_home: bool, parent_node: Node, rng: Rand
 		inst.name = "SpawnedLog_" + biome.capitalize() + "_" + str(spawned)
 		inst.global_position = test_pos
 		parent_node.add_child(inst)
-		if Engine.is_editor_hint():
-			inst.owner = get_tree().edited_scene_root
+		_assign_node_owner(inst, parent_node)
 		spawned += 1
 		
 	print("Spawned ", spawned, " Fallen Logs")
@@ -1021,13 +1134,19 @@ func _spawn_bushes_and_ferns(amount: int, is_home: bool, parent_node: Node, rng:
 	if target_bushes <= 0:
 		return
 		
+	var all_core_land: Array = []
+	var core_biomes: Dictionary = candidate_data.get("core_biomes", {})
+	for k in core_biomes.keys():
+		all_core_land.append_array(core_biomes[k])
+	var bush_pool: Array = all_core_land if all_core_land.size() >= 15 else all_land
+
 	var spawned = 0
 	var attempts = 0
 	var max_attempts = target_bushes * 60
 	
 	while spawned < target_bushes and attempts < max_attempts:
 		attempts += 1
-		var c = all_land[rng.randi() % all_land.size()]
+		var c = bush_pool[rng.randi() % bush_pool.size()]
 		var center = ref_layer.to_global(ref_layer.map_to_local(c))
 		var test_pos = center + Vector2(rng.randf_range(-2, 2), rng.randf_range(-2, 2))
 		
@@ -1081,100 +1200,12 @@ func _spawn_bushes_and_ferns(amount: int, is_home: bool, parent_node: Node, rng:
 		inst.name = "SpawnedBush_" + biome.capitalize() + "_" + str(spawned)
 		inst.global_position = test_pos
 		parent_node.add_child(inst)
-		if Engine.is_editor_hint():
-			inst.owner = get_tree().edited_scene_root
+		_assign_node_owner(inst, parent_node)
 		spawned += 1
 		
 	print("Spawned ", spawned, " Bushes & Ferns")
 
-func _spawn_gatherables(stick_amt: int, stone_amt: int, is_home: bool, parent_node: Node, rng: RandomNumberGenerator, candidate_data: Dictionary) -> void:
-	var world_map = _get_world_map()
-	var g_scene = _get_cached_scene("res://scenes/objects/gatherable.tscn")
-	if not g_scene: return
-	
-	var biomes: Dictionary = candidate_data["biomes"]
-	var total_cells = 0
-	for k in biomes.keys():
-		total_cells += biomes[k].size()
-		
-	var home_factor: float = 0.5 if is_home else 1.0
-	var eff_sticks = stick_amt
-	var eff_stones = stone_amt
-	
-	if use_density_generation:
-		var stick_rate = 0.016 # ~1 палка на 60 тайлов
-		var stone_rate = 0.014 # ~1 камень на 70 тайлов
-		eff_sticks = max(2, int(round(total_cells * stick_rate * gatherable_density * global_density * home_factor)))
-		eff_stones = max(2, int(round(total_cells * stone_rate * gatherable_density * global_density * home_factor)))
-		
-	if is_home:
-		var starter_pos = Vector2(320, 180)
-		for s in range(min(2, eff_sticks)):
-			var p = starter_pos + Vector2(rng.randf_range(-30, 30), rng.randf_range(10, 30))
-			_instantiate_gatherable("stick", p, is_home, parent_node, g_scene, "SpawnedStick_Camp_")
-			spawned_positions.append(p)
-		for st in range(min(1, eff_stones)):
-			var p = starter_pos + Vector2(rng.randf_range(-30, 30), rng.randf_range(10, 30))
-			_instantiate_gatherable("stone", p, is_home, parent_node, g_scene, "SpawnedSmallStone_Camp_")
-			spawned_positions.append(p)
-			
-	_spawn_gatherable_items("stick", eff_sticks, "SpawnedStick_", is_home, parent_node, rng, world_map, g_scene, candidate_data)
-	_spawn_gatherable_items("stone", eff_stones, "SpawnedSmallStone_", is_home, parent_node, rng, world_map, g_scene, candidate_data)
+# Метод упразднен: летающие палки и камни больше не спавнятся.
+func _spawn_gatherables(_stick_amt: int, _stone_amt: int, _is_home: bool, _parent_node: Node, _rng: RandomNumberGenerator, _candidate_data: Dictionary) -> void:
+	pass
 
-func _spawn_gatherable_items(res_id: String, target_amount: int, prefix: String, is_home: bool, parent_node: Node, rng: RandomNumberGenerator, world_map: Node, g_scene: PackedScene, candidate_data: Dictionary) -> void:
-	var current_count = _count_spawned_type(prefix)
-	var needed = target_amount - current_count
-	if needed <= 0: return
-	
-	var biomes: Dictionary = candidate_data["biomes"]
-	var cells: Array = []
-	
-	if res_id == "stone":
-		for k in biomes.keys():
-			cells.append_array(biomes[k])
-	else:
-		for k in ["forest", "dry", "clearing"]:
-			if biomes.has(k):
-				cells.append_array(biomes[k])
-				
-	if cells.is_empty(): return
-	var ref_layer: TileMapLayer = candidate_data["ref_layer"]
-	
-	var spawned = 0
-	var attempts = 0
-	var max_attempts = needed * 40
-	
-	while spawned < needed and attempts < max_attempts:
-		attempts += 1
-		var c = cells[rng.randi() % cells.size()]
-		var center = ref_layer.to_global(ref_layer.map_to_local(c))
-		var test_pos = center + Vector2(rng.randf_range(-4, 4), rng.randf_range(-4, 4))
-		
-		if not _is_valid_spawn(test_pos, world_map, res_id):
-			continue
-			
-		var too_close = false
-		for p in spawned_positions:
-			if p.distance_to(test_pos) < gatherable_min_dist:
-				too_close = true
-				break
-		if too_close:
-			continue
-			
-		spawned_positions.append(test_pos)
-		_instantiate_gatherable(res_id, test_pos, is_home, parent_node, g_scene, prefix)
-		spawned += 1
-		
-	print("Spawned ", spawned, " of ", prefix)
-
-func _instantiate_gatherable(res_id: String, pos: Vector2, is_home: bool, parent_node: Node, g_scene: PackedScene, prefix: String) -> void:
-	var inst = g_scene.instantiate()
-	inst.name = prefix + str(parent_node.get_child_count())
-	inst.global_position = pos
-	if "resource_id" in inst:
-		inst.resource_id = res_id
-	if "is_permanent" in inst:
-		inst.is_permanent = is_home
-	parent_node.add_child(inst)
-	if Engine.is_editor_hint():
-		inst.owner = get_tree().edited_scene_root

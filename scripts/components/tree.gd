@@ -21,6 +21,16 @@ func _ready() -> void:
 	super._ready()
 	collision_layer = 2
 	
+	# Check HomeStateManager persistence on HomeIsland
+	var current_scene = get_tree().current_scene
+	var is_home = (current_scene and current_scene.name == "HomeIsland")
+	if is_home and HomeStateManager:
+		if HomeStateManager.is_destroyed(get_path()):
+			queue_free()
+			return
+		elif HomeStateManager.is_stump(get_path()):
+			current_state = State.STUMP
+	
 	# Configure HP based on size
 	if tree_size == "big":
 		hp = 5
@@ -32,17 +42,20 @@ func _ready() -> void:
 		hp = 3
 		stump_hp = 1
 		
-	# Ensure correct starting frame (Full tree is frame 1)
+	# Ensure correct starting frame (Full tree is frame 1, stump is frame 0)
 	if sprite:
-		sprite.frame = 1
+		sprite.frame = 0 if current_state == State.STUMP else 1
+		
+	if current_state == State.STUMP and occluder:
+		occluder.queue_free()
 		
 	# Make shapes unique
 	if interaction_shape and interaction_shape.shape:
 		interaction_shape.shape = interaction_shape.shape.duplicate()
 	if static_shape and static_shape.shape:
 		static_shape.shape = static_shape.shape.duplicate()
-	if occluder:
-		var occ_shape = occluder.get_node("CollisionShape2D")
+	if occluder and is_instance_valid(occluder):
+		var occ_shape = occluder.get_node_or_null("CollisionShape2D")
 		if occ_shape and occ_shape.shape:
 			occ_shape.shape = occ_shape.shape.duplicate()
 
@@ -156,6 +169,11 @@ func _chop_down(player: Node2D) -> void:
 	is_animating = true
 	current_state = State.STUMP
 	
+	var current_scene = get_tree().current_scene
+	var is_home = (current_scene and current_scene.name == "HomeIsland")
+	if is_home and HomeStateManager:
+		HomeStateManager.mark_stump(get_path())
+	
 	GameStateManager.register_tree_chopped()
 	_spawn_drops(tree_size == "big", false)
 	
@@ -204,6 +222,10 @@ func _chop_down(player: Node2D) -> void:
 		occluder.queue_free()
 
 func _destroy_stump() -> void:
+	var current_scene = get_tree().current_scene
+	var is_home = (current_scene and current_scene.name == "HomeIsland")
+	if is_home and HomeStateManager:
+		HomeStateManager.mark_destroyed(get_path())
 	_spawn_drops(tree_size == "big", true)
 	queue_free()
 

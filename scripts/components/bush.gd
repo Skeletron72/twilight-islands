@@ -8,7 +8,7 @@ class_name BushObject
 @export var max_hp: int = 2
 @export var drop_item_id: String = "stick"
 @export var drop_amount_min: int = 1
-@export var drop_amount_max: int = 2
+@export var drop_amount_max: int = 3
 @export var regrows_berries: bool = true
 @export var regrowth_time_sec: float = 180.0
 

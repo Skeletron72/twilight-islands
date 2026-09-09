@@ -593,11 +593,14 @@ func _update_auto_target() -> void:
 	
 	for node in interactables:
 		if node == self: continue
-		if node.has_method("interact"):
-			var dist = global_position.distance_to(node.global_position)
+		var target_candidate: Node2D = node
+		if not target_candidate.has_method("interact") and target_candidate.get_parent() and target_candidate.get_parent().has_method("interact"):
+			target_candidate = target_candidate.get_parent()
+		if target_candidate.has_method("interact"):
+			var dist = global_position.distance_to(target_candidate.global_position)
 			if dist < closest_dist:
 				closest_dist = dist
-				closest_target = node
+				closest_target = target_candidate
 				
 	# Reset old target modulate
 	if current_target and is_instance_valid(current_target):

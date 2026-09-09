@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/components/cave_ore_rock.gd" id="1_ore"]
+[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Rock_Animations/Cave_Rock_1_Anim.png" id="2_tex"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 16.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_phys"]
+size = Vector2(14, 8)
+
+[node name="CaveOreRock" type="Area2D" groups=["interactable"]]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_ore")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+offset = Vector2(0, -6)
+hframes = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_interact")
+
+[node name="StaticBody" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody"]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_phys")

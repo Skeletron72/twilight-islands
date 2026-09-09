@@ -196,10 +196,37 @@ static func is_water_at(world_pos: Vector2, world_map: Node = null) -> bool:
 		return false
 	return info.get("is_water", false) or info.get("biome", "") in ["water", "ocean"]
 
+## Проверяет, является ли тайл автотайлом перехода между разными биомами
+static func is_transition_cell_data(cell_data: TileData) -> bool:
+	if not cell_data or cell_data.terrain_set == -1:
+		return false
+	var biomes_found: Dictionary = {}
+	if cell_data.terrain != -1 and TERRAIN_TO_BIOME.has(cell_data.terrain):
+		biomes_found[TERRAIN_TO_BIOME[cell_data.terrain]] = true
+	for bit in [
+		TileSet.CELL_NEIGHBOR_RIGHT_SIDE,
+		TileSet.CELL_NEIGHBOR_BOTTOM_RIGHT_CORNER,
+		TileSet.CELL_NEIGHBOR_BOTTOM_SIDE,
+		TileSet.CELL_NEIGHBOR_BOTTOM_LEFT_CORNER,
+		TileSet.CELL_NEIGHBOR_LEFT_SIDE,
+		TileSet.CELL_NEIGHBOR_TOP_LEFT_CORNER,
+		TileSet.CELL_NEIGHBOR_TOP_SIDE,
+		TileSet.CELL_NEIGHBOR_TOP_RIGHT_CORNER
+	]:
+		if cell_data.is_valid_terrain_peering_bit(bit):
+			var bit_t = cell_data.get_terrain_peering_bit(bit)
+			if bit_t != -1 and TERRAIN_TO_BIOME.has(bit_t):
+				biomes_found[TERRAIN_TO_BIOME[bit_t]] = true
+	return biomes_found.size() > 1
+
 ## Извлекает имя биома из TileData: сначала из custom_data("biome"), затем из terrain ID и peering bits
 static func _resolve_biome_from_cell(cell_data: TileData) -> String:
 	if not cell_data:
 		return "void"
+
+	# Если в автотайле смешаны разные биомы — помечаем как transition (граница)
+	if is_transition_cell_data(cell_data):
+		return "transition"
 
 	# 1. Проверяем custom_data("biome")
 	var custom_biome = cell_data.get_custom_data("biome")
