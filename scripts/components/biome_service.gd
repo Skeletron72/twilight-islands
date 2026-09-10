@@ -8,7 +8,7 @@ extends RefCounted
 enum SurfaceType { GRASS, STONE, DIRT, WATER, VOID }
 
 # Стандартный порядок проверки слоев сверху вниз для определения поверхности под ногами
-const LAYER_PRIORITY = ["RoadsLayer", "WaterLayer", "GrassLayer", "GroundLayer", "ShoreLayer", "OceanLayer"]
+const LAYER_PRIORITY = ["ObjectsLayer", "GroundDecorationLayer", "RoadsLayer", "WaterLayer", "GrassLayer", "GroundLayer", "ShoreLayer", "OceanLayer"]
 
 # Маппинг ID террейнов из cute_tileset.tres в имена биомов (на случай отсутствия custom_data)
 
@@ -108,7 +108,7 @@ static func get_top_tile_info(world_pos: Vector2, world_map: Node = null) -> Dic
 			continue
 
 		# Слой дорог - если мы тут, значит мы стоим на мосту или дороге
-		if layer_name == "RoadsLayer":
+		if layer_name == "RoadsLayer" or layer_name == "ObjectsLayer" or layer_name == "GroundDecorationLayer":
 			result["is_road"] = true
 			if result["surface"] == SurfaceType.VOID:
 				result["surface"] = SurfaceType.STONE
