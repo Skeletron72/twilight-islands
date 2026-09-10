@@ -9,7 +9,7 @@ class_name CaveEntrance
 		cliff_style = val
 		_update_texture()
 
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var sprite: Sprite2D = $EntranceSprite
 @onready var interaction_area: Area2D = $InteractionArea
 @onready var prompt_label: Label = get_node_or_null("PromptLabel")
 
@@ -45,8 +45,9 @@ func _setup_prompt_label() -> void:
 		prompt_label.name = "PromptLabel"
 		prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		prompt_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		prompt_label.position = Vector2(-60, -42)
+		prompt_label.position = Vector2(-60, 6)
 		prompt_label.custom_minimum_size = Vector2(120, 16)
+		prompt_label.z_index = 100
 		prompt_label.text = "[E] Войти в пещеру"
 		prompt_label.modulate.a = 0.0
 		

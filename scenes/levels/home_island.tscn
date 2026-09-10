@@ -1548,9 +1548,7 @@ z_as_relative = false
 position = Vector2(390, 132)
 
 [node name="CaveEntrance" parent="." unique_id=778899002 instance=ExtResource("cave_entrance_scene")]
-z_index = 150
-z_as_relative = false
-position = Vector2(530, 150)
+position = Vector2(530, 102)
 
 [node name="ResourceSpawner" type="Node2D" parent="." unique_id=2145765979]
 visible = false

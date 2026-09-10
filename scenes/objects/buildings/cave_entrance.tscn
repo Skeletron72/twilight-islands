@@ -1,28 +1,28 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://s7c1bqde7bo2"]
 
-[ext_resource type="Script" path="res://scripts/components/cave_entrance.gd" id="1_cave"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_1_Cave_Entrance.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://d3ohav87rq16d" path="res://scripts/components/cave_entrance.gd" id="1_cave"]
+[ext_resource type="Texture2D" uid="uid://dff7mwm4170qb" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_1_Cave_Entrance.png" id="2_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
 size = Vector2(36, 36)
 
-[node name="CaveEntrance" type="StaticBody2D" groups=["interactable"]]
+[node name="CaveEntrance" type="StaticBody2D" unique_id=960602631 groups=["interactable"]]
 y_sort_enabled = true
 collision_layer = 5
 collision_mask = 0
 script = ExtResource("1_cave")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="EntranceSprite" type="Sprite2D" parent="." unique_id=1773982391]
+position = Vector2(0, 48)
 texture = ExtResource("2_tex")
 offset = Vector2(0, -24)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-24, 0, -24, -44, 24, -44, 24, 0, 8, 0, 8, -16, -8, -16, -8, 0)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1922393373]
+polygon = PackedVector2Array(-24, 32, -24, 0, 24, 0, 24, 31, 13, 31, 13, 19, -13, 19, -13, 32)
 
-[node name="InteractionArea" type="Area2D" parent="."]
-position = Vector2(0, 0)
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1150905665]
+position = Vector2(0, 48)
 collision_layer = 2
-collision_mask = 1
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=858572392]
 shape = SubResource("RectangleShape2D_door")

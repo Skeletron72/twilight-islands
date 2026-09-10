@@ -18,12 +18,17 @@ const TERRAIN_TO_BIOME: Dictionary = {
 	3: "water",         # Water
 	4: "water",         # Stone Water
 	5: "clearing",      # FarmLand
-	6: "beach",         # Beach Water
-	7: "clearing",      # Brown Cliff
-	8: "clearing",      # Grey Cliff
-	9: "forest",        # Лесная трава
-	10: "dry",          # Сухая трава
-	11: "magic"         # Волшебная трава
+	6: "forest",        # Лесная трава
+	7: "dry",           # Сухая трава
+	8: "magic",         # Волшебная трава
+	9: "clearing",      # Горы (Луговые стены)
+	10: "forest",       # Горы (Лесные стены)
+	11: "dry",          # Горы (Сухие стены)
+	12: "magic",        # Горы (Волшебные стены)
+	13: "clearing",     # Горы (Луговая поляна)
+	14: "forest",       # Горы (Лесная поляна)
+	15: "dry",          # Горы (Сухая поляна)
+	16: "magic"         # Горы (Волшебная поляна)
 }
 
 ## Находит узел WorldMap на текущей или переданной сцене
