@@ -11,25 +11,40 @@ enum SurfaceType { GRASS, STONE, DIRT, WATER, VOID }
 const LAYER_PRIORITY = ["RoadsLayer", "WaterLayer", "GrassLayer", "GroundLayer", "ShoreLayer", "OceanLayer"]
 
 # Маппинг ID террейнов из cute_tileset.tres в имена биомов (на случай отсутствия custom_data)
-const TERRAIN_TO_BIOME: Dictionary = {
-	0: "clearing",      # Базовая трава
-	1: "clearing",      # Dirt (дорожка в траве)
-	2: "beach",         # Sand (песок)
-	3: "water",         # Water
-	4: "water",         # Stone Water
-	5: "clearing",      # FarmLand
-	6: "forest",        # Лесная трава
-	7: "dry",           # Сухая трава
-	8: "magic",         # Волшебная трава
-	9: "clearing",      # Горы (Луговые стены)
-	10: "forest",       # Горы (Лесные стены)
-	11: "dry",          # Горы (Сухие стены)
-	12: "magic",        # Горы (Волшебные стены)
-	13: "clearing",     # Горы (Луговая поляна)
-	14: "forest",       # Горы (Лесная поляна)
-	15: "dry",          # Горы (Сухая поляна)
-	16: "magic"         # Горы (Волшебная поляна)
-}
+
+static var _terrain_to_biome_cache: Dictionary = {}
+static var _is_cache_built: bool = false
+
+static func _get_terrain_biome(terrain_set: int, terrain_id: int) -> String:
+	if not _is_cache_built:
+		_build_terrain_cache()
+	
+	if terrain_set == -1 or terrain_id == -1:
+		return "clearing"
+		
+	var key = str(terrain_set) + "_" + str(terrain_id)
+	if _terrain_to_biome_cache.has(key):
+		return _terrain_to_biome_cache[key]
+		
+	return "clearing"
+
+static func _build_terrain_cache() -> void:
+	var ts = load("res://resources/cute_tileset.tres") as TileSet
+	if not ts: return
+	
+	for s_id in range(ts.get_terrain_sets_count()):
+		for t_id in range(ts.get_terrains_count(s_id)):
+			var t_name = ts.get_terrain_name(s_id, t_id).to_lower()
+			var biome = "clearing"
+			if "лес" in t_name or "forest" in t_name: biome = "forest"
+			elif "сух" in t_name or "dry" in t_name: biome = "dry"
+			elif "волшеб" in t_name or "magic" in t_name: biome = "magic"
+			elif "песок" in t_name or "песч" in t_name or "sand" in t_name or "beach" in t_name or "пляж" in t_name: biome = "beach"
+			elif "water" in t_name or "вода" in t_name: biome = "water"
+			
+			_terrain_to_biome_cache[str(s_id) + "_" + str(t_id)] = biome
+			
+	_is_cache_built = true
 
 ## Находит узел WorldMap на текущей или переданной сцене
 static func find_world_map(context_node: Node = null) -> Node:
@@ -206,8 +221,8 @@ static func is_transition_cell_data(cell_data: TileData) -> bool:
 	if not cell_data or cell_data.terrain_set == -1:
 		return false
 	var biomes_found: Dictionary = {}
-	if cell_data.terrain != -1 and TERRAIN_TO_BIOME.has(cell_data.terrain):
-		biomes_found[TERRAIN_TO_BIOME[cell_data.terrain]] = true
+	if cell_data.terrain != -1:
+		biomes_found[_get_terrain_biome(cell_data.terrain_set, cell_data.terrain)] = true
 	for bit in [
 		TileSet.CELL_NEIGHBOR_RIGHT_SIDE,
 		TileSet.CELL_NEIGHBOR_BOTTOM_RIGHT_CORNER,
@@ -220,8 +235,8 @@ static func is_transition_cell_data(cell_data: TileData) -> bool:
 	]:
 		if cell_data.is_valid_terrain_peering_bit(bit):
 			var bit_t = cell_data.get_terrain_peering_bit(bit)
-			if bit_t != -1 and TERRAIN_TO_BIOME.has(bit_t):
-				biomes_found[TERRAIN_TO_BIOME[bit_t]] = true
+			if bit_t != -1:
+				biomes_found[_get_terrain_biome(cell_data.terrain_set, bit_t)] = true
 	return biomes_found.size() > 1
 
 ## Извлекает имя биома из TileData: сначала из custom_data("biome"), затем из terrain ID и peering bits
@@ -240,8 +255,8 @@ static func _resolve_biome_from_cell(cell_data: TileData) -> String:
 
 	# 2. Если пусто — проверяем прямой террейн
 	var t_id = cell_data.terrain
-	if t_id != -1 and TERRAIN_TO_BIOME.has(t_id):
-		return TERRAIN_TO_BIOME[t_id]
+	if t_id != -1:
+		return _get_terrain_biome(cell_data.terrain_set, t_id)
 
 	# 3. Проверяем peering bits террейнов (для краевых автотайлов)
 	if cell_data.terrain_set != -1:
@@ -257,8 +272,8 @@ static func _resolve_biome_from_cell(cell_data: TileData) -> String:
 		]:
 			if cell_data.is_valid_terrain_peering_bit(bit):
 				var bit_t = cell_data.get_terrain_peering_bit(bit)
-				if bit_t != -1 and TERRAIN_TO_BIOME.has(bit_t):
-					return TERRAIN_TO_BIOME[bit_t]
+				if bit_t != -1:
+					return _get_terrain_biome(cell_data.terrain_set, bit_t)
 
 	return "clearing"
 
