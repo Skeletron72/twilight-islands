@@ -107,100 +107,63 @@ static func get_top_tile_info(world_pos: Vector2, world_map: Node = null) -> Dic
 		if not cell_data:
 			continue
 
-		# Если мы наткнулись на дорогу — отмечаем поверхность как камень/дорога,
-		# но продолжаем искать под ней биом грунта для underlying_biome!
+		# Слой дорог - если мы тут, значит мы стоим на мосту или дороге
 		if layer_name == "RoadsLayer":
 			result["is_road"] = true
 			if result["surface"] == SurfaceType.VOID:
 				result["surface"] = SurfaceType.STONE
-			# Запоминаем данные дороги, если основной слой еще не определен
 			if result["layer_name"] == "":
 				result["layer_name"] = "RoadsLayer"
 				result["layer"] = layer
 				result["map_pos"] = map_pos
 				result["source_id"] = source_id
 				result["cell_data"] = cell_data
-			continue
+			continue # Идем глубже, чтобы понять биом
 
-		# Если мы наткнулись на внутреннюю воду
+		# Ниже идет логика для остальных слоев
+		var current_layer_biome = "void"
+		var current_is_water = false
+		var current_surface_type = SurfaceType.VOID
+		var current_can_hoe = false
+		
 		if layer_name == "WaterLayer":
-			result["is_water"] = true
-			result["surface"] = SurfaceType.WATER
-			result["biome"] = "water"
-			result["layer_name"] = "WaterLayer"
-			result["layer"] = layer
-			result["map_pos"] = map_pos
-			result["source_id"] = source_id
-			result["cell_data"] = cell_data
-			return result
-
-		# Слой наложений трав и биомов поверх земли (GrassLayer)
-		if layer_name == "GrassLayer":
-			var biome_tag = _resolve_biome_from_cell(cell_data)
-			result["biome"] = biome_tag
-			result["layer_name"] = "GrassLayer"
-			result["layer"] = layer
-			result["map_pos"] = map_pos
-			result["source_id"] = source_id
-			result["cell_data"] = cell_data
-			result["can_hoe"] = cell_data.get_custom_data("can_hoe") == true
-			result["is_water"] = cell_data.get_custom_data("is_water") == true
+			current_is_water = true
+			current_surface_type = SurfaceType.WATER
+			current_layer_biome = "water"
+		elif layer_name == "OceanLayer":
+			current_is_water = true
+			current_surface_type = SurfaceType.WATER
+			current_layer_biome = "ocean"
+		else:
+			current_layer_biome = _resolve_biome_from_cell(cell_data)
+			if layer_name == "ShoreLayer" and (current_layer_biome == "clearing" or current_layer_biome == "void"):
+				current_layer_biome = "beach"
 			
-			if result["surface"] == SurfaceType.VOID:
-				result["surface"] = SurfaceType.WATER if result["is_water"] else SurfaceType.GRASS
-			return result
-
-		# Основной слой земли (травы всех видов)
-		if layer_name == "GroundLayer":
-			var biome_tag = _resolve_biome_from_cell(cell_data)
-			result["biome"] = biome_tag
-			result["layer_name"] = "GroundLayer"
-			result["layer"] = layer
-			result["map_pos"] = map_pos
-			result["source_id"] = source_id
-			result["cell_data"] = cell_data
-			result["can_hoe"] = cell_data.get_custom_data("can_hoe") == true
-			result["is_water"] = cell_data.get_custom_data("is_water") == true
-			
-			if result["surface"] == SurfaceType.VOID:
-				result["surface"] = SurfaceType.WATER if result["is_water"] else SurfaceType.GRASS
-			return result
-
-		# Слой берега / пляжа (песок, подстилающий весь остров)
-		if layer_name == "ShoreLayer":
-			# Мы попали сюда только если на GroundLayer не было тайла!
-			var biome_tag = _resolve_biome_from_cell(cell_data)
-			if biome_tag == "clearing" or biome_tag == "void":
-				biome_tag = "beach" # Для ShoreLayer по умолчанию пляж
-			result["biome"] = biome_tag
-			result["layer_name"] = "ShoreLayer"
-			result["layer"] = layer
-			result["map_pos"] = map_pos
-			result["source_id"] = source_id
-			result["cell_data"] = cell_data
-			result["can_hoe"] = cell_data.get_custom_data("can_hoe") == true
-			
-			# Песок пляжа не должен считаться водой, даже если у анимированного тайла стоит флаг
-			if biome_tag == "beach":
-				result["is_water"] = false
+			if current_layer_biome == "beach":
+				current_is_water = false
 			else:
-				result["is_water"] = cell_data.get_custom_data("is_water") == true
+				current_is_water = cell_data.get_custom_data("is_water") == true
+				
+			current_can_hoe = cell_data.get_custom_data("can_hoe") == true
+			current_surface_type = SurfaceType.WATER if current_is_water else (SurfaceType.GRASS if layer_name != "ShoreLayer" else SurfaceType.DIRT)
 
-			if result["surface"] == SurfaceType.VOID:
-				result["surface"] = SurfaceType.WATER if result["is_water"] else SurfaceType.DIRT
+		# Если мы уже стоим на дороге/мосту, мы просто обновляем биом и возвращаем результат
+		if result["is_road"]:
+			result["underlying_biome"] = current_layer_biome
+			result["biome"] = current_layer_biome
 			return result
-
-		# Океан вокруг острова
-		if layer_name == "OceanLayer":
-			result["biome"] = "ocean"
-			result["surface"] = SurfaceType.WATER
-			result["is_water"] = true
-			result["layer_name"] = "OceanLayer"
-			result["layer"] = layer
-			result["map_pos"] = map_pos
-			result["source_id"] = source_id
-			result["cell_data"] = cell_data
-			return result
+			
+		# Иначе, это и есть наш топовый слой!
+		result["biome"] = current_layer_biome
+		result["is_water"] = current_is_water
+		result["surface"] = current_surface_type
+		result["can_hoe"] = current_can_hoe
+		result["layer_name"] = layer_name
+		result["layer"] = layer
+		result["map_pos"] = map_pos
+		result["source_id"] = source_id
+		result["cell_data"] = cell_data
+		return result
 
 	return result
 
