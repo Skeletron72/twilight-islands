@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dff7mwm4170qb" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_1_Cave_Entrance.png" id="2_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
-size = Vector2(36, 36)
+size = Vector2(36, 25)
 
 [node name="CaveEntrance" type="StaticBody2D" unique_id=960602631 groups=["interactable"]]
 y_sort_enabled = true
@@ -25,4 +25,5 @@ position = Vector2(0, 48)
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=858572392]
+position = Vector2(0, -28.5)
 shape = SubResource("RectangleShape2D_door")
