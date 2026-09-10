@@ -8,7 +8,7 @@ extends RefCounted
 enum SurfaceType { GRASS, STONE, DIRT, WATER, VOID }
 
 # Стандартный порядок проверки слоев сверху вниз для определения поверхности под ногами
-const LAYER_PRIORITY = ["ObjectsLayer", "GroundDecorationLayer", "RoadsLayer", "WaterLayer", "GrassLayer", "GroundLayer", "ShoreLayer", "OceanLayer"]
+const LAYER_PRIORITY = ["ObjectsLayer", "GroundDecorationLayer", "RoadsLayer", "CliffsLayer", "WaterLayer", "GrassLayer", "GroundLayer", "ShoreLayer", "OceanLayer"]
 
 # Маппинг ID террейнов из cute_tileset.tres в имена биомов (на случай отсутствия custom_data)
 
@@ -284,6 +284,9 @@ static func get_cells_by_biome(world_map: Node = null, exclude_blocked: bool = t
 	if grass_layer:
 		for cell in grass_layer.get_used_cells():
 			all_coords[cell] = true
+	if cliffs_layer:
+		for cell in cliffs_layer.get_used_cells():
+			all_coords[cell] = true
 
 	for cell in all_coords.keys():
 		# Проверка блокировок объектами/домами/скалами/дорогами
@@ -295,12 +298,20 @@ static func get_cells_by_biome(world_map: Node = null, exclude_blocked: bool = t
 			if houses_layer and houses_layer.get_cell_source_id(cell) != -1:
 				continue
 			if cliffs_layer and cliffs_layer.get_cell_source_id(cell) != -1:
-				continue
+				var cdata = cliffs_layer.get_cell_tile_data(cell)
+				if cdata and cdata.get_collision_polygons_count(0) > 0:
+					continue
 			if water_layer and water_layer.get_cell_source_id(cell) != -1:
 				continue
 
-		# Приоритет слоев: GrassLayer -> GroundLayer -> ShoreLayer
-		if grass_layer and grass_layer.get_cell_source_id(cell) != -1:
+		# Приоритет слоев: CliffsLayer -> GrassLayer -> GroundLayer -> ShoreLayer
+		if cliffs_layer and cliffs_layer.get_cell_source_id(cell) != -1:
+			var cell_data = cliffs_layer.get_cell_tile_data(cell)
+			var b = _resolve_biome_from_cell(cell_data)
+			if not result.has(b):
+				result[b] = []
+			result[b].append(cell)
+		elif grass_layer and grass_layer.get_cell_source_id(cell) != -1:
 			var cell_data = grass_layer.get_cell_tile_data(cell)
 			var b = _resolve_biome_from_cell(cell_data)
 			if not result.has(b):
