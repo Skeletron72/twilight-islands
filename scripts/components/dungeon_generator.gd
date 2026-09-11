@@ -74,7 +74,6 @@ func generate(
 
 	# Carve a dedicated 5-tile wide vertical corridor for the support
 	var support_placed = true
-	var support_pos = Vector2i(cx, cy - 8)
 	
 	# Пробиваем коридор ровно 4 шириной (чтобы не ломать 2x2 сетку), а саппорт (5 тайлов) будет красиво врезаться в стены по 0.5 тайла!
 	for dy in range(-12, 0):
@@ -226,9 +225,13 @@ func generate(
 			max_dist = d
 			ladder_down_tile = cell
 
+	# Саппорт ставится ровно у основания южного фасада скалы (y = cy - 3)
+	var support_pos = Vector2i(cx, cy - 3)
 	if support_pos != Vector2i(-1, -1):
 		var support = preload("res://scenes/objects/dungeon/cave_support.tscn").instantiate()
-		support.global_position = _tile_to_world(support_pos) + Vector2(-8, 0) # Сдвигаем на полтайла влево, так как коридор четный (4)
+		# Сдвигаем X на -8 (т.к. ширина коридора 4 тайла, центр смещен)
+		# Сдвигаем Y на +8 (чтобы origin был на нижнем крае тайла, совпадая с физической базой скалы)
+		support.global_position = _tile_to_world(support_pos) + Vector2(-8, 8)
 		interactables.add_child(support)
 
 	var ladder_up = SCENE_LADDER_UP.instantiate()
