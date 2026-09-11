@@ -197,11 +197,11 @@ func generate(
 				
 				# ПРАВИЛЬНЫЙ МАППИНГ ДЛЯ RPG MAKER 3x3 (ВЕРШИНА ГОРЫ)
 				
-				# Внешние углы (ИНВЕРТИРОВАННЫЙ МАППИНГ ПО ПРОСЬБЕ ПОЛЬЗОВАТЕЛЯ)
-				if f_n and f_w: tile = Vector2i(6, 2)
-				elif f_n and f_e: tile = Vector2i(4, 2)
-				elif f_s and f_w: tile = Vector2i(6, 0)
-				elif f_s and f_e: tile = Vector2i(4, 0)
+				# Внешние углы (ИНВЕРТИРОВАННЫЙ МАППИНГ + ПОМЕНЯННЫЕ МЕСТАМИ ВНЕШНИЕ И ВНУТРЕННИЕ)
+				if f_n and f_w: tile = Vector2i(4, 3)
+				elif f_n and f_e: tile = Vector2i(5, 3)
+				elif f_s and f_w: tile = Vector2i(4, 4)
+				elif f_s and f_e: tile = Vector2i(5, 4)
 				
 				# Прямые края (Светлая часть к полу, темная внутрь скалы)
 				elif f_n: tile = Vector2i(5, 2)
@@ -209,11 +209,11 @@ func generate(
 				elif f_w: tile = Vector2i(6, 1)
 				elif f_e: tile = Vector2i(4, 1)
 				
-				# Внутренние углы (Инвертированные)
-				elif f_nw: tile = Vector2i(4, 3)
-				elif f_ne: tile = Vector2i(5, 3)
-				elif f_sw: tile = Vector2i(4, 4)
-				elif f_se: tile = Vector2i(5, 4)
+				# Внутренние углы (Инвертированные + ПОМЕНЯННЫЕ МЕСТАМИ)
+				elif f_nw: tile = Vector2i(6, 2)
+				elif f_ne: tile = Vector2i(4, 2)
+				elif f_sw: tile = Vector2i(6, 0)
+				elif f_se: tile = Vector2i(4, 0)
 				
 				if tile != Vector2i(-1, -1):
 					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
