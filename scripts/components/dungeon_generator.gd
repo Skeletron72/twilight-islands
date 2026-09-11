@@ -200,9 +200,25 @@ func generate(
 	var cx = scx * 2
 	var wall_y = swall_y * 2
 	
-	# 6. Четкая геометрия входной комнаты и южной стены:
-	for x in range(cx - 7, cx + 8):
-		for y in range(wall_y + 1, min(wall_y + 8, h - 2)):
+	# 6. Геометрия входной комнаты и южной стены:
+	# Формируем первый зал органичной природной формы (с шумом и неровными краями, а не коробкой)
+	var ec_x = cx - 1
+	var ec_y = wall_y + 4
+	var er_x = randi_range(7, 10)
+	var er_y = randi_range(4, 6)
+	for x in range(cx - er_x - 3, cx + er_x + 4):
+		for y in range(wall_y + 1, min(h - 2, wall_y + er_y * 2 + 3)):
+			if x >= 1 and x < w - 1 and y >= 1 and y < h - 1:
+				var dx = float(x - ec_x) / float(er_x)
+				var dy = float(y - ec_y) / float(er_y)
+				var dist = dx * dx + dy * dy
+				var noise = (sin(x * 1.4) + cos(y * 1.6)) * 0.22
+				if dist + noise < 1.05:
+					grid[x][y] = 0
+
+	# Гарантируем свободный проход перед выходом (cx - 5..cx - 3) и саппортом (cx - 2..cx + 2)
+	for x in range(cx - 6, cx + 3):
+		for y in range(wall_y + 1, wall_y + 4):
 			if x >= 1 and x < w - 1 and y >= 1 and y < h - 1:
 				grid[x][y] = 0
 				

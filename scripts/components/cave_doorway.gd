@@ -4,11 +4,15 @@ class_name CaveDoorway
 # Interactive cave doorway exit on Floor 1, leading back to the surface.
 # Matches the architecture and collision behavior of CaveEntrance.
 
+var no_highlight: bool = true
+
 @onready var interaction_area: Area2D = $InteractionArea
+@onready var doorway_light: PointLight2D = get_node_or_null("DoorwayLight")
 @onready var prompt_label: Label = get_node_or_null("PromptLabel")
 
 var _player_in_range: bool = false
 var _prompt_tween: Tween
+var _light_tween: Tween
 var _player_ref: Node2D = null
 
 func _ready() -> void:
@@ -19,6 +23,45 @@ func _ready() -> void:
 	if interaction_area:
 		interaction_area.body_entered.connect(_on_body_entered)
 		interaction_area.body_exited.connect(_on_body_exited)
+		
+	if GameStateManager:
+		GameStateManager.time_changed.connect(_on_time_changed)
+		_update_light_for_time(GameStateManager.current_time, false)
+
+func _on_time_changed(new_time) -> void:
+	_update_light_for_time(new_time, true)
+
+func _update_light_for_time(tod, animated: bool = false) -> void:
+	if not doorway_light:
+		return
+		
+	var target_color: Color = Color(1.0, 0.95, 0.88)
+	var target_energy: float = 1.3
+	
+	if GameStateManager:
+		match tod:
+			GameStateManager.TimeOfDay.MORNING:
+				target_color = Color(1.0, 0.88, 0.72)
+				target_energy = 1.1
+			GameStateManager.TimeOfDay.DAY:
+				target_color = Color(1.0, 0.98, 0.90)
+				target_energy = 1.5
+			GameStateManager.TimeOfDay.DUSK:
+				target_color = Color(1.0, 0.55, 0.25)
+				target_energy = 0.95
+			GameStateManager.TimeOfDay.NIGHT:
+				target_color = Color(0.35, 0.45, 0.85)
+				target_energy = 0.4
+			
+	if animated and is_inside_tree():
+		if _light_tween and _light_tween.is_valid():
+			_light_tween.kill()
+		_light_tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		_light_tween.tween_property(doorway_light, "color", target_color, 2.0)
+		_light_tween.tween_property(doorway_light, "energy", target_energy, 2.0)
+	else:
+		doorway_light.color = target_color
+		doorway_light.energy = target_energy
 
 func _setup_prompt_label() -> void:
 	if not prompt_label:

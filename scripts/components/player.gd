@@ -611,8 +611,9 @@ func _update_auto_target() -> void:
 	
 	# Highlight new target
 	if current_target and is_instance_valid(current_target):
-		var sprite = current_target.get_node_or_null("Sprite2D")
-		if sprite: sprite.modulate = Color(1.4, 1.4, 1.4, 1.0)
+		if not current_target.get("no_highlight"):
+			var sprite = current_target.get_node_or_null("Sprite2D")
+			if sprite: sprite.modulate = Color(1.4, 1.4, 1.4, 1.0)
 
 func _try_interact() -> void:
 	if attack_cooldown > 0.0:

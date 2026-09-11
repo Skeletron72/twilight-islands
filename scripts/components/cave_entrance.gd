@@ -1,5 +1,8 @@
 extends StaticBody2D
+
 class_name CaveEntrance
+
+var no_highlight: bool = true
 
 # Interactive cave entrance placed on the island surface.
 # Leads into the procedural dungeon / mine floors.

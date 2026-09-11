@@ -1,5 +1,8 @@
 extends Area2D
+
 class_name LadderDown
+
+var no_highlight: bool = true
 
 # Ladder leading down to the next floor in the mine/dungeon.
 

@@ -1,5 +1,8 @@
 extends Area2D
+
 class_name WallLadder
+
+var no_highlight: bool = true
 
 # Wall ladder mounted on a south cliff wall, leading back up to the previous floor.
 
