@@ -13,19 +13,19 @@ const SOURCE_FLOOR_DECOR: int = 27
 # ==============================================================================
 
 # Пол (нижние тайлы в Cave_Floor_1)
-const TILE_FLOOR = Vector2i(1, 4)
+const TILE_FLOORS = [Vector2i(0, 4), Vector2i(1, 4), Vector2i(2, 4), Vector2i(1, 3)]
 
 # Внутренние углы (правые верхние 9 тайлов, 3x3. Серединка 5,1 пустая)
-const TILE_INNER_TL = Vector2i(4, 0)
-const TILE_INNER_TR = Vector2i(6, 0)
-const TILE_INNER_BL = Vector2i(4, 2)
-const TILE_INNER_BR = Vector2i(6, 2)
+const TILE_INNER_TL = Vector2i(4, 3)
+const TILE_INNER_TR = Vector2i(5, 3)
+const TILE_INNER_BL = Vector2i(4, 4)
+const TILE_INNER_BR = Vector2i(5, 4)
 
 # Внешние углы (сразу под ними 4 тайла, 2x2)
-const TILE_OUTER_TL = Vector2i(4, 3)
-const TILE_OUTER_TR = Vector2i(5, 3)
-const TILE_OUTER_BL = Vector2i(4, 4)
-const TILE_OUTER_BR = Vector2i(5, 4)
+const TILE_OUTER_TL = Vector2i(4, 0)
+const TILE_OUTER_TR = Vector2i(6, 0)
+const TILE_OUTER_BL = Vector2i(4, 2)
+const TILE_OUTER_BR = Vector2i(6, 2)
 
 # Сами стены (Слева снизу 6 тайлов)
 # Допустим, это блок 3x2: (0..2, 6..7).
@@ -123,7 +123,7 @@ func generate(
 	for x in range(w):
 		for y in range(h):
 			if grid[x][y] == 0:
-				floor_layer.set_cell(Vector2i(x, y), SOURCE_FLOOR, TILE_FLOOR)
+				floor_layer.set_cell(Vector2i(x, y), SOURCE_FLOOR, TILE_FLOORS[randi() % TILE_FLOORS.size()])
 				valid_floor_cells.append(Vector2i(x, y))
 			else:
 				# It is a wall. Let's autotile it based on neighboring floors!
@@ -158,9 +158,16 @@ func generate(
 				elif f_ne: tile = TILE_OUTER_BL; is_border = true
 				elif f_nw: tile = TILE_OUTER_BR; is_border = true
 				
-				# Only draw if it's a border or solid background
-				if is_border or (not is_border and randf() < 0.1): # optimization: don't draw invisible solid walls
+				# Only draw border walls, skip the background void completely
+				if is_border:
 					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
+					
+				# If we are the NORTH wall (looking at us), we need to draw the bottom half of the wall below us!
+				if tile == TILE_WALL_TOP:
+					# Draw the bottom part of the tall wall on the cell below us (which is a floor cell)
+					# wall_layer will draw ON TOP of the floor layer!
+					wall_layer.set_cell(Vector2i(x, y + 1), SOURCE_WALLS, Vector2i(1, 7))
+
 
 	# 4. Generate Collider for Walls using Godot's TileMapLayer built-in collisions, 
 	# but we will manually add physical bodies around the floor edges for perfect collision
