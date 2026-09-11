@@ -91,6 +91,9 @@ func generate(
 		for y in range(h):
 			grid[x][y] = s_grid[x / 2][y / 2]
 			
+	var cx = w / 2
+	var cy = h / 2
+
 	# Carve a dedicated 5-tile wide vertical corridor for the support
 	var support_placed = true
 	var support_pos = Vector2i(cx, cy - 8)
@@ -106,8 +109,6 @@ func generate(
 		grid[cx + dx][cy] = 0
 		grid[cx + dx][cy - 12] = 0
 
-	var cx = w / 2
-	var cy = h / 2
 
 	var floor_cells: Array[Vector2i] = []
 	for x in range(w):
