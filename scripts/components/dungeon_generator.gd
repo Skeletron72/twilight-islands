@@ -96,6 +96,7 @@ func generate(
 		floor_layer.set_cells_terrain_connect(floor_cells, 1, terrain_id)
 
 	# 5. Draw Walls using perfect 3x3 blob logic
+	var covered_by_wall: Array[Vector2i] = []
 	for x in range(w):
 		for y in range(h):
 			if grid[x][y] == 1:
@@ -125,11 +126,11 @@ func generate(
 				elif f_w: tile = Vector2i(6, 1)
 				elif f_e: tile = Vector2i(4, 1)
 				
-				# Внутренние углы (Теперь используем тайлы внешних углов пустоты!)
-				elif f_nw: tile = Vector2i(4, 0)
-				elif f_ne: tile = Vector2i(6, 0)
-				elif f_sw: tile = Vector2i(4, 2)
-				elif f_se: tile = Vector2i(6, 2)
+				# Внутренние углы (Поменяли местами по диагонали!)
+				elif f_nw: tile = Vector2i(6, 2)
+				elif f_ne: tile = Vector2i(4, 2)
+				elif f_sw: tile = Vector2i(6, 0)
+				elif f_se: tile = Vector2i(4, 0)
 				
 				if tile != Vector2i(-1, -1):
 					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
@@ -160,6 +161,18 @@ func generate(
 						
 					wall_layer.set_cell(Vector2i(x, y+1), SOURCE_WALLS, face_top)
 					wall_layer.set_cell(Vector2i(x, y+2), SOURCE_WALLS, face_bot)
+					
+					# Добавляем клетки в список "скрытых", чтобы там не спавнились камни
+					covered_by_wall.append(Vector2i(x, y+1))
+					covered_by_wall.append(Vector2i(x, y+2))
+					
+					# Создаем коллизию для вертикальной стены (на нижнем тайле y+2)
+					var col = CollisionShape2D.new()
+					var shape = RectangleShape2D.new()
+					shape.size = Vector2(16, 16)
+					col.shape = shape
+					col.position = _tile_to_world(Vector2i(x, y+2))
+					boundary_body.add_child(col)
 
 	_create_boundary_walls_from_grid(boundary_body, grid, w, h)
 
@@ -170,7 +183,8 @@ func generate(
 	for x in range(w):
 		for y in range(h):
 			if grid[x][y] == 0:
-				valid_floor_cells.append(Vector2i(x, y))
+				if not Vector2i(x, y) in covered_by_wall:
+					valid_floor_cells.append(Vector2i(x, y))
 				
 	var ladder_down_tile = spawn_tile
 	var max_dist = 0.0
