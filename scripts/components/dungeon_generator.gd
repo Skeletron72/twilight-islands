@@ -4,8 +4,11 @@ class_name DungeonGenerator
 const SOURCE_WALLS: int = 25
 const SOURCE_FLOOR: int = 32
 
-const SCENE_LADDER_UP = preload("res://scenes/objects/dungeon/ladder_up.tscn")
+const SCENE_CAVE_DOORWAY = preload("res://scenes/objects/dungeon/cave_doorway.tscn")
+const SCENE_WALL_LADDER = preload("res://scenes/objects/dungeon/wall_ladder.tscn")
 const SCENE_LADDER_DOWN = preload("res://scenes/objects/dungeon/ladder_down.tscn")
+const SCENE_CAVE_SUPPORT = preload("res://scenes/objects/dungeon/cave_support.tscn")
+
 const MINABLE_STONES = [
 	preload("res://scenes/objects/stones/stone_10.tscn"),
 	preload("res://scenes/objects/stones/stone_11.tscn"),
@@ -30,9 +33,9 @@ func generate(
 	for child in interactables.get_children():
 		child.queue_free()
 
-	# Размеры залов случайные (от компактных до огромных лабиринтов)
-	var base_w = randi_range(30, 65) # w будет от 60 до 130
-	var base_h = int(base_w * 0.75)  # h будет от 45 до 97
+	# Компактные и удобные этажи (быстро исследуются, легко найти спуск)
+	var base_w = randi_range(22, 34) # w будет от 44 до 68
+	var base_h = int(base_w * 0.75)  # h будет от 33 до 51
 	
 	var w: int = base_w * 2
 	var h: int = base_h * 2
@@ -51,10 +54,9 @@ func generate(
 	var swall_y = sh - 5 # Позиция южной стены в малом разрешении
 	
 	# 2. Генерация просторных природных пещер в стиле Stardew Valley:
-	# Разделяем пещеру на секторы, чтобы залы равномерно и органично заполнили всю площадь
 	var cave_min_y = 2
 	var cave_max_y = swall_y - 2
-	var cols = 3 if sw >= 40 else 2
+	var cols = 3 if sw >= 30 else 2
 	var rows = 2
 	var chambers: Array = []
 	
@@ -69,17 +71,17 @@ func generate(
 			var max_y = cave_min_y + (r + 1) * sec_h - 1
 			
 			if min_x < max_x and min_y < max_y:
-				var cx = randi_range(min_x, max_x)
-				var cy = randi_range(min_y, max_y)
-				var rx = randi_range(4, max(5, int(sec_w / 2)))
-				var ry = randi_range(3, max(4, int(sec_h / 2)))
-				chambers.append({"x": cx, "y": cy, "rx": rx, "ry": ry})
+				var cx_pos = randi_range(min_x, max_x)
+				var cy_pos = randi_range(min_y, max_y)
+				var rx = randi_range(3, max(4, int(sec_w / 2)))
+				var ry = randi_range(3, max(3, int(sec_h / 2)))
+				chambers.append({"x": cx_pos, "y": cy_pos, "rx": rx, "ry": ry})
 				
 	# Гарантированный южный зал прямо перед входным коридором
 	var entrance_chamber_y = swall_y - randi_range(3, 4)
-	chambers.append({"x": scx, "y": entrance_chamber_y, "rx": randi_range(5, 7), "ry": randi_range(3, 4)})
+	chambers.append({"x": scx, "y": entrance_chamber_y, "rx": randi_range(4, 6), "ry": randi_range(3, 4)})
 	
-	# Вырезаем залы органичными эллипсами с природным шумом по краям
+	# Вырезаем залы органичными эллипсами с шумом
 	for ch in chambers:
 		var ch_x: int = ch.x
 		var ch_y: int = ch.y
@@ -94,7 +96,7 @@ func generate(
 				if dist + noise < 1.05:
 					s_grid[x][y] = 0
 
-	# Соединяем залы широкими извилистыми природными туннелями
+	# Соединяем залы широкими извилистыми туннелями
 	for i in range(chambers.size()):
 		var ch1 = chambers[i]
 		var dists: Array = []
@@ -105,13 +107,11 @@ func generate(
 				dists.append({"d": d, "j": j})
 		dists.sort_custom(func(a, b): return a.d < b.d)
 		
-		# Соединяем с 2 ближайшими залами
 		for k in range(min(2, dists.size())):
 			var target_ch = chambers[dists[k].j]
 			var cur_x = ch1.x
 			var cur_y = ch1.y
 			while cur_x != target_ch.x or cur_y != target_ch.y:
-				# Ширина прохода в малом разрешении (после х2 будет от 4 до 6 тайлов)
 				for bx in range(-1, 2):
 					for by in range(-1, 2):
 						var nx = cur_x + bx
@@ -131,14 +131,12 @@ func generate(
 				cur_x = clampi(cur_x, 2, sw - 3)
 				cur_y = clampi(cur_y, 2, swall_y - 2)
 
-	# В больших залах оставляем природные каменные колонны и островки (как в шахте Стардью)
+	# В залах оставляем природные каменные колонны
 	for ch in chambers:
-		if ch.rx >= 5 and ch.ry >= 4 and randf() < 0.65:
+		if ch.rx >= 4 and ch.ry >= 3 and randf() < 0.5:
 			s_grid[ch.x][ch.y] = 1
-			if randf() < 0.5 and ch.x + 1 < sw - 1:
-				s_grid[ch.x + 1][ch.y] = 1
 
-	# Сглаживание клеточным автоматом (2 прохода, чтобы скалы были округлыми и естественными)
+	# Сглаживание клеточным автоматом (2 прохода)
 	for p in range(2):
 		var new_s = s_grid.duplicate(true)
 		for x in range(1, sw - 1):
@@ -159,7 +157,7 @@ func generate(
 		s_grid[scx][y] = 0
 		s_grid[scx][y - 1] = 0
 
-	# 5. Flood-fill от входа для удаления изолированных полостей
+	# 4. Flood-fill от входа для гарантии 100% связности
 	var visited: Array = []
 	for x in range(sw):
 		var col = []
@@ -174,7 +172,7 @@ func generate(
 		var curr = queue.pop_front()
 		for dx in range(-1, 2):
 			for dy in range(-1, 2):
-				if abs(dx) == abs(dy): continue # Только ортогональные соседи
+				if abs(dx) == abs(dy): continue
 				var nx = curr.x + dx
 				var ny = curr.y + dy
 				if nx >= 0 and nx < sw and ny >= 0 and ny < sh:
@@ -182,13 +180,12 @@ func generate(
 						visited[nx][ny] = true
 						queue.append(Vector2i(nx, ny))
 						
-	# Заливаем все непосещенные участки пола стенами
 	for x in range(sw):
 		for y in range(sh):
 			if s_grid[x][y] == 0 and not visited[x][y]:
 				s_grid[x][y] = 1
 				
-	# 6. Увеличиваем в 2 раза (ИДЕАЛЬНАЯ ГЕОМЕТРИЯ)
+	# 5. Увеличиваем в 2 раза (ИДЕАЛЬНАЯ ГЕОМЕТРИЯ)
 	var grid: Array = []
 	for x in range(w):
 		var col = []
@@ -203,14 +200,13 @@ func generate(
 	var cx = scx * 2
 	var wall_y = swall_y * 2
 	
-	# 7. Четкая геометрия входной комнаты и южной стены:
-	# Очищаем комнату спавна строго под южной стеной
+	# 6. Четкая геометрия входной комнаты и южной стены:
 	for x in range(cx - 7, cx + 8):
 		for y in range(wall_y + 1, min(wall_y + 8, h - 2)):
 			if x >= 1 and x < w - 1 and y >= 1 and y < h - 1:
 				grid[x][y] = 0
 				
-	# Создаем ровную, непрерывную горизонтальную южную стену (от cx-12 до cx+12)
+	# Непрерывная горизонтальная южная стена
 	for dy in range(-3, 1):
 		var wy = wall_y + dy
 		for x in range(max(1, cx - 12), cx - 1):
@@ -230,7 +226,7 @@ func generate(
 			grid[cx + 2][wy] = 1
 			grid[cx + 3][wy] = 1
 			
-	# Плавный широкий выход из коридора в пещеру на северном конце
+	# Плавный выход из коридора в залы пещеры
 	for dx in range(-3, 4):
 		for dy in range(-2, 1):
 			var jx = cx + dx
@@ -238,7 +234,7 @@ func generate(
 			if jx >= 1 and jx < w - 1 and jy >= 1:
 				grid[jx][jy] = 0
 
-	# 8. Рисуем пол с помощью автотайлинга Terrain
+	# 7. Рисуем пол (Terrain)
 	var floor_cells: Array[Vector2i] = []
 	for x in range(w):
 		for y in range(h):
@@ -250,7 +246,7 @@ func generate(
 		if randf() < 0.2: terrain_id = (3 if terrain_id == 2 else 2)
 		floor_layer.set_cells_terrain_connect(floor_cells, 1, terrain_id)
 
-	# 9. Рисуем стены (с паддингом в 20 тайлов вокруг, чтобы не было видно пустоту)
+	# 8. Рисуем стены
 	var covered_by_wall: Array[Vector2i] = []
 	var padding = 20
 	for x in range(-padding, w + padding):
@@ -300,9 +296,6 @@ func generate(
 					var face_top = Vector2i(1, 6)
 					var face_bot = Vector2i(1, 7)
 					
-					# Торцы фасада:
-					# Если стена граничит с полом на востоке (левая стена коридора) -> правый торец скалы (2, 6)
-					# Если стена граничит с полом на западе (правая стена коридора) -> левый торец скалы (0, 6)
 					if f_e:
 						face_top = Vector2i(2, 6)
 						face_bot = Vector2i(2, 7)
@@ -325,9 +318,8 @@ func generate(
 
 	_create_boundary_walls_from_grid(boundary_body, grid, w, h)
 
-	# 10. Размещение объектов
-	var spawn_tile = Vector2i(cx, wall_y + 3)
-	var ladder_up_tile = Vector2i(cx, wall_y + 4)
+	# 9. Размещение объектов
+	var spawn_tile = Vector2i(cx - 4, wall_y + 3)
 	
 	var valid_floor_cells = []
 	for x in range(w):
@@ -344,25 +336,43 @@ func generate(
 			max_dist = d
 			ladder_down_tile = cell
 
-	# Саппорт ставится ровно у основания южного фасада скалы (y = wall_y + 2)
-	# Его перекладина ровно на уровне wall_y, а стойки упираются в пол у основания фасада
+	# Саппорт ставится у основания южного фасада скалы (y = wall_y + 2, x = cx)
 	var support_pos = Vector2i(cx, wall_y + 2)
-	var support = preload("res://scenes/objects/dungeon/cave_support.tscn").instantiate()
+	var support = SCENE_CAVE_SUPPORT.instantiate()
 	support.global_position = _tile_to_world(support_pos) + Vector2(0, 8)
 	interactables.add_child(support)
 
-	var ladder_up = SCENE_LADDER_UP.instantiate()
-	ladder_up.global_position = _tile_to_world(ladder_up_tile)
-	interactables.add_child(ladder_up)
+	# ВЫХОД НАВЕРХ / НА ПОВЕРХНОСТЬ (на южной стене):
+	# На 1 этаже: каменный арочный выход Cave_Doorway_1 (первые 8 тайлов)
+	# На этажах 2+: пристенная лестница Desert_Ladder
+	if floor_num <= 1:
+		var doorway = SCENE_CAVE_DOORWAY.instantiate()
+		doorway.global_position = _tile_to_world(Vector2i(cx - 4, wall_y + 2)) + Vector2(-8, 8)
+		interactables.add_child(doorway)
+	else:
+		var wall_ladder = SCENE_WALL_LADDER.instantiate()
+		wall_ladder.global_position = _tile_to_world(Vector2i(cx - 4, wall_y + 2)) + Vector2(0, 8)
+		interactables.add_child(wall_ladder)
 
+	# Игрок появляется перед выходом на южной стене
 	if player:
 		player.global_position = _tile_to_world(spawn_tile)
 
+	# СПУСК ВНИЗ: люк в полу Cave_Floor_Ladder (в дальнем зале)
 	var ladder_down = SCENE_LADDER_DOWN.instantiate()
 	ladder_down.global_position = _tile_to_world(ladder_down_tile)
 	interactables.add_child(ladder_down)
 
-	var reserved = [spawn_tile, ladder_up_tile, ladder_down_tile, ladder_up_tile + Vector2i(0, 1)]
+	# 10. Спавн камней и руд (не спавним у выхода, саппорта и люка)
+	var reserved = [
+		spawn_tile,
+		Vector2i(cx - 4, wall_y + 2),
+		Vector2i(cx - 5, wall_y + 2),
+		ladder_down_tile,
+		Vector2i(cx, wall_y + 2),
+		Vector2i(cx, wall_y + 1),
+		Vector2i(cx, wall_y)
+	]
 	for cell in valid_floor_cells:
 		if cell in reserved: continue
 		if randf() < 0.05:

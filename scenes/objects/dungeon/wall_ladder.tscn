@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/components/wall_ladder.gd" id="1_wld"]
+[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy_Desert/Props/Desert_Ladder.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(16, 24)
+
+[node name="WallLadder" type="Area2D" groups=["interactable"]]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_wld")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+offset = Vector2(0, -24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -12)
+shape = SubResource("RectangleShape2D_1")
