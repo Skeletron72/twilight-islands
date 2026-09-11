@@ -8,6 +8,7 @@ const SCENE_CAVE_DOORWAY = preload("res://scenes/objects/dungeon/cave_doorway.ts
 const SCENE_WALL_LADDER = preload("res://scenes/objects/dungeon/wall_ladder.tscn")
 const SCENE_LADDER_DOWN = preload("res://scenes/objects/dungeon/ladder_down.tscn")
 const SCENE_CAVE_SUPPORT = preload("res://scenes/objects/dungeon/cave_support.tscn")
+const SCENE_CAVE_WALL_SUPPORT = preload("res://scenes/objects/dungeon/cave_wall_support.tscn")
 
 const MINABLE_STONES = [
 	preload("res://scenes/objects/stones/stone_10.tscn"),
@@ -428,7 +429,6 @@ func generate(
 	ladder_down.global_position = _tile_to_world(ladder_down_tile)
 	interactables.add_child(ladder_down)
 
-	# 10. Спавн камней и руд (не спавним у выхода, саппорта и люка, с гарантированным отступом от стен)
 	var reserved = {}
 	# Зона вокруг точки спавна и выхода (радиус 1 тайл)
 	for dx in range(-1, 2):
@@ -437,6 +437,66 @@ func generate(
 			reserved[ladder_down_tile + Vector2i(dx, dy)] = true
 			reserved[Vector2i(cx - 4 + dx, wall_y + 2 + dy)] = true
 			reserved[Vector2i(cx + dx, wall_y + 2 + dy)] = true
+
+	# 10. Декоративные опоры южных стен с масляными фонарями (Cave_Wall_Support.png)
+	var wall_support_candidates: Array[Vector2i] = []
+	for y in range(2, h - 3):
+		for x in range(3, w - 3):
+			# Опора имеет ширину 80px (5 тайлов: x-2 .. x+2) и высоту 32px (2 тайла: y+1, y+2)
+			# Проверяем, что опора полностью умещается на фасаде южной стены
+			var fits = true
+			for dx in range(-2, 3):
+				var tx = x + dx
+				if tx < 0 or tx >= w or y + 3 >= h:
+					fits = false
+					break
+				if not Vector2i(tx, y + 1) in covered_dict or not Vector2i(tx, y + 2) in covered_dict:
+					fits = false
+					break
+				if grid[tx][y + 3] != 0 or Vector2i(tx, y + 3) in covered_dict:
+					fits = false
+					break
+			if not fits: continue
+
+			# Не спавним поверх стартовой зоны входа, саппорта и люка вниз
+			if y == wall_y and abs(x - cx) < 8: continue
+			if Vector2(x, y + 2).distance_to(Vector2(spawn_tile)) < 4.0: continue
+			if Vector2(x, y + 2).distance_to(Vector2(ladder_down_tile)) < 4.0: continue
+
+			wall_support_candidates.append(Vector2i(x, y))
+
+	# Предпочитаем стены с запасом ширины (чтобы опора не обрывалась на углах)
+	var wide_candidates: Array[Vector2i] = []
+	for c in wall_support_candidates:
+		if c.x - 3 >= 0 and c.x + 3 < w and grid[c.x - 3][c.y] == 1 and grid[c.x + 3][c.y] == 1:
+			wide_candidates.append(c)
+	var candidates_pool = wide_candidates if wide_candidates.size() > 0 else wall_support_candidates
+	candidates_pool.shuffle()
+
+	var placed_supports: Array[Vector2i] = []
+	var target_supports_count = randi_range(2, 4)
+	for cand in candidates_pool:
+		var too_close = false
+		for placed in placed_supports:
+			if Vector2(cand).distance_to(Vector2(placed)) < 6.0:
+				too_close = true
+				break
+		if too_close: continue
+
+		placed_supports.append(cand)
+		var wall_support = SCENE_CAVE_WALL_SUPPORT.instantiate()
+		wall_support.global_position = _tile_to_world(Vector2i(cand.x, cand.y + 2)) + Vector2(0, 8)
+		interactables.add_child(wall_support)
+
+		# Резервируем пространство под опорой и перед фонарем от спавна камней
+		for dx in range(-3, 4):
+			for dy in range(1, 4):
+				reserved[Vector2i(cand.x + dx, cand.y + dy)] = true
+
+		if placed_supports.size() >= target_supports_count:
+			break
+
+	# 11. Спавн камней и руд (не спавним у выхода, саппортов и люка, с гарантированным отступом от стен)
 
 	for cell in safe_floor_cells:
 		if cell in reserved: continue
