@@ -98,14 +98,13 @@ func generate(
 	var support_placed = true
 	var support_pos = Vector2i(cx, cy - 8)
 	
-	# Пробиваем идеальный коридор 5 шириной и 12 длиной наверх от спавна, чтобы там гарантированно стоял саппорт!
+	# Пробиваем коридор ровно 4 шириной (чтобы не ломать 2x2 сетку), а саппорт (5 тайлов) будет красиво врезаться в стены по 0.5 тайла!
 	for dy in range(-12, 0):
-		for dx in range(-2, 3):
+		for dx in range(-2, 2):
 			grid[cx + dx][cy + dy] = 0
 	
-	# Делаем переход плавным (чтобы не было острых углов в 1 тайл)
-	# Расширяем края коридора у основания и на вершине до четных значений
-	for dx in range(-3, 4):
+	# Плавный переход краев
+	for dx in range(-3, 3):
 		grid[cx + dx][cy] = 0
 		grid[cx + dx][cy - 12] = 0
 
@@ -141,11 +140,11 @@ func generate(
 				
 				# ПРАВИЛЬНЫЙ МАППИНГ ДЛЯ RPG MAKER 3x3 (ВЕРШИНА ГОРЫ)
 				
-				# Внешние углы (Теперь используем тайлы внутренних углов пустоты!)
-				if f_n and f_w: tile = Vector2i(4, 3)
-				elif f_n and f_e: tile = Vector2i(5, 3)
-				elif f_s and f_w: tile = Vector2i(4, 4)
-				elif f_s and f_e: tile = Vector2i(5, 4)
+				# Внешние углы (Правильный маппинг для 2x2 блоков, темная сторона наружу)
+				if f_n and f_w: tile = Vector2i(6, 2)
+				elif f_n and f_e: tile = Vector2i(4, 2)
+				elif f_s and f_w: tile = Vector2i(6, 0)
+				elif f_s and f_e: tile = Vector2i(4, 0)
 				
 				# Прямые края
 				elif f_n: tile = Vector2i(5, 2)
@@ -153,11 +152,11 @@ func generate(
 				elif f_w: tile = Vector2i(6, 1)
 				elif f_e: tile = Vector2i(4, 1)
 				
-				# Внутренние углы (Поменяли местами по диагонали!)
-				elif f_nw: tile = Vector2i(6, 2)
-				elif f_ne: tile = Vector2i(4, 2)
-				elif f_sw: tile = Vector2i(6, 0)
-				elif f_se: tile = Vector2i(4, 0)
+				# Внутренние углы (впадины в скале)
+				elif f_nw: tile = Vector2i(4, 3)
+				elif f_ne: tile = Vector2i(5, 3)
+				elif f_sw: tile = Vector2i(4, 4)
+				elif f_se: tile = Vector2i(5, 4)
 				
 				if tile != Vector2i(-1, -1):
 					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
@@ -177,8 +176,7 @@ func generate(
 						face_top = Vector2i(2, 6)
 						face_bot = Vector2i(2, 7)
 						
-					# Inner corners (swapped)
-					# f_se -> (5,4) (Inner BR). It has a small south face on the left.
+					# Inner corners
 					if f_se and not f_s:
 						face_top = Vector2i(2, 6)
 						face_bot = Vector2i(2, 7)
@@ -223,7 +221,7 @@ func generate(
 
 	if support_pos != Vector2i(-1, -1):
 		var support = preload("res://scenes/objects/dungeon/cave_support.tscn").instantiate()
-		support.global_position = _tile_to_world(support_pos) # Центрируем по тайлу cx
+		support.global_position = _tile_to_world(support_pos) + Vector2(-8, 0) # Сдвигаем на полтайла влево, так как коридор четный (4)
 		interactables.add_child(support)
 
 	var ladder_up = SCENE_LADDER_UP.instantiate()
