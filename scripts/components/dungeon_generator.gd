@@ -83,6 +83,35 @@ func generate(
 		for dy in range(-1, 2):
 			s_grid[scx + dx][scy + dy] = 0
 			
+	# Flood-fill для удаления изолированных комнат
+	var visited: Array = []
+	for x in range(sw):
+		var col = []
+		col.resize(sh)
+		col.fill(false)
+		visited.append(col)
+		
+	var queue: Array[Vector2i] = [Vector2i(scx, scy)]
+	visited[scx][scy] = true
+	
+	while queue.size() > 0:
+		var curr = queue.pop_front()
+		for dx in range(-1, 2):
+			for dy in range(-1, 2):
+				if abs(dx) == abs(dy): continue # Только ортогональные соседи
+				var nx = curr.x + dx
+				var ny = curr.y + dy
+				if nx >= 0 and nx < sw and ny >= 0 and ny < sh:
+					if s_grid[nx][ny] == 0 and not visited[nx][ny]:
+						visited[nx][ny] = true
+						queue.append(Vector2i(nx, ny))
+						
+	# Заливаем все непосещенные участки пола стенами
+	for x in range(sw):
+		for y in range(sh):
+			if s_grid[x][y] == 0 and not visited[x][y]:
+				s_grid[x][y] = 1
+			
 	# Увеличиваем в 2 раза (ИДЕАЛЬНАЯ ГЕОМЕТРИЯ)
 	var grid: Array = []
 	for x in range(w):
@@ -155,24 +184,23 @@ func generate(
 				
 				# ПРАВИЛЬНЫЙ МАППИНГ ДЛЯ RPG MAKER 3x3 (ВЕРШИНА ГОРЫ)
 				
-				# Внешние углы (ПРАВИЛЬНЫЙ МАППИНГ ДЛЯ 2x2 БЛОКОВ)
-				# 2x2 блок имеет породу на юге и востоке, поэтому угол не может иметь там пол! Используем внешние углы пустоты (6,2 и т.д.)
-				if f_n and f_w: tile = Vector2i(6, 2)
-				elif f_n and f_e: tile = Vector2i(4, 2)
-				elif f_s and f_w: tile = Vector2i(6, 0)
-				elif f_s and f_e: tile = Vector2i(4, 0)
+				# Внешние углы (углы скалы) - стандартный маппинг
+				if f_n and f_w: tile = Vector2i(4, 0)
+				elif f_n and f_e: tile = Vector2i(6, 0)
+				elif f_s and f_w: tile = Vector2i(4, 2)
+				elif f_s and f_e: tile = Vector2i(6, 2)
 				
 				# Прямые края
-				elif f_n: tile = Vector2i(5, 2)
-				elif f_s: tile = Vector2i(5, 0)
-				elif f_w: tile = Vector2i(6, 1)
-				elif f_e: tile = Vector2i(4, 1)
+				elif f_n: tile = Vector2i(5, 0)
+				elif f_s: tile = Vector2i(5, 2)
+				elif f_w: tile = Vector2i(4, 1)
+				elif f_e: tile = Vector2i(6, 1)
 				
 				# Внутренние углы (впадины в скале)
-				elif f_nw: tile = Vector2i(4, 3)
-				elif f_ne: tile = Vector2i(5, 3)
-				elif f_sw: tile = Vector2i(4, 4)
-				elif f_se: tile = Vector2i(5, 4)
+				elif f_nw: tile = Vector2i(5, 4)
+				elif f_ne: tile = Vector2i(4, 4)
+				elif f_sw: tile = Vector2i(5, 3)
+				elif f_se: tile = Vector2i(4, 3)
 				
 				if tile != Vector2i(-1, -1):
 					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
@@ -193,9 +221,11 @@ func generate(
 						face_bot = Vector2i(2, 7)
 						
 					# Inner corners
+					# f_se (Void SE, so Rock is NW). The tile is (4,3). It has a small south face on the right.
 					if f_se and not f_s:
 						face_top = Vector2i(2, 6)
 						face_bot = Vector2i(2, 7)
+					# f_sw (Void SW, so Rock is NE). The tile is (5,3). It has a small south face on the left.
 					elif f_sw and not f_s:
 						face_top = Vector2i(0, 6)
 						face_bot = Vector2i(0, 7)
