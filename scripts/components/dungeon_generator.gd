@@ -90,6 +90,21 @@ func generate(
 	for x in range(w):
 		for y in range(h):
 			grid[x][y] = s_grid[x / 2][y / 2]
+			
+	# Carve a dedicated 5-tile wide vertical corridor for the support
+	var support_placed = true
+	var support_pos = Vector2i(cx, cy - 8)
+	
+	# Пробиваем идеальный коридор 5 шириной и 12 длиной наверх от спавна, чтобы там гарантированно стоял саппорт!
+	for dy in range(-12, 0):
+		for dx in range(-2, 3):
+			grid[cx + dx][cy + dy] = 0
+	
+	# Делаем переход плавным (чтобы не было острых углов в 1 тайл)
+	# Расширяем края коридора у основания и на вершине до четных значений
+	for dx in range(-3, 4):
+		grid[cx + dx][cy] = 0
+		grid[cx + dx][cy - 12] = 0
 
 	var cx = w / 2
 	var cy = h / 2
@@ -204,6 +219,11 @@ func generate(
 		if d > max_dist:
 			max_dist = d
 			ladder_down_tile = cell
+
+	if support_pos != Vector2i(-1, -1):
+		var support = preload("res://scenes/objects/dungeon/cave_support.tscn").instantiate()
+		support.global_position = _tile_to_world(support_pos) # Центрируем по тайлу cx
+		interactables.add_child(support)
 
 	var ladder_up = SCENE_LADDER_UP.instantiate()
 	ladder_up.global_position = _tile_to_world(ladder_up_tile)
