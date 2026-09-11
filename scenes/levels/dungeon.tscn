@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/dungeon.gd" id="1_dng"]
-[ext_resource type="TileSet" uid="uid://dcinsxthwxsap" path="res://resources/cute_tileset.tres" id="2_ts"]
+[ext_resource type="TileSet" uid="uid://dkxctgnaoqmci" path="res://resources/cute_tileset.tres" id="2_ts"]
 [ext_resource type="PackedScene" uid="uid://cxab3213x0x" path="res://scenes/characters/player/player.tscn" id="3_plr"]
 [ext_resource type="PackedScene" uid="uid://dfoo5613x3x" path="res://scenes/ui/ui_layer.tscn" id="4_ui"]
 [ext_resource type="FontFile" uid="uid://cp5m6git4cdoo" path="res://assets/fonts/Chalkboard.ttf" id="5_font"]
