@@ -14,7 +14,7 @@ var anim_timer: float = 0.0
 @onready var static_shape: CollisionShape2D = $StaticBody/CollisionShape2D
 
 func is_gatherable() -> bool:
-	return rock_type >= 1 and rock_type <= 9
+	return rock_type >= 1 and rock_type <= 2
 
 func _ready() -> void:
 	super._ready()

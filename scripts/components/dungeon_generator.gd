@@ -9,13 +9,14 @@ const SCENE_WALL_LADDER = preload("res://scenes/objects/dungeon/wall_ladder.tscn
 const SCENE_LADDER_DOWN = preload("res://scenes/objects/dungeon/ladder_down.tscn")
 const SCENE_CAVE_SUPPORT = preload("res://scenes/objects/dungeon/cave_support.tscn")
 const SCENE_CAVE_WALL_SUPPORT = preload("res://scenes/objects/dungeon/cave_wall_support.tscn")
+const SCENE_CAVE_LANTERN = preload("res://scenes/objects/dungeon/cave_lantern.tscn")
+const SCENE_CAVE_STALAGMITE = preload("res://scenes/objects/dungeon/cave_stalagmite.tscn")
 
-const MINABLE_STONES = [
-	preload("res://scenes/objects/stones/stone_10.tscn"),
-	preload("res://scenes/objects/stones/stone_11.tscn"),
-	preload("res://scenes/objects/stones/stone_12.tscn"),
-	preload("res://scenes/objects/stones/stone_13.tscn"),
-	preload("res://scenes/objects/stones/stone_14.tscn")
+const CAVE_STONES = [
+	preload("res://scenes/objects/stones/stone_1.tscn"),
+	preload("res://scenes/objects/stones/stone_2.tscn"),
+	preload("res://scenes/objects/stones/stone_3.tscn"),
+	preload("res://scenes/objects/stones/stone_4.tscn")
 ]
 
 func generate(
@@ -511,13 +512,75 @@ func generate(
 		if placed_supports.size() >= target_supports_count:
 			break
 
-	# 11. Спавн камней и руд (не спавним у выхода, саппортов и люка, с гарантированным отступом от стен)
+	# 11. Настенные масляные светильники (Lantern.png) для мягкого освещения темных зон
+	var lantern_candidates: Array[Vector2i] = []
+	for y in range(2, h - 3):
+		for x in range(2, w - 2):
+			if not Vector2i(x, y + 1) in covered_dict or not Vector2i(x, y + 2) in covered_dict:
+				continue
+			if y + 3 >= h or grid[x][y + 3] != 0 or Vector2i(x, y + 3) in covered_dict:
+				continue
+			if y == wall_y and abs(x - cx) < 8: continue
+			if Vector2(x, y + 2).distance_to(Vector2(spawn_tile)) < 4.0: continue
+			if Vector2(x, y + 2).distance_to(Vector2(ladder_down_tile)) < 4.0: continue
 
+			# Не вешать вплотную к опорам с фонарями
+			var near_support = false
+			for s in placed_supports:
+				if Vector2(x, y).distance_to(Vector2(s)) < 4.0:
+					near_support = true
+					break
+			if near_support: continue
+
+			lantern_candidates.append(Vector2i(x, y))
+
+	lantern_candidates.shuffle()
+	var placed_lanterns: Array[Vector2i] = []
+	var target_lanterns = randi_range(5, 8)
+	for cand in lantern_candidates:
+		var too_close = false
+		for pl in placed_lanterns:
+			if Vector2(cand).distance_to(Vector2(pl)) < 5.0:
+				too_close = true
+				break
+		if too_close: continue
+
+		placed_lanterns.append(cand)
+		var lantern = SCENE_CAVE_LANTERN.instantiate()
+		lantern.global_position = _tile_to_world(Vector2i(cand.x, cand.y + 2))
+		interactables.add_child(lantern)
+
+		reserved[Vector2i(cand.x, cand.y + 3)] = true
+		if placed_lanterns.size() >= target_lanterns:
+			break
+
+	# 12. Декоративные сталагмиты на полу (Cave_Decorations.png)
+	var stalagmite_candidates: Array[Vector2i] = []
+	for cell in valid_floor_cells:
+		if cell in reserved: continue
+		# Сталагмиты естественнее всего смотрятся у краев и выступов пещеры
+		stalagmite_candidates.append(cell)
+	
+	stalagmite_candidates.shuffle()
+	var target_stalagmites = randi_range(8, 14)
+	var placed_stalagmites = 0
+	for cell in stalagmite_candidates:
+		if cell in reserved: continue
+		var stalagmite = SCENE_CAVE_STALAGMITE.instantiate()
+		stalagmite.variant = randi() % 4
+		stalagmite.global_position = _tile_to_world(cell)
+		interactables.add_child(stalagmite)
+		reserved[cell] = true
+		placed_stalagmites += 1
+		if placed_stalagmites >= target_stalagmites:
+			break
+
+	# 13. Спавн анимированных камней (1-2 рукой, 3-4 киркой, с гарантированным отступом от стен)
 	for cell in safe_floor_cells:
 		if cell in reserved: continue
-		if randf() < 0.07:
+		if randf() < 0.08:
 			if DungeonManager and DungeonManager.is_tile_cleared(floor_num, cell): continue
-			var stone = MINABLE_STONES[randi() % MINABLE_STONES.size()].instantiate()
+			var stone = CAVE_STONES[randi() % CAVE_STONES.size()].instantiate()
 			# Минимальный джиттер (+-2 пикселя), чтобы камни не стояли строго по сетке, но никогда не наползали на соседние тайлы и стены
 			stone.global_position = _tile_to_world(cell) + Vector2(randf_range(-2, 2), randf_range(-2, 2))
 			interactables.add_child(stone)

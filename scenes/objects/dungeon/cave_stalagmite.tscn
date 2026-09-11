@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://cavestalagmite01"]
+
+[ext_resource type="Script" path="res://scripts/components/cave_stalagmite.gd" id="1_cst"]
+[ext_resource type="Texture2D" uid="uid://dg2ggt1sn7sqw" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Cave_Decorations.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
+size = Vector2(10, 4)
+
+[node name="CaveStalagmite" type="StaticBody2D"]
+y_sort_enabled = true
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("1_cst")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+region_enabled = true
+region_rect = Rect2(0, 16, 16, 16)
+offset = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_base")
