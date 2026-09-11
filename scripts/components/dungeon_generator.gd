@@ -137,11 +137,13 @@ func generate(
 			
 	# Пробиваем ровный коридор на север через эту стену
 	for dy in range(-12, -3):
-		for dx in range(-2, 2):
+		# ИСКЛЮЧЕНИЕ: Для коридора с саппортом делаем ширину ровно 3 тайла (-1, 0, 1),
+		# чтобы ножки саппорта идеально совпали со стенами по краям!
+		for dx in range(-1, 2):
 			grid[cx + dx][cy + dy] = 0
 		# Гарантируем толщину боковых стен коридора
+		grid[cx - 2][cy + dy] = 1
 		grid[cx - 3][cy + dy] = 1
-		grid[cx - 4][cy + dy] = 1
 		grid[cx + 2][cy + dy] = 1
 		grid[cx + 3][cy + dy] = 1
 			
@@ -265,9 +267,9 @@ func generate(
 	var support_pos = Vector2i(cx, cy - 3)
 	if support_pos != Vector2i(-1, -1):
 		var support = preload("res://scenes/objects/dungeon/cave_support.tscn").instantiate()
-		# Сдвигаем X на -8 (т.к. ширина коридора 4 тайла, центр смещен)
+		# Так как коридор теперь 3 тайла (нечетный), он идеально центрирован по тайлу cx!
 		# Сдвигаем Y на +8 (чтобы origin был на нижнем крае тайла, совпадая с физической базой скалы)
-		support.global_position = _tile_to_world(support_pos) + Vector2(-8, 8)
+		support.global_position = _tile_to_world(support_pos) + Vector2(0, 8)
 		interactables.add_child(support)
 
 	var ladder_up = SCENE_LADDER_UP.instantiate()
