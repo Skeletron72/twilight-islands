@@ -182,23 +182,23 @@ func generate(
 				
 				# ПРАВИЛЬНЫЙ МАППИНГ ДЛЯ RPG MAKER 3x3 (ВЕРШИНА ГОРЫ)
 				
-				# Внешние углы (ИНВЕРТИРОВАННЫЙ МАППИНГ: 3x3 БЛОК = ПУСТОТА)
-				if f_n and f_w: tile = Vector2i(6, 2)
-				elif f_n and f_e: tile = Vector2i(4, 2)
-				elif f_s and f_w: tile = Vector2i(6, 0)
-				elif f_s and f_e: tile = Vector2i(4, 0)
+				# Внешние углы (углы скалы) - стандартный маппинг
+				if f_n and f_w: tile = Vector2i(4, 0)
+				elif f_n and f_e: tile = Vector2i(6, 0)
+				elif f_s and f_w: tile = Vector2i(4, 2)
+				elif f_s and f_e: tile = Vector2i(6, 2)
 				
 				# Прямые края
-				elif f_n: tile = Vector2i(5, 2)
-				elif f_s: tile = Vector2i(5, 0)
-				elif f_w: tile = Vector2i(6, 1)
-				elif f_e: tile = Vector2i(4, 1)
+				elif f_n: tile = Vector2i(5, 0)
+				elif f_s: tile = Vector2i(5, 2)
+				elif f_w: tile = Vector2i(4, 1)
+				elif f_e: tile = Vector2i(6, 1)
 				
-				# Внутренние углы
-				elif f_nw: tile = Vector2i(4, 3)
-				elif f_ne: tile = Vector2i(5, 3)
-				elif f_sw: tile = Vector2i(4, 4)
-				elif f_se: tile = Vector2i(5, 4)
+				# Внутренние углы (впадины в скале)
+				elif f_nw: tile = Vector2i(5, 4)
+				elif f_ne: tile = Vector2i(4, 4)
+				elif f_sw: tile = Vector2i(5, 3)
+				elif f_se: tile = Vector2i(4, 3)
 				
 				if tile != Vector2i(-1, -1):
 					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
@@ -218,8 +218,7 @@ func generate(
 						face_top = Vector2i(2, 6)
 						face_bot = Vector2i(2, 7)
 						
-					# Inner corners (инвертировано)
-					# f_se (Floor is SE) -> использует (5,4), у которого нижний фейс слева
+					# Inner corners
 					if f_se and not f_s:
 						face_top = Vector2i(2, 6)
 						face_bot = Vector2i(2, 7)
