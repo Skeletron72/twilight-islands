@@ -31,7 +31,7 @@ func generate(
 		child.queue_free()
 
 	# Размеры залов случайные и могут быть больше (от маленьких до очень больших)
-	var base_w = randi() % 60 + 30 # от 30 до 90
+	var base_w = randi() % 80 + 40 # от 40 до 120
 	var base_h = int(base_w * 0.75)
 	
 	# Делаем четными для идеального скейла
@@ -82,8 +82,9 @@ func generate(
 			s_grid[scx + dx][scy + dy] = 0
 			
 	# Пробиваем стартовый коридор в малом разрешении ДО flood-fill'а, чтобы соединить спавн с основной пещерой!
-	for dy in range(-6, 0):
-		s_grid[scx][scy + dy] = 0
+	# Копаем прямо до центра карты, чтобы ГАРАНТИРОВАННО зацепить основную пещеру!
+	for y in range(sh / 2, scy + 1):
+		s_grid[scx][y] = 0
 			
 	# Flood-fill для удаления изолированных комнат
 	var visited: Array = []
@@ -196,23 +197,23 @@ func generate(
 				
 				# ПРАВИЛЬНЫЙ МАППИНГ ДЛЯ RPG MAKER 3x3 (ВЕРШИНА ГОРЫ)
 				
-				# Внешние углы (углы скалы) - стандартный маппинг
-				if f_n and f_w: tile = Vector2i(4, 0)
-				elif f_n and f_e: tile = Vector2i(6, 0)
-				elif f_s and f_w: tile = Vector2i(4, 2)
-				elif f_s and f_e: tile = Vector2i(6, 2)
+				# Внешние углы (ИНВЕРТИРОВАННЫЙ МАППИНГ ПО ПРОСЬБЕ ПОЛЬЗОВАТЕЛЯ)
+				if f_n and f_w: tile = Vector2i(6, 2)
+				elif f_n and f_e: tile = Vector2i(4, 2)
+				elif f_s and f_w: tile = Vector2i(6, 0)
+				elif f_s and f_e: tile = Vector2i(4, 0)
 				
-				# Прямые края
-				elif f_n: tile = Vector2i(5, 0)
-				elif f_s: tile = Vector2i(5, 2)
-				elif f_w: tile = Vector2i(4, 1)
-				elif f_e: tile = Vector2i(6, 1)
+				# Прямые края (Светлая часть к полу, темная внутрь скалы)
+				elif f_n: tile = Vector2i(5, 2)
+				elif f_s: tile = Vector2i(5, 0)
+				elif f_w: tile = Vector2i(6, 1)
+				elif f_e: tile = Vector2i(4, 1)
 				
-				# Внутренние углы (впадины в скале)
-				elif f_nw: tile = Vector2i(5, 4)
-				elif f_ne: tile = Vector2i(4, 4)
-				elif f_sw: tile = Vector2i(5, 3)
-				elif f_se: tile = Vector2i(4, 3)
+				# Внутренние углы (Инвертированные)
+				elif f_nw: tile = Vector2i(4, 3)
+				elif f_ne: tile = Vector2i(5, 3)
+				elif f_sw: tile = Vector2i(4, 4)
+				elif f_se: tile = Vector2i(5, 4)
 				
 				if tile != Vector2i(-1, -1):
 					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
@@ -232,7 +233,7 @@ func generate(
 						face_top = Vector2i(2, 6)
 						face_bot = Vector2i(2, 7)
 						
-					# Inner corners
+					# Inner corners (инвертировано)
 					if f_se and not f_s:
 						face_top = Vector2i(2, 6)
 						face_bot = Vector2i(2, 7)
