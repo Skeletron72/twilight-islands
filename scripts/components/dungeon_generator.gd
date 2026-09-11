@@ -81,6 +81,10 @@ func generate(
 		for dy in range(-1, 2):
 			s_grid[scx + dx][scy + dy] = 0
 			
+	# Пробиваем стартовый коридор в малом разрешении ДО flood-fill'а, чтобы соединить спавн с основной пещерой!
+	for dy in range(-6, 0):
+		s_grid[scx][scy + dy] = 0
+			
 	# Flood-fill для удаления изолированных комнат
 	var visited: Array = []
 	for x in range(sw):
@@ -165,20 +169,28 @@ func generate(
 		if randf() < 0.2: terrain_id = (3 if terrain_id == 2 else 2)
 		floor_layer.set_cells_terrain_connect(floor_cells, 1, terrain_id)
 
-	# 5. Draw Walls using perfect 3x3 blob logic
+	# 5. Draw Walls using perfect 3x3 blob logic (с огромным паддингом, чтобы не было выхода в пустоту)
 	var covered_by_wall: Array[Vector2i] = []
-	for x in range(w):
-		for y in range(h):
-			if grid[x][y] == 1:
-				var f_n = grid[x][y-1] == 0 if y > 0 else false
-				var f_s = grid[x][y+1] == 0 if y < h-1 else false
-				var f_w = grid[x-1][y] == 0 if x > 0 else false
-				var f_e = grid[x+1][y] == 0 if x < w-1 else false
+	var padding = 20
+	for x in range(-padding, w + padding):
+		for y in range(-padding, h + padding):
+			# Если за пределами сетки, считаем, что там скала
+			var is_wall = true
+			if x >= 0 and x < w and y >= 0 and y < h:
+				is_wall = (grid[x][y] == 1)
 				
-				var f_nw = grid[x-1][y-1] == 0 if (x > 0 and y > 0) else false
-				var f_ne = grid[x+1][y-1] == 0 if (x < w-1 and y > 0) else false
-				var f_sw = grid[x-1][y+1] == 0 if (x > 0 and y < h-1) else false
-				var f_se = grid[x+1][y+1] == 0 if (x < w-1 and y < h-1) else false
+			if is_wall:
+				var get_g = func(gx, gy): return grid[gx][gy] if gx >= 0 and gx < w and gy >= 0 and gy < h else 1
+				
+				var f_n = get_g.call(x, y-1) == 0
+				var f_s = get_g.call(x, y+1) == 0
+				var f_w = get_g.call(x-1, y) == 0
+				var f_e = get_g.call(x+1, y) == 0
+				
+				var f_nw = get_g.call(x-1, y-1) == 0
+				var f_ne = get_g.call(x+1, y-1) == 0
+				var f_sw = get_g.call(x-1, y+1) == 0
+				var f_se = get_g.call(x+1, y+1) == 0
 				
 				var tile = Vector2i(-1, -1)
 				
