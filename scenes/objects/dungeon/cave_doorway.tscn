@@ -3,20 +3,28 @@
 [ext_resource type="Script" path="res://scripts/components/cave_doorway.gd" id="1_cdw"]
 [ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Doorway_1.png" id="2_tex"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
-size = Vector2(28, 24)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
+size = Vector2(16, 16)
 
-[node name="CaveDoorway" type="Area2D" groups=["interactable"]]
-collision_layer = 2
-collision_mask = 1
+[node name="CaveDoorway" type="StaticBody2D" groups=["interactable"]]
+y_sort_enabled = true
+collision_layer = 1
+collision_mask = 0
 script = ExtResource("1_cdw")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_tex")
 region_enabled = true
-region_rect = Rect2(0, 0, 32, 64)
-offset = Vector2(0, -32)
+region_rect = Rect2(0, 0, 32, 48)
+offset = Vector2(0, -24)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -12)
-shape = SubResource("RectangleShape2D_1")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-16, -24, 16, -24, 16, 0, 6, 0, 6, -14, -6, -14, -6, 0, -16, 0)
+
+[node name="InteractionArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_door")

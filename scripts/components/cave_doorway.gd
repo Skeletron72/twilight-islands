@@ -1,20 +1,24 @@
-extends Area2D
+extends StaticBody2D
 class_name CaveDoorway
 
-# Doorway leading out of the cave back to the surface on Floor 1.
+# Interactive cave doorway exit on Floor 1, leading back to the surface.
+# Matches the architecture and collision behavior of CaveEntrance.
 
+@onready var interaction_area: Area2D = $InteractionArea
 @onready var prompt_label: Label = get_node_or_null("PromptLabel")
-var _prompt_tween: Tween
+
 var _player_in_range: bool = false
+var _prompt_tween: Tween
+var _player_ref: Node2D = null
 
 func _ready() -> void:
 	if not is_in_group("interactable"):
 		add_to_group("interactable")
-	collision_layer = 2
-	collision_mask = 1
 	_setup_prompt_label()
-	body_entered.connect(_on_body_entered)
-	body_exited.connect(_on_body_exited)
+	
+	if interaction_area:
+		interaction_area.body_entered.connect(_on_body_entered)
+		interaction_area.body_exited.connect(_on_body_exited)
 
 func _setup_prompt_label() -> void:
 	if not prompt_label:
@@ -22,8 +26,9 @@ func _setup_prompt_label() -> void:
 		prompt_label.name = "PromptLabel"
 		prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		prompt_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		prompt_label.position = Vector2(-75, -50)
+		prompt_label.position = Vector2(-75, -54)
 		prompt_label.custom_minimum_size = Vector2(150, 16)
+		prompt_label.z_index = 100
 		prompt_label.text = "[E] Выйти на поверхность"
 		prompt_label.modulate.a = 0.0
 		
@@ -43,11 +48,14 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		_player_in_range = true
+		_player_ref = body
 		_fade_prompt(1.0)
 
 func _on_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		_player_in_range = false
+		if _player_ref == body:
+			_player_ref = null
 		_fade_prompt(0.0)
 
 func _fade_prompt(target_alpha: float) -> void:
