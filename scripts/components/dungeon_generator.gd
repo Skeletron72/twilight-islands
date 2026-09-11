@@ -4,8 +4,40 @@ class_name DungeonGenerator
 # Procedural generator for Stardew Valley-style mine/dungeon floors.
 
 const SOURCE_WALLS: int = 25
-const SOURCE_FLOOR: int = 33
+const SOURCE_FLOOR: int = 32
 const SOURCE_FLOOR_DECOR: int = 27
+
+# ==============================================================================
+# КООРДИНАТЫ ТАЙЛОВ СТЕН (Из слов пользователя)
+# Если какой-то кусок выглядит не так, можно просто поменять X, Y здесь!
+# ==============================================================================
+
+# Пол (нижние тайлы в Cave_Floor_1)
+const TILE_FLOOR = Vector2i(1, 4)
+
+# Внутренние углы (правые верхние 9 тайлов, 3x3. Серединка 5,1 пустая)
+const TILE_INNER_TL = Vector2i(4, 0)
+const TILE_INNER_TR = Vector2i(6, 0)
+const TILE_INNER_BL = Vector2i(4, 2)
+const TILE_INNER_BR = Vector2i(6, 2)
+
+# Внешние углы (сразу под ними 4 тайла, 2x2)
+const TILE_OUTER_TL = Vector2i(4, 3)
+const TILE_OUTER_TR = Vector2i(5, 3)
+const TILE_OUTER_BL = Vector2i(4, 4)
+const TILE_OUTER_BR = Vector2i(5, 4)
+
+# Сами стены (Слева снизу 6 тайлов)
+# Допустим, это блок 3x2: (0..2, 6..7).
+const TILE_WALL_TOP = Vector2i(1, 6)    # Верхняя стена
+const TILE_WALL_BOTTOM = Vector2i(1, 7) # Нижняя стена (смотрит на нас)
+const TILE_WALL_LEFT = Vector2i(0, 6)   # Левая стена
+const TILE_WALL_RIGHT = Vector2i(2, 6)  # Правая стена
+
+# Сплошная заливка стены вдали
+const TILE_WALL_SOLID = Vector2i(0, 7)
+
+# ==============================================================================
 
 const SCENE_LADDER_UP = preload("res://scenes/objects/dungeon/ladder_up.tscn")
 const SCENE_LADDER_DOWN = preload("res://scenes/objects/dungeon/ladder_down.tscn")
@@ -20,31 +52,16 @@ const MINABLE_STONES = [
 	preload("res://scenes/objects/stones/stone_14.tscn")
 ]
 
-const GATHERABLE_STONES = [
-	preload("res://scenes/objects/stones/stone_1.tscn"),
-	preload("res://scenes/objects/stones/stone_2.tscn"),
-	preload("res://scenes/objects/stones/stone_3.tscn"),
-	preload("res://scenes/objects/stones/stone_4.tscn"),
-	preload("res://scenes/objects/stones/stone_5.tscn"),
-	preload("res://scenes/objects/stones/stone_6.tscn"),
-	preload("res://scenes/objects/stones/stone_7.tscn"),
-	preload("res://scenes/objects/stones/stone_8.tscn"),
-	preload("res://scenes/objects/stones/stone_9.tscn")
-]
-
 func generate(
 	floor_num: int,
 	floor_layer: TileMapLayer,
 	wall_layer: TileMapLayer,
 	boundary_body: StaticBody2D,
 	interactables: Node2D,
-	player: Player
+	player: Node2D
 ) -> void:
-	# Deterministic seed based on dungeon_seed and floor number
-	var base_seed: int = DungeonManager.get_or_create_dungeon_seed() if DungeonManager else 12345
-	seed(hash(base_seed + floor_num * 10007))
-
-	# Clear previous tiles and children
+	
+	# Clear previous map
 	floor_layer.clear()
 	wall_layer.clear()
 	for child in boundary_body.get_children():
@@ -52,171 +69,163 @@ func generate(
 	for child in interactables.get_children():
 		child.queue_free()
 
-	# Room dimensions
-	var width: int = 22 + (floor_num % 3) * 2
-	var height: int = 16 + (floor_num % 2) * 2
+	# Dimensions increase with floor number
+	var w: int = 26 + (floor_num % 5) * 2
+	var h: int = 20 + (floor_num % 3) * 2
+	
+	var grid: Array = []
+	for x in range(w):
+		var col = []
+		col.resize(h)
+		col.fill(1) # 1 = Wall
+		grid.append(col)
+		
+	# 1. Сellular Automata - Random Fill
+	for x in range(2, w - 2):
+		for y in range(2, h - 2):
+			if randf() > 0.42:
+				grid[x][y] = 0 # 0 = Floor
+				
+	# 2. Сellular Automata - Smoothing (4 iterations)
+	for i in range(4):
+		var new_grid = grid.duplicate(true)
+		for x in range(1, w - 1):
+			for y in range(1, h - 1):
+				var walls = 0
+				for dx in range(-1, 2):
+					for dy in range(-1, 2):
+						if grid[x + dx][y + dy] == 1:
+							walls += 1
+				
+				if walls >= 5:
+					new_grid[x][y] = 1
+				elif walls <= 3:
+					new_grid[x][y] = 0
+		grid = new_grid
+		
+	# Ensure a central clearing for spawn and ladder
+	var cx = w / 2
+	var cy = h / 2
+	for dx in range(-3, 4):
+		for dy in range(-3, 4):
+			grid[cx + dx][cy + dy] = 0
+			
+	# Connect separate cave rooms or ensure borders are walls
+	for x in range(w):
+		grid[x][0] = 1
+		grid[x][h-1] = 1
+	for y in range(h):
+		grid[0][y] = 1
+		grid[w-1][y] = 1
 
-	# 1. Fill Floor tiles
-	for y in range(1, height - 1):
-		for x in range(1, width - 1):
-			floor_layer.set_cell(Vector2i(x, y), SOURCE_FLOOR, Vector2i(0, 0))
-			# Floor decor with 12% probability
-			if randf() < 0.12:
-				var decor_variant = randi() % 3
-				floor_layer.set_cell(Vector2i(x, y), SOURCE_FLOOR_DECOR, Vector2i(decor_variant, 0))
+	# 3. Draw Floor & Calculate Walls
+	var valid_floor_cells = []
+	for x in range(w):
+		for y in range(h):
+			if grid[x][y] == 0:
+				floor_layer.set_cell(Vector2i(x, y), SOURCE_FLOOR, TILE_FLOOR)
+				valid_floor_cells.append(Vector2i(x, y))
+			else:
+				# It is a wall. Let's autotile it based on neighboring floors!
+				var f_n = grid[x][y-1] == 0 if y > 0 else false
+				var f_s = grid[x][y+1] == 0 if y < h-1 else false
+				var f_w = grid[x-1][y] == 0 if x > 0 else false
+				var f_e = grid[x+1][y] == 0 if x < w-1 else false
+				
+				var f_nw = grid[x-1][y-1] == 0 if (x > 0 and y > 0) else false
+				var f_ne = grid[x+1][y-1] == 0 if (x < w-1 and y > 0) else false
+				var f_sw = grid[x-1][y+1] == 0 if (x > 0 and y < h-1) else false
+				var f_se = grid[x+1][y+1] == 0 if (x < w-1 and y < h-1) else false
+				
+				var tile = TILE_WALL_SOLID
+				var is_border = false
+				
+				# Inner corners (Floor on two orthogonal sides)
+				if f_s and f_e: tile = TILE_INNER_TL; is_border = true
+				elif f_s and f_w: tile = TILE_INNER_TR; is_border = true
+				elif f_n and f_e: tile = TILE_INNER_BL; is_border = true
+				elif f_n and f_w: tile = TILE_INNER_BR; is_border = true
+				
+				# Straight edges (Floor on one side)
+				elif f_s: tile = TILE_WALL_TOP; is_border = true
+				elif f_n: tile = TILE_WALL_BOTTOM; is_border = true
+				elif f_e: tile = TILE_WALL_LEFT; is_border = true
+				elif f_w: tile = TILE_WALL_RIGHT; is_border = true
+				
+				# Outer corners (Floor only on diagonal)
+				elif f_se: tile = TILE_OUTER_TL; is_border = true
+				elif f_sw: tile = TILE_OUTER_TR; is_border = true
+				elif f_ne: tile = TILE_OUTER_BL; is_border = true
+				elif f_nw: tile = TILE_OUTER_BR; is_border = true
+				
+				# Only draw if it's a border or solid background
+				if is_border or (not is_border and randf() < 0.1): # optimization: don't draw invisible solid walls
+					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
 
-	# 2. Build Perimeter Walls
-	for x in range(1, width - 1):
-		wall_layer.set_cell(Vector2i(x, 0), SOURCE_WALLS, Vector2i(1, 0)) # Top
-		wall_layer.set_cell(Vector2i(x, height - 1), SOURCE_WALLS, Vector2i(1, 2)) # Bottom
+	# 4. Generate Collider for Walls using Godot's TileMapLayer built-in collisions, 
+	# but we will manually add physical bodies around the floor edges for perfect collision
+	_create_boundary_walls_from_grid(boundary_body, grid, w, h)
 
-	for y in range(1, height - 1):
-		wall_layer.set_cell(Vector2i(0, y), SOURCE_WALLS, Vector2i(0, 1)) # Left
-		wall_layer.set_cell(Vector2i(width - 1, y), SOURCE_WALLS, Vector2i(2, 1)) # Right
+	# 5. Place Ladders and Spawns
+	var spawn_tile = Vector2i(cx, cy)
+	var ladder_up_tile = Vector2i(cx, cy - 1)
+	
+	# Find a faraway point for the ladder down
+	var ladder_down_tile = spawn_tile
+	var max_dist = 0.0
+	for cell in valid_floor_cells:
+		var d = Vector2(cell).distance_to(Vector2(spawn_tile))
+		if d > max_dist:
+			max_dist = d
+			ladder_down_tile = cell
 
-	# Corners
-	wall_layer.set_cell(Vector2i(0, 0), SOURCE_WALLS, Vector2i(0, 0))
-	wall_layer.set_cell(Vector2i(width - 1, 0), SOURCE_WALLS, Vector2i(2, 0))
-	wall_layer.set_cell(Vector2i(0, height - 1), SOURCE_WALLS, Vector2i(0, 2))
-	wall_layer.set_cell(Vector2i(width - 1, height - 1), SOURCE_WALLS, Vector2i(2, 2))
-
-	# 3. Create Boundary Collisions
-	_create_boundary_walls(boundary_body, width, height)
-
-	# 4. Reserved tiles (walkway, entrance, exit)
-	var ladder_up_tile = Vector2i(3, 3)
-	var spawn_tile = Vector2i(3, 4)
-	var ladder_down_tile = Vector2i(width - 4, height - 4)
-
-	var reserved: Dictionary = {}
-	for dx in range(-1, 2):
-		for dy in range(-1, 2):
-			reserved[ladder_up_tile + Vector2i(dx, dy)] = true
-			reserved[spawn_tile + Vector2i(dx, dy)] = true
-			reserved[ladder_down_tile + Vector2i(dx, dy)] = true
-
-	# 5. Place Ladder Up & Position Player
 	var ladder_up = SCENE_LADDER_UP.instantiate()
 	ladder_up.global_position = _tile_to_world(ladder_up_tile)
 	interactables.add_child(ladder_up)
 
 	if player:
 		player.global_position = _tile_to_world(spawn_tile)
-		if "lantern_light" in player and player.lantern_light:
-			player.lantern_light.energy = 0.9
-		var cam = player.get_node_or_null("Camera2D") as Camera2D
-		if cam:
-			cam.reset_smoothing()
 
-	# 6. Place Ladder Down
 	var ladder_down = SCENE_LADDER_DOWN.instantiate()
 	ladder_down.global_position = _tile_to_world(ladder_down_tile)
 	interactables.add_child(ladder_down)
 
-	# 7. Add Ambient Torches along north wall
-	var torch_x_positions = [5, int(width / 2), width - 6]
-	for tx in torch_x_positions:
-		var torch = SCENE_TORCH.instantiate()
-		torch.global_position = _tile_to_world(Vector2i(tx, 1))
-		interactables.add_child(torch)
+	# 6. Scatter Ores and Stones
+	var reserved = [spawn_tile, ladder_up_tile, ladder_down_tile, ladder_up_tile + Vector2i(0, 1)]
+	for cell in valid_floor_cells:
+		if cell in reserved: continue
+		if randf() < 0.15:
+			var stone = MINABLE_STONES[randi() % MINABLE_STONES.size()].instantiate()
+			stone.global_position = _tile_to_world(cell) + Vector2(randf_range(-4, 4), randf_range(-4, 4))
+			interactables.add_child(stone)
 
-	# 8. Natural Interior Cavern Pillars (1-3 small pillars)
-	var pillar_count = randi_range(1, 3)
-	for p in range(pillar_count):
-		var px = randi_range(6, width - 7)
-		var py = randi_range(4, height - 5)
-		var p_tile = Vector2i(px, py)
-		if reserved.has(p_tile): continue
-		
-		# Place a 1x1 or 2x1 rock pillar
-		wall_layer.set_cell(p_tile, SOURCE_WALLS, Vector2i(1, 1))
-		reserved[p_tile] = true
-		
-		var col = CollisionShape2D.new()
-		var shape = RectangleShape2D.new()
-		shape.size = Vector2(16, 16)
-		col.shape = shape
-		col.position = _tile_to_world(p_tile)
-		boundary_body.add_child(col)
-
-	# 9. Scatter Minable Rocks and Ores
-	var ore_chance = clampf(0.20 + (floor_num * 0.05), 0.20, 0.65)
-	for y in range(2, height - 2):
-		for x in range(2, width - 2):
-			var tile = Vector2i(x, y)
-			if reserved.has(tile): continue
-
-			# ~18% chance of rock spawning per tile
-			if randf() < 0.18:
-				# Skip if already mined during this dungeon run
-				if DungeonManager and DungeonManager.is_tile_cleared(floor_num, tile):
-					continue
-
-				var world_pos = _tile_to_world(tile) + Vector2(randf_range(-2, 2), randf_range(-2, 2))
-				var roll = randf()
-				var inst: Node2D = null
-
-				if roll < ore_chance:
-					# Spawn Cave Ore Rock (drops twilight ore)
-					inst = SCENE_ORE_ROCK.instantiate()
-				elif roll < 0.70:
-					# Spawn Minable Stone
-					var stone_packed = MINABLE_STONES[randi() % MINABLE_STONES.size()]
-					inst = stone_packed.instantiate()
-				else:
-					# Spawn Gatherable Rock
-					var gstone_packed = GATHERABLE_STONES[randi() % GATHERABLE_STONES.size()]
-					inst = gstone_packed.instantiate()
-
-				inst.global_position = world_pos
-				interactables.add_child(inst)
-
-				var cur_node = inst
-				var cur_fl = floor_num
-				var cur_t = tile
-				cur_node.tree_exiting.connect(func():
-					if is_instance_valid(cur_node) and "is_dead" in cur_node and cur_node.is_dead:
-						if DungeonManager:
-							DungeonManager.mark_tile_cleared(cur_fl, cur_t)
-				)
-
-func _create_boundary_walls(body: StaticBody2D, width: int, height: int) -> void:
+func _create_boundary_walls_from_grid(body: StaticBody2D, grid: Array, w: int, h: int) -> void:
 	body.collision_layer = 1
 	body.collision_mask = 0
-
-	var thickness: float = 24.0
-
-	# Top Wall
-	var top_col = CollisionShape2D.new()
-	var top_shape = RectangleShape2D.new()
-	top_shape.size = Vector2(width * 16.0 + 32.0, thickness)
-	top_col.shape = top_shape
-	top_col.position = Vector2((width * 16.0) / 2.0, 8.0)
-	body.add_child(top_col)
-
-	# Bottom Wall
-	var bot_col = CollisionShape2D.new()
-	var bot_shape = RectangleShape2D.new()
-	bot_shape.size = Vector2(width * 16.0 + 32.0, thickness)
-	bot_col.shape = bot_shape
-	bot_col.position = Vector2((width * 16.0) / 2.0, (height - 1) * 16.0 + 8.0)
-	body.add_child(bot_col)
-
-	# Left Wall
-	var left_col = CollisionShape2D.new()
-	var left_shape = RectangleShape2D.new()
-	left_shape.size = Vector2(thickness, height * 16.0 + 32.0)
-	left_col.shape = left_shape
-	left_col.position = Vector2(8.0, (height * 16.0) / 2.0)
-	body.add_child(left_col)
-
-	# Right Wall
-	var right_col = CollisionShape2D.new()
-	var right_shape = RectangleShape2D.new()
-	right_shape.size = Vector2(thickness, height * 16.0 + 32.0)
-	right_col.shape = right_shape
-	right_col.position = Vector2((width - 1) * 16.0 + 8.0, (height * 16.0) / 2.0)
-	body.add_child(right_col)
+	
+	for x in range(w):
+		for y in range(h):
+			if grid[x][y] == 1:
+				# Only add collision if adjacent to floor
+				var adjacent_floor = false
+				for dx in range(-1, 2):
+					for dy in range(-1, 2):
+						var nx = x + dx
+						var ny = y + dy
+						if nx >= 0 and nx < w and ny >= 0 and ny < h:
+							if grid[nx][ny] == 0:
+								adjacent_floor = true
+								break
+					if adjacent_floor: break
+					
+				if adjacent_floor:
+					var col = CollisionShape2D.new()
+					var shape = RectangleShape2D.new()
+					shape.size = Vector2(16, 16)
+					col.shape = shape
+					col.position = _tile_to_world(Vector2i(x, y))
+					body.add_child(col)
 
 func _tile_to_world(tile: Vector2i) -> Vector2:
 	return Vector2(tile.x * 16 + 8, tile.y * 16 + 8)
+
