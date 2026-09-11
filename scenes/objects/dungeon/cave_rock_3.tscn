@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://caverock03"]
+
+[ext_resource type="Script" path="res://scripts/components/stone.gd" id="1_dest"]
+[ext_resource type="Texture2D" uid="uid://ch3sgiywluofm" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Rock_Animations/Cave_Rock_3_Anim.png" id="2_tex"]
+[ext_resource type="Script" path="res://scripts/components/occluder.gd" id="3_occ"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_stone"]
+radius = 16.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_static"]
+size = Vector2(12.0, 6.0)
+
+[node name="CaveRock_3" type="Area2D"]
+y_sort_enabled = true
+position = Vector2(0, 4)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_dest")
+rock_type = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+hframes = 8
+offset = Vector2(0, -8.0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8.0)
+shape = SubResource("CircleShape2D_stone")
+
+[node name="StaticBody" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody"]
+position = Vector2(0, -3.0)
+shape = SubResource("RectangleShape2D_static")

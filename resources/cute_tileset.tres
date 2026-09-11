@@ -1,118 +1,118 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://dkxctgnaoqmci"]
 
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Picnic_Blankets.png" id="1_jicv0"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Wooden_Deck_Tiles.png" id="2_e313t"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_3_Tile.png" id="3_klc0i"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_2_Tile.png" id="4_qw3fs"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_3_Cave_Entrance.png" id="5_vtnxr"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_4_Tile.png" id="6_yva2n"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_4_Cave_Entrance.png" id="7_5rlaf"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_1_Cave_Entrance.png" id="8_krqqj"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_1_Tile.png" id="9_j1jjl"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/FarmLand/FarmLand_Wet_Tile.png" id="10_hvu03"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/FarmLand/FarmLand_Tile.png" id="11_olecb"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Bridge/Bridge_Stone_Horizontal.png" id="12_p5ovc"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Hedge_Tiles.png" id="13_v5xhb"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Bridge/Bridge_Stone_Vertical.png" id="14_rpx1a"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Bridge/Bridge_Wood.png" id="15_bglcl"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Bridge/Bridge_Wood_1.png" id="16_f4u0v"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Water_Animation.png" id="17_4h2sa"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Wall_Support.png" id="18_b17qk"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Walls.png" id="19_ive46"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Floor_Ladder.png" id="20_yy0by"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Floor_Decoration.png" id="21_iy5vs"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Support_2.png" id="22_orxjd"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Support_1.png" id="23_yb8te"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Pavement_Tiles.png" id="24_yubqo"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Water.png" id="25_5ot5s"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Rails.png" id="26_nfvlm"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Floor_1.png" id="27_xyp7h"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Floor_Middle.png" id="28_3lyym"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Doorway_1.png" id="29_nrwvk"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Floor_2.png" id="30_5c4cp"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_Tiles_4.png" id="31_d5ewc"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_Tiles_1_Blob_TEST_1.png" id="32_pfte6"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_Tiles_3.png" id="33_icu4m"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_Tiles_2.png" id="34_fdct4"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cobble_Road/Cobble_Road_2.png" id="35_8qbyp"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_2_Middle.png" id="36_gvs7h"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_Tiles_1.png" id="37_qleyf"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Path_Decoration.png" id="38_65xeq"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_3_Middle.png" id="39_hx8pv"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Path_Middle.png" id="40_yknbs"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_1_Middle.png" id="41_recv8"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_4_Middle.png" id="42_761ex"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_Tiles_1_Blob_TEST.png" id="43_2f11n"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_6.png" id="44_w1s6p"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_7.png" id="45_e3812"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cobble_Road/Cobble_Road_1.png" id="46_67uwd"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_5.png" id="47_yn1mx"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_4.png" id="48_pap2e"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_1.png" id="49_uu8xy"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_3.png" id="50_qxfcm"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_2.png" id="51_h4bxu"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_8.png" id="52_upg7d"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_1_Anim.png" id="53_jdh77"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Foam_Animation.png" id="54_0yjsd"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Decoration.png" id="55_ci8uv"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Middle.png" id="56_m2twp"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Beach/Beach_Decor_Tiles.png" id="57_gaqn3"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_1_Anim.png" id="58_p68ic"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_3.png" id="59_hn0cp"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_2.png" id="60_rr34s"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_1.png" id="61_soi4v"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_4.png" id="62_iaxdw"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_4_Anim.png" id="63_vk7s2"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Fish_Animated_Tile.png" id="64_rgumq"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_3_Anim.png" id="65_m86cf"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_2_Anim.png" id="66_p0wui"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Middle_Anim_1.png" id="67_pv72f"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Beach/Beach_Tiles.png" id="68_vwrpg"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_4.png" id="69_epliq"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Middle_Anim_2.png" id="70_niw0n"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_3_Anim.png" id="71_teaef"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_2_Anim.png" id="72_dnqg8"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_4_Anim.png" id="73_4be1q"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_2.png" id="74_3sp7t"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_3.png" id="75_513xf"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_1.png" id="76_cf4dv"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Cave_Entrance.png" id="77_37mqc"]
-[ext_resource type="PackedScene" path="res://scenes/objects/trees/small_spruce.tscn" id="77_v5xhb"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_2_Cave_Entrance.png" id="78_nr5gn"]
-[ext_resource type="PackedScene" path="res://scenes/objects/trees/small_oak.tscn" id="78_rpx1a"]
-[ext_resource type="PackedScene" path="res://scenes/objects/trees/big_birch.tscn" id="79_bglcl"]
-[ext_resource type="PackedScene" path="res://scenes/objects/trees/medium_spruce.tscn" id="80_f4u0v"]
-[ext_resource type="PackedScene" path="res://scenes/objects/trees/big_spruce.tscn" id="81_4h2sa"]
-[ext_resource type="PackedScene" path="res://scenes/objects/trees/big_fruit.tscn" id="82_b17qk"]
-[ext_resource type="PackedScene" path="res://scenes/objects/trees/big_oak.tscn" id="83_ive46"]
-[ext_resource type="PackedScene" path="res://scenes/objects/trees/medium_fruit.tscn" id="84_yy0by"]
-[ext_resource type="PackedScene" path="res://scenes/objects/trees/small_fruit.tscn" id="85_iy5vs"]
-[ext_resource type="PackedScene" path="res://scenes/objects/trees/small_birch.tscn" id="86_orxjd"]
-[ext_resource type="PackedScene" path="res://scenes/objects/trees/medium_birch.tscn" id="87_yb8te"]
-[ext_resource type="PackedScene" path="res://scenes/objects/trees/medium_oak.tscn" id="88_yubqo"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Grass_2_Anim.png" id="89_d5ewc"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Grass_3_Anim.png" id="91_pfte6"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_7_Anim.png" id="92_icu4m"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_6_Anim.png" id="93_fdct4"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_1_Anim.png" id="94_8qbyp"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_10_Anim.png" id="95_gvs7h"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_11_Anim.png" id="96_qleyf"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_4_Anim.png" id="97_65xeq"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_5_Anim.png" id="98_hx8pv"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_14_Anim.png" id="99_yknbs"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_15_Anim.png" id="100_recv8"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Grass_1_Anim.png" id="102_761ex"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_9_Anim.png" id="103_2f11n"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_8_Anim.png" id="104_w1s6p"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_3_Anim.png" id="105_e3812"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_2_Anim.png" id="106_67uwd"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_13_Anim.png" id="107_yn1mx"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_12_Anim.png" id="108_pap2e"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy_Desert/Props/Desert_Fern.png" id="109_icu4m"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy_Desert/Props/Fallen_Palm_Leaves.png" id="110_fdct4"]
-[ext_resource type="Texture2D" path="res://assets/textures/tiles/water_plants_animated.png" id="111_wplan"]
-[ext_resource type="Texture2D" path="res://assets/textures/tiles/water_rocks_animated.png" id="112_wrock"]
-[ext_resource type="Texture2D" path="res://assets/textures/tiles/water_logs_animated.png" id="113_wlogs"]
+[ext_resource type="Texture2D" uid="uid://56cakqor4mfp" path="res://assets/new_assets/Cute_Fantasy/Tiles/Picnic_Blankets.png" id="1_jicv0"]
+[ext_resource type="Texture2D" uid="uid://xjx17iveljka" path="res://assets/new_assets/Cute_Fantasy/Tiles/Wooden_Deck_Tiles.png" id="2_e313t"]
+[ext_resource type="Texture2D" uid="uid://bm7b2nvbhbyk3" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_3_Tile.png" id="3_klc0i"]
+[ext_resource type="Texture2D" uid="uid://cu7q7j3em7abp" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_2_Tile.png" id="4_qw3fs"]
+[ext_resource type="Texture2D" uid="uid://dbpnl7ru3ff0q" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_3_Cave_Entrance.png" id="5_vtnxr"]
+[ext_resource type="Texture2D" uid="uid://0ya0bvhkcwf6" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_4_Tile.png" id="6_yva2n"]
+[ext_resource type="Texture2D" uid="uid://5qcbnd0b3y0h" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_4_Cave_Entrance.png" id="7_5rlaf"]
+[ext_resource type="Texture2D" uid="uid://dff7mwm4170qb" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_1_Cave_Entrance.png" id="8_krqqj"]
+[ext_resource type="Texture2D" uid="uid://bjls3y2w1n484" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_1_Tile.png" id="9_j1jjl"]
+[ext_resource type="Texture2D" uid="uid://xkvd72jf3aak" path="res://assets/new_assets/Cute_Fantasy/Tiles/FarmLand/FarmLand_Wet_Tile.png" id="10_hvu03"]
+[ext_resource type="Texture2D" uid="uid://bio31gah1jubw" path="res://assets/new_assets/Cute_Fantasy/Tiles/FarmLand/FarmLand_Tile.png" id="11_olecb"]
+[ext_resource type="Texture2D" uid="uid://iv5egnbqa1rc" path="res://assets/new_assets/Cute_Fantasy/Tiles/Bridge/Bridge_Stone_Horizontal.png" id="12_p5ovc"]
+[ext_resource type="Texture2D" uid="uid://b8owhyhkkig8t" path="res://assets/new_assets/Cute_Fantasy/Tiles/Hedge_Tiles.png" id="13_v5xhb"]
+[ext_resource type="Texture2D" uid="uid://h4oo0nhxbeik" path="res://assets/new_assets/Cute_Fantasy/Tiles/Bridge/Bridge_Stone_Vertical.png" id="14_rpx1a"]
+[ext_resource type="Texture2D" uid="uid://bsxkxa847k2ul" path="res://assets/new_assets/Cute_Fantasy/Tiles/Bridge/Bridge_Wood.png" id="15_bglcl"]
+[ext_resource type="Texture2D" uid="uid://c3q72reyyakla" path="res://assets/new_assets/Cute_Fantasy/Tiles/Bridge/Bridge_Wood_1.png" id="16_f4u0v"]
+[ext_resource type="Texture2D" uid="uid://2270vut4bxy" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Water_Animation.png" id="17_4h2sa"]
+[ext_resource type="Texture2D" uid="uid://irxdy3di2jdh" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Wall_Support.png" id="18_b17qk"]
+[ext_resource type="Texture2D" uid="uid://bmr5bjqhgglcx" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Walls.png" id="19_ive46"]
+[ext_resource type="Texture2D" uid="uid://bi4mtetfxg48a" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Floor_Ladder.png" id="20_yy0by"]
+[ext_resource type="Texture2D" uid="uid://7j3eur8a6euu" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Floor_Decoration.png" id="21_iy5vs"]
+[ext_resource type="Texture2D" uid="uid://jrh7v2jr8qoc" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Support_2.png" id="22_orxjd"]
+[ext_resource type="Texture2D" uid="uid://db2x8cpm3tysx" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Support_1.png" id="23_yb8te"]
+[ext_resource type="Texture2D" uid="uid://brglrytr8a2ff" path="res://assets/new_assets/Cute_Fantasy/Tiles/Pavement_Tiles.png" id="24_yubqo"]
+[ext_resource type="Texture2D" uid="uid://b0q8vxuofkh22" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Water.png" id="25_5ot5s"]
+[ext_resource type="Texture2D" uid="uid://c4i0xeqv3rqed" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Rails.png" id="26_nfvlm"]
+[ext_resource type="Texture2D" uid="uid://csmwwpjslmgic" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Floor_1.png" id="27_xyp7h"]
+[ext_resource type="Texture2D" uid="uid://dfieobms3l3iy" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Floor_Middle.png" id="28_3lyym"]
+[ext_resource type="Texture2D" uid="uid://cw33d88jvlls5" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Doorway_1.png" id="29_nrwvk"]
+[ext_resource type="Texture2D" uid="uid://m3mi7akd8twj" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Floor_2.png" id="30_5c4cp"]
+[ext_resource type="Texture2D" uid="uid://cmouo7st7np0c" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_Tiles_4.png" id="31_d5ewc"]
+[ext_resource type="Texture2D" uid="uid://1f215oygexyy" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_Tiles_1_Blob_TEST_1.png" id="32_pfte6"]
+[ext_resource type="Texture2D" uid="uid://bx5rtco08ch3o" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_Tiles_3.png" id="33_icu4m"]
+[ext_resource type="Texture2D" uid="uid://dp1tcfuw81x7y" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_Tiles_2.png" id="34_fdct4"]
+[ext_resource type="Texture2D" uid="uid://dwlxgb37nvnab" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cobble_Road/Cobble_Road_2.png" id="35_8qbyp"]
+[ext_resource type="Texture2D" uid="uid://ufep1cphqqp5" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_2_Middle.png" id="36_gvs7h"]
+[ext_resource type="Texture2D" uid="uid://cvx1m1ucnx2qk" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_Tiles_1.png" id="37_qleyf"]
+[ext_resource type="Texture2D" uid="uid://cdnlkj675ne76" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Path_Decoration.png" id="38_65xeq"]
+[ext_resource type="Texture2D" uid="uid://ck64105lpb8ec" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_3_Middle.png" id="39_hx8pv"]
+[ext_resource type="Texture2D" uid="uid://dj4lo1a5ym8m2" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Path_Middle.png" id="40_yknbs"]
+[ext_resource type="Texture2D" uid="uid://cyfvhomng4puc" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_1_Middle.png" id="41_recv8"]
+[ext_resource type="Texture2D" uid="uid://csu4t6d7jvhr1" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_4_Middle.png" id="42_761ex"]
+[ext_resource type="Texture2D" uid="uid://7yh25s7w88kd" path="res://assets/new_assets/Cute_Fantasy/Tiles/Grass/Grass_Tiles_1_Blob_TEST.png" id="43_2f11n"]
+[ext_resource type="Texture2D" uid="uid://b6tjf8n3s2h3c" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_6.png" id="44_w1s6p"]
+[ext_resource type="Texture2D" uid="uid://l4qfos21hho" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_7.png" id="45_e3812"]
+[ext_resource type="Texture2D" uid="uid://dc84qklbct2r8" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cobble_Road/Cobble_Road_1.png" id="46_67uwd"]
+[ext_resource type="Texture2D" uid="uid://seqjrt7vjiwr" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_5.png" id="47_yn1mx"]
+[ext_resource type="Texture2D" uid="uid://geckgiobfjbf" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_4.png" id="48_pap2e"]
+[ext_resource type="Texture2D" uid="uid://cim6wcb8xhtyo" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_1.png" id="49_uu8xy"]
+[ext_resource type="Texture2D" uid="uid://bups2hc8e2ju7" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_3.png" id="50_qxfcm"]
+[ext_resource type="Texture2D" uid="uid://de0uf1xah8u2h" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_2.png" id="51_h4bxu"]
+[ext_resource type="Texture2D" uid="uid://2wv0d1qs1jbm" path="res://assets/new_assets/Cute_Fantasy/Tiles/Waterfall/Waterfall_8.png" id="52_upg7d"]
+[ext_resource type="Texture2D" uid="uid://dw3osj2r0whfh" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_1_Anim.png" id="53_jdh77"]
+[ext_resource type="Texture2D" uid="uid://mp7qad8ffc1l" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Foam_Animation.png" id="54_0yjsd"]
+[ext_resource type="Texture2D" uid="uid://bevexcij4qcdf" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Decoration.png" id="55_ci8uv"]
+[ext_resource type="Texture2D" uid="uid://bb5jl7g6sakx1" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Middle.png" id="56_m2twp"]
+[ext_resource type="Texture2D" uid="uid://3ceekjnesiq6" path="res://assets/new_assets/Cute_Fantasy/Tiles/Beach/Beach_Decor_Tiles.png" id="57_gaqn3"]
+[ext_resource type="Texture2D" uid="uid://bkojgudb0562r" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_1_Anim.png" id="58_p68ic"]
+[ext_resource type="Texture2D" uid="uid://fu3acy25w0rt" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_3.png" id="59_hn0cp"]
+[ext_resource type="Texture2D" uid="uid://xv0dkdkg1f2c" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_2.png" id="60_rr34s"]
+[ext_resource type="Texture2D" uid="uid://bkdlg0ux2ouwe" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_1.png" id="61_soi4v"]
+[ext_resource type="Texture2D" uid="uid://dgj0ek5bmro86" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_4.png" id="62_iaxdw"]
+[ext_resource type="Texture2D" uid="uid://bqw1d2gmirwar" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_4_Anim.png" id="63_vk7s2"]
+[ext_resource type="Texture2D" uid="uid://01escaxbdh1n" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Fish_Animated_Tile.png" id="64_rgumq"]
+[ext_resource type="Texture2D" uid="uid://cwouinm42vkgv" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_3_Anim.png" id="65_m86cf"]
+[ext_resource type="Texture2D" uid="uid://crge8by00lyyr" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_2_Anim.png" id="66_p0wui"]
+[ext_resource type="Texture2D" uid="uid://cqocygde16eay" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Middle_Anim_1.png" id="67_pv72f"]
+[ext_resource type="Texture2D" uid="uid://uem0fnbi1km3" path="res://assets/new_assets/Cute_Fantasy/Tiles/Beach/Beach_Tiles.png" id="68_vwrpg"]
+[ext_resource type="Texture2D" uid="uid://c7r1bl7rk1nwm" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_4.png" id="69_epliq"]
+[ext_resource type="Texture2D" uid="uid://ddggbnxibcakr" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Middle_Anim_2.png" id="70_niw0n"]
+[ext_resource type="Texture2D" uid="uid://ceoupc1jy4eay" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_3_Anim.png" id="71_teaef"]
+[ext_resource type="Texture2D" uid="uid://xvkthvdleu42" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_2_Anim.png" id="72_dnqg8"]
+[ext_resource type="Texture2D" uid="uid://dbogk3m38a35c" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Tile_4_Anim.png" id="73_4be1q"]
+[ext_resource type="Texture2D" uid="uid://dioldx8aemvd" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_2.png" id="74_3sp7t"]
+[ext_resource type="Texture2D" uid="uid://ckr5kxqr1mih5" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_3.png" id="75_513xf"]
+[ext_resource type="Texture2D" uid="uid://cuyynkmknupdh" path="res://assets/new_assets/Cute_Fantasy/Tiles/Water/Water_Stone_Tile_1.png" id="76_cf4dv"]
+[ext_resource type="Texture2D" uid="uid://md0i82k6njxe" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Cave_Entrance.png" id="77_37mqc"]
+[ext_resource type="PackedScene" uid="uid://h8mmu7quecxj" path="res://scenes/objects/trees/small_spruce.tscn" id="77_v5xhb"]
+[ext_resource type="Texture2D" uid="uid://cna0hufpfulje" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cliff/Stone_Cliff_2_Cave_Entrance.png" id="78_nr5gn"]
+[ext_resource type="PackedScene" uid="uid://b5bhvtbe8i2pe" path="res://scenes/objects/trees/small_oak.tscn" id="78_rpx1a"]
+[ext_resource type="PackedScene" uid="uid://kc6jxhot705q" path="res://scenes/objects/trees/big_birch.tscn" id="79_bglcl"]
+[ext_resource type="PackedScene" uid="uid://d1s11sgp14ag5" path="res://scenes/objects/trees/medium_spruce.tscn" id="80_f4u0v"]
+[ext_resource type="PackedScene" uid="uid://bqlqmm0jytubr" path="res://scenes/objects/trees/big_spruce.tscn" id="81_4h2sa"]
+[ext_resource type="PackedScene" uid="uid://cd62ke12d6kea" path="res://scenes/objects/trees/big_fruit.tscn" id="82_b17qk"]
+[ext_resource type="PackedScene" uid="uid://dd2uvp3f64w32" path="res://scenes/objects/trees/big_oak.tscn" id="83_ive46"]
+[ext_resource type="PackedScene" uid="uid://beweqdvy2gc85" path="res://scenes/objects/trees/medium_fruit.tscn" id="84_yy0by"]
+[ext_resource type="PackedScene" uid="uid://wnf26bm32yne" path="res://scenes/objects/trees/small_fruit.tscn" id="85_iy5vs"]
+[ext_resource type="PackedScene" uid="uid://bp1g8ev580rui" path="res://scenes/objects/trees/small_birch.tscn" id="86_orxjd"]
+[ext_resource type="PackedScene" uid="uid://cgmyw3mphv5xw" path="res://scenes/objects/trees/medium_birch.tscn" id="87_yb8te"]
+[ext_resource type="PackedScene" uid="uid://kguq6b1lnw3h" path="res://scenes/objects/trees/medium_oak.tscn" id="88_yubqo"]
+[ext_resource type="Texture2D" uid="uid://b1tw3pmphqtjf" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Grass_2_Anim.png" id="89_d5ewc"]
+[ext_resource type="Texture2D" uid="uid://bhw13imijg11m" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Grass_3_Anim.png" id="91_pfte6"]
+[ext_resource type="Texture2D" uid="uid://ku3wqjcfr1wj" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_7_Anim.png" id="92_icu4m"]
+[ext_resource type="Texture2D" uid="uid://rytffu3iywt1" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_6_Anim.png" id="93_fdct4"]
+[ext_resource type="Texture2D" uid="uid://drh2xq0x23wed" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_1_Anim.png" id="94_8qbyp"]
+[ext_resource type="Texture2D" uid="uid://ddrxia07o4k6t" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_10_Anim.png" id="95_gvs7h"]
+[ext_resource type="Texture2D" uid="uid://bxgbfg8j6q0mo" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_11_Anim.png" id="96_qleyf"]
+[ext_resource type="Texture2D" uid="uid://c366814l7y2gd" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_4_Anim.png" id="97_65xeq"]
+[ext_resource type="Texture2D" uid="uid://dyou1xsw80ssd" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_5_Anim.png" id="98_hx8pv"]
+[ext_resource type="Texture2D" uid="uid://b4fpe4gu5df17" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_14_Anim.png" id="99_yknbs"]
+[ext_resource type="Texture2D" uid="uid://b0dwmar5p31b0" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_15_Anim.png" id="100_recv8"]
+[ext_resource type="Texture2D" uid="uid://dorvjes224bv0" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Grass_1_Anim.png" id="102_761ex"]
+[ext_resource type="Texture2D" uid="uid://uqs5s32cx3pp" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_9_Anim.png" id="103_2f11n"]
+[ext_resource type="Texture2D" uid="uid://wuc6m2qn2mkj" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_8_Anim.png" id="104_w1s6p"]
+[ext_resource type="Texture2D" uid="uid://dv0f0wtnfasmt" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_3_Anim.png" id="105_e3812"]
+[ext_resource type="Texture2D" uid="uid://406k4diftp2e" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_2_Anim.png" id="106_67uwd"]
+[ext_resource type="Texture2D" uid="uid://b2d06a10ammej" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_13_Anim.png" id="107_yn1mx"]
+[ext_resource type="Texture2D" uid="uid://6t170o6stqos" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Grass_Animations/Flower_Grass_12_Anim.png" id="108_pap2e"]
+[ext_resource type="Texture2D" uid="uid://bv7vp202ooret" path="res://assets/new_assets/Cute_Fantasy_Desert/Props/Desert_Fern.png" id="109_icu4m"]
+[ext_resource type="Texture2D" uid="uid://cilucokx1u2v3" path="res://assets/new_assets/Cute_Fantasy_Desert/Props/Fallen_Palm_Leaves.png" id="110_fdct4"]
+[ext_resource type="Texture2D" uid="uid://b6w1cffasydyb" path="res://assets/textures/tiles/water_plants_animated.png" id="111_wplan"]
+[ext_resource type="Texture2D" uid="uid://bun2pyaxm0syj" path="res://assets/textures/tiles/water_rocks_animated.png" id="112_wrock"]
+[ext_resource type="Texture2D" uid="uid://pwbgj1s5we3m" path="res://assets/textures/tiles/water_logs_animated.png" id="113_wlogs"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jicv0"]
 texture = ExtResource("1_jicv0")
@@ -197,14 +197,14 @@ texture = ExtResource("3_klc0i")
 1:0/0 = 0
 1:0/0/terrain_set = 0
 1:0/0/terrain = 15
-1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -0.6924572, -0.89030075, 0.19784546, -1.582756, 8, -8, 8, -8, -8, 8, -8)
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:0/0/terrains_peering_bit/right_side = 15
 1:0/0/terrains_peering_bit/bottom_right_corner = 15
 1:0/0/terrains_peering_bit/bottom_side = 15
 1:1/0 = 0
 1:1/0/terrain_set = 0
 1:1/0/terrain = 15
-1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-1.0881443, -0.09892273, -0.89030075, 0.19784546, -1.582756, 8, -8, 8, -8, -8, -1.4838352, -8)
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:1/0/terrains_peering_bit/right_side = 15
 1:1/0/terrains_peering_bit/bottom_right_corner = 15
 1:1/0/terrains_peering_bit/bottom_side = 15
@@ -213,32 +213,33 @@ texture = ExtResource("3_klc0i")
 1:2/0 = 0
 1:2/0/terrain_set = 0
 1:2/0/terrain = 15
-1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.6601257, -8, 0.89030075, -0.19784546, 8, -0.09892273, 8, 8, -3.3633575, 8)
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:2/0/terrains_peering_bit/right_side = 15
 1:2/0/terrains_peering_bit/top_side = 15
 1:2/0/terrains_peering_bit/top_right_corner = 15
 1:3/0 = 0
 1:3/0/terrain_set = 0
 1:3/0/terrain = 11
-1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.6601257, -8, 8, -8, 8, 8, -3.3633575, 8)
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:3/0/terrains_peering_bit/right_side = 11
 1:3/0/terrains_peering_bit/bottom_side = 11
 1:4/0 = 0
 1:4/0/terrain_set = 0
 1:4/0/terrain = 11
-1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.6601257, -8, 8, -8, 8, 8, -3.3633575, 8)
+1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:4/0/terrains_peering_bit/right_side = 11
 1:4/0/terrains_peering_bit/bottom_side = 11
 1:4/0/terrains_peering_bit/top_side = 11
 1:5/0 = 0
 1:5/0/terrain_set = 0
 1:5/0/terrain = 11
+1:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:5/0/terrains_peering_bit/right_side = 11
 1:5/0/terrains_peering_bit/top_side = 11
 2:0/0 = 0
 2:0/0/terrain_set = 0
 2:0/0/terrain = 15
-2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, 0.59353447, -0.89030075, 0.19784546, -8, 0.09892273, -8, -8, 8, -8)
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:0/0/terrains_peering_bit/right_side = 15
 2:0/0/terrains_peering_bit/bottom_right_corner = 15
 2:0/0/terrains_peering_bit/bottom_side = 15
@@ -258,7 +259,7 @@ texture = ExtResource("3_klc0i")
 2:2/0 = 0
 2:2/0/terrain_set = 0
 2:2/0/terrain = 15
-2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -0.59353447, -0.89030075, -0.19784546, -8, -0.09892273, -8, 8, 8, 8)
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:2/0/terrains_peering_bit/right_side = 15
 2:2/0/terrains_peering_bit/left_side = 15
 2:2/0/terrains_peering_bit/top_left_corner = 15
@@ -282,20 +283,21 @@ texture = ExtResource("3_klc0i")
 2:5/0 = 0
 2:5/0/terrain_set = 0
 2:5/0/terrain = 11
+2:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:5/0/terrains_peering_bit/right_side = 11
 2:5/0/terrains_peering_bit/left_side = 11
 2:5/0/terrains_peering_bit/top_side = 11
 3:0/0 = 0
 3:0/0/terrain_set = 0
 3:0/0/terrain = 15
-3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -0.6924572, 0.89030075, 0.19784546, 1.582756, 8, 8, 8, 8, -8, -8, -8)
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:0/0/terrains_peering_bit/bottom_side = 15
 3:0/0/terrains_peering_bit/bottom_left_corner = 15
 3:0/0/terrains_peering_bit/left_side = 15
 3:1/0 = 0
 3:1/0/terrain_set = 0
 3:1/0/terrain = 15
-3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(1.0881443, -0.09892273, 0.89030075, 0.19784546, 1.582756, 8, 8, 8, 8, -8, 1.4838352, -8)
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:1/0/terrains_peering_bit/bottom_side = 15
 3:1/0/terrains_peering_bit/bottom_left_corner = 15
 3:1/0/terrains_peering_bit/left_side = 15
@@ -304,26 +306,27 @@ texture = ExtResource("3_klc0i")
 3:2/0 = 0
 3:2/0/terrain_set = 0
 3:2/0/terrain = 15
-3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.6601257, -8, -0.89030075, -0.19784546, -8, -0.09892273, -8, 8, 3.3633575, 8)
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:2/0/terrains_peering_bit/left_side = 15
 3:2/0/terrains_peering_bit/top_left_corner = 15
 3:2/0/terrains_peering_bit/top_side = 15
 3:3/0 = 0
 3:3/0/terrain_set = 0
 3:3/0/terrain = 11
-3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.6601257, -8, -8, -8, -8, 8, 3.3633575, 8)
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:3/0/terrains_peering_bit/bottom_side = 11
 3:3/0/terrains_peering_bit/left_side = 11
 3:4/0 = 0
 3:4/0/terrain_set = 0
 3:4/0/terrain = 11
-3:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.6601257, -8, -8, -8, -8, 8, 3.3633575, 8)
+3:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:4/0/terrains_peering_bit/bottom_side = 11
 3:4/0/terrains_peering_bit/left_side = 11
 3:4/0/terrains_peering_bit/top_side = 11
 3:5/0 = 0
 3:5/0/terrain_set = 0
 3:5/0/terrain = 11
+3:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:5/0/terrains_peering_bit/left_side = 11
 3:5/0/terrains_peering_bit/top_side = 11
 4:0/0 = 0
@@ -336,7 +339,7 @@ texture = ExtResource("3_klc0i")
 5:1/0 = 0
 5:1/0/terrain_set = 0
 5:1/0/terrain = 15
-5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.561203, 3.4622803, 8, -8, 8, 8, -8, 8)
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 5:1/0/terrains_peering_bit/right_side = 15
 5:1/0/terrains_peering_bit/bottom_side = 15
 5:1/0/terrains_peering_bit/bottom_left_corner = 15
@@ -347,7 +350,7 @@ texture = ExtResource("3_klc0i")
 5:2/0 = 0
 5:2/0/terrain_set = 0
 5:2/0/terrain = 15
-5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.561203, -3.4622803, 8, 8, 8, -8, -8, -8)
+5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 5:2/0/terrains_peering_bit/right_side = 15
 5:2/0/terrains_peering_bit/bottom_right_corner = 15
 5:2/0/terrains_peering_bit/bottom_side = 15
@@ -362,7 +365,7 @@ texture = ExtResource("3_klc0i")
 6:1/0 = 0
 6:1/0/terrain_set = 0
 6:1/0/terrain = 15
-6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.561203, 3.4622803, -8, -8, -8, 8, 8, 8)
+6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 6:1/0/terrains_peering_bit/right_side = 15
 6:1/0/terrains_peering_bit/bottom_right_corner = 15
 6:1/0/terrains_peering_bit/bottom_side = 15
@@ -373,7 +376,7 @@ texture = ExtResource("3_klc0i")
 6:2/0 = 0
 6:2/0/terrain_set = 0
 6:2/0/terrain = 15
-6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.561203, -3.4622803, -8, 8, -8, -8, 8, -8)
+6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 6:2/0/terrains_peering_bit/right_side = 15
 6:2/0/terrains_peering_bit/bottom_right_corner = 15
 6:2/0/terrains_peering_bit/bottom_side = 15
@@ -601,14 +604,14 @@ texture = ExtResource("4_qw3fs")
 1:0/0 = 0
 1:0/0/terrain_set = 0
 1:0/0/terrain = 14
-1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -0.6924572, -0.89030075, 0.19784546, -1.582756, 8, -8, 8, -8, -8, 8, -8)
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:0/0/terrains_peering_bit/right_side = 14
 1:0/0/terrains_peering_bit/bottom_right_corner = 14
 1:0/0/terrains_peering_bit/bottom_side = 14
 1:1/0 = 0
 1:1/0/terrain_set = 0
 1:1/0/terrain = 14
-1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-1.0881443, -0.09892273, -0.89030075, 0.19784546, -1.582756, 8, -8, 8, -8, -8, -1.4838352, -8)
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:1/0/terrains_peering_bit/right_side = 14
 1:1/0/terrains_peering_bit/bottom_right_corner = 14
 1:1/0/terrains_peering_bit/bottom_side = 14
@@ -617,32 +620,33 @@ texture = ExtResource("4_qw3fs")
 1:2/0 = 0
 1:2/0/terrain_set = 0
 1:2/0/terrain = 14
-1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.6601257, -8, 0.89030075, -0.19784546, 8, -0.09892273, 8, 8, -3.3633575, 8)
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:2/0/terrains_peering_bit/right_side = 14
 1:2/0/terrains_peering_bit/top_side = 14
 1:2/0/terrains_peering_bit/top_right_corner = 14
 1:3/0 = 0
 1:3/0/terrain_set = 0
 1:3/0/terrain = 10
-1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.6601257, -8, 8, -8, 8, 8, -3.3633575, 8)
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:3/0/terrains_peering_bit/right_side = 10
 1:3/0/terrains_peering_bit/bottom_side = 10
 1:4/0 = 0
 1:4/0/terrain_set = 0
 1:4/0/terrain = 10
-1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.6601257, -8, 8, -8, 8, 8, -3.3633575, 8)
+1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:4/0/terrains_peering_bit/right_side = 10
 1:4/0/terrains_peering_bit/bottom_side = 10
 1:4/0/terrains_peering_bit/top_side = 10
 1:5/0 = 0
 1:5/0/terrain_set = 0
 1:5/0/terrain = 10
+1:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:5/0/terrains_peering_bit/right_side = 10
 1:5/0/terrains_peering_bit/top_side = 10
 2:0/0 = 0
 2:0/0/terrain_set = 0
 2:0/0/terrain = 14
-2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, 0.59353447, -0.89030075, 0.19784546, -8, 0.09892273, -8, -8, 8, -8)
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:0/0/terrains_peering_bit/right_side = 14
 2:0/0/terrains_peering_bit/bottom_right_corner = 14
 2:0/0/terrains_peering_bit/bottom_side = 14
@@ -662,7 +666,7 @@ texture = ExtResource("4_qw3fs")
 2:2/0 = 0
 2:2/0/terrain_set = 0
 2:2/0/terrain = 14
-2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -0.59353447, -0.89030075, -0.19784546, -8, -0.09892273, -8, 8, 8, 8)
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:2/0/terrains_peering_bit/right_side = 14
 2:2/0/terrains_peering_bit/left_side = 14
 2:2/0/terrains_peering_bit/top_left_corner = 14
@@ -686,20 +690,21 @@ texture = ExtResource("4_qw3fs")
 2:5/0 = 0
 2:5/0/terrain_set = 0
 2:5/0/terrain = 10
+2:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:5/0/terrains_peering_bit/right_side = 10
 2:5/0/terrains_peering_bit/left_side = 10
 2:5/0/terrains_peering_bit/top_side = 10
 3:0/0 = 0
 3:0/0/terrain_set = 0
 3:0/0/terrain = 14
-3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -0.6924572, 0.89030075, 0.19784546, 1.582756, 8, 8, 8, 8, -8, -8, -8)
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:0/0/terrains_peering_bit/bottom_side = 14
 3:0/0/terrains_peering_bit/bottom_left_corner = 14
 3:0/0/terrains_peering_bit/left_side = 14
 3:1/0 = 0
 3:1/0/terrain_set = 0
 3:1/0/terrain = 14
-3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(1.0881443, -0.09892273, 0.89030075, 0.19784546, 1.582756, 8, 8, 8, 8, -8, 1.4838352, -8)
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:1/0/terrains_peering_bit/bottom_side = 14
 3:1/0/terrains_peering_bit/bottom_left_corner = 14
 3:1/0/terrains_peering_bit/left_side = 14
@@ -708,26 +713,27 @@ texture = ExtResource("4_qw3fs")
 3:2/0 = 0
 3:2/0/terrain_set = 0
 3:2/0/terrain = 14
-3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.6601257, -8, -0.89030075, -0.19784546, -8, -0.09892273, -8, 8, 3.3633575, 8)
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:2/0/terrains_peering_bit/left_side = 14
 3:2/0/terrains_peering_bit/top_left_corner = 14
 3:2/0/terrains_peering_bit/top_side = 14
 3:3/0 = 0
 3:3/0/terrain_set = 0
 3:3/0/terrain = 10
-3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.6601257, -8, -8, -8, -8, 8, 3.3633575, 8)
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:3/0/terrains_peering_bit/bottom_side = 10
 3:3/0/terrains_peering_bit/left_side = 10
 3:4/0 = 0
 3:4/0/terrain_set = 0
 3:4/0/terrain = 10
-3:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.6601257, -8, -8, -8, -8, 8, 3.3633575, 8)
+3:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:4/0/terrains_peering_bit/bottom_side = 10
 3:4/0/terrains_peering_bit/left_side = 10
 3:4/0/terrains_peering_bit/top_side = 10
 3:5/0 = 0
 3:5/0/terrain_set = 0
 3:5/0/terrain = 10
+3:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:5/0/terrains_peering_bit/left_side = 10
 3:5/0/terrains_peering_bit/top_side = 10
 4:0/0 = 0
@@ -740,7 +746,7 @@ texture = ExtResource("4_qw3fs")
 5:1/0 = 0
 5:1/0/terrain_set = 0
 5:1/0/terrain = 14
-5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.561203, 3.4622803, 8, -8, 8, 8, -8, 8)
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 5:1/0/terrains_peering_bit/right_side = 14
 5:1/0/terrains_peering_bit/bottom_side = 14
 5:1/0/terrains_peering_bit/bottom_left_corner = 14
@@ -751,7 +757,7 @@ texture = ExtResource("4_qw3fs")
 5:2/0 = 0
 5:2/0/terrain_set = 0
 5:2/0/terrain = 14
-5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.561203, -3.4622803, 8, 8, 8, -8, -8, -8)
+5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 5:2/0/terrains_peering_bit/right_side = 14
 5:2/0/terrains_peering_bit/bottom_right_corner = 14
 5:2/0/terrains_peering_bit/bottom_side = 14
@@ -766,7 +772,7 @@ texture = ExtResource("4_qw3fs")
 6:1/0 = 0
 6:1/0/terrain_set = 0
 6:1/0/terrain = 14
-6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.561203, 3.4622803, -8, -8, -8, 8, 8, 8)
+6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 6:1/0/terrains_peering_bit/right_side = 14
 6:1/0/terrains_peering_bit/bottom_right_corner = 14
 6:1/0/terrains_peering_bit/bottom_side = 14
@@ -777,7 +783,7 @@ texture = ExtResource("4_qw3fs")
 6:2/0 = 0
 6:2/0/terrain_set = 0
 6:2/0/terrain = 14
-6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.561203, -3.4622803, -8, 8, -8, -8, 8, -8)
+6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 6:2/0/terrains_peering_bit/right_side = 14
 6:2/0/terrains_peering_bit/bottom_right_corner = 14
 6:2/0/terrains_peering_bit/bottom_side = 14
@@ -854,14 +860,14 @@ texture = ExtResource("6_yva2n")
 1:0/0 = 0
 1:0/0/terrain_set = 0
 1:0/0/terrain = 16
-1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -0.6924572, -0.89030075, 0.19784546, -1.582756, 8, -8, 8, -8, -8, 8, -8)
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:0/0/terrains_peering_bit/right_side = 16
 1:0/0/terrains_peering_bit/bottom_right_corner = 16
 1:0/0/terrains_peering_bit/bottom_side = 16
 1:1/0 = 0
 1:1/0/terrain_set = 0
 1:1/0/terrain = 16
-1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-1.0881443, -0.09892273, -0.89030075, 0.19784546, -1.582756, 8, -8, 8, -8, -8, -1.4838352, -8)
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:1/0/terrains_peering_bit/right_side = 16
 1:1/0/terrains_peering_bit/bottom_right_corner = 16
 1:1/0/terrains_peering_bit/bottom_side = 16
@@ -870,32 +876,33 @@ texture = ExtResource("6_yva2n")
 1:2/0 = 0
 1:2/0/terrain_set = 0
 1:2/0/terrain = 16
-1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.6601257, -8, 0.89030075, -0.19784546, 8, -0.09892273, 8, 8, -3.3633575, 8)
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:2/0/terrains_peering_bit/right_side = 16
 1:2/0/terrains_peering_bit/top_side = 16
 1:2/0/terrains_peering_bit/top_right_corner = 16
 1:3/0 = 0
 1:3/0/terrain_set = 0
 1:3/0/terrain = 12
-1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.6601257, -8, 8, -8, 8, 8, -3.3633575, 8)
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:3/0/terrains_peering_bit/right_side = 12
 1:3/0/terrains_peering_bit/bottom_side = 12
 1:4/0 = 0
 1:4/0/terrain_set = 0
 1:4/0/terrain = 12
-1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.6601257, -8, 8, -8, 8, 8, -3.3633575, 8)
+1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:4/0/terrains_peering_bit/right_side = 12
 1:4/0/terrains_peering_bit/bottom_side = 12
 1:4/0/terrains_peering_bit/top_side = 12
 1:5/0 = 0
 1:5/0/terrain_set = 0
 1:5/0/terrain = 12
+1:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:5/0/terrains_peering_bit/right_side = 12
 1:5/0/terrains_peering_bit/top_side = 12
 2:0/0 = 0
 2:0/0/terrain_set = 0
 2:0/0/terrain = 16
-2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, 0.59353447, -0.89030075, 0.19784546, -8, 0.09892273, -8, -8, 8, -8)
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:0/0/terrains_peering_bit/right_side = 16
 2:0/0/terrains_peering_bit/bottom_right_corner = 16
 2:0/0/terrains_peering_bit/bottom_side = 16
@@ -915,7 +922,7 @@ texture = ExtResource("6_yva2n")
 2:2/0 = 0
 2:2/0/terrain_set = 0
 2:2/0/terrain = 16
-2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -0.59353447, -0.89030075, -0.19784546, -8, -0.09892273, -8, 8, 8, 8)
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:2/0/terrains_peering_bit/right_side = 16
 2:2/0/terrains_peering_bit/left_side = 16
 2:2/0/terrains_peering_bit/top_left_corner = 16
@@ -939,20 +946,21 @@ texture = ExtResource("6_yva2n")
 2:5/0 = 0
 2:5/0/terrain_set = 0
 2:5/0/terrain = 12
+2:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:5/0/terrains_peering_bit/right_side = 12
 2:5/0/terrains_peering_bit/left_side = 12
 2:5/0/terrains_peering_bit/top_side = 12
 3:0/0 = 0
 3:0/0/terrain_set = 0
 3:0/0/terrain = 16
-3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -0.6924572, 0.89030075, 0.19784546, 1.582756, 8, 8, 8, 8, -8, -8, -8)
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:0/0/terrains_peering_bit/bottom_side = 16
 3:0/0/terrains_peering_bit/bottom_left_corner = 16
 3:0/0/terrains_peering_bit/left_side = 16
 3:1/0 = 0
 3:1/0/terrain_set = 0
 3:1/0/terrain = 16
-3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(1.0881443, -0.09892273, 0.89030075, 0.19784546, 1.582756, 8, 8, 8, 8, -8, 1.4838352, -8)
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:1/0/terrains_peering_bit/bottom_side = 16
 3:1/0/terrains_peering_bit/bottom_left_corner = 16
 3:1/0/terrains_peering_bit/left_side = 16
@@ -961,26 +969,27 @@ texture = ExtResource("6_yva2n")
 3:2/0 = 0
 3:2/0/terrain_set = 0
 3:2/0/terrain = 16
-3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.6601257, -8, -0.89030075, -0.19784546, -8, -0.09892273, -8, 8, 3.3633575, 8)
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:2/0/terrains_peering_bit/left_side = 16
 3:2/0/terrains_peering_bit/top_left_corner = 16
 3:2/0/terrains_peering_bit/top_side = 16
 3:3/0 = 0
 3:3/0/terrain_set = 0
 3:3/0/terrain = 12
-3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.6601257, -8, -8, -8, -8, 8, 3.3633575, 8)
+3:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:3/0/terrains_peering_bit/bottom_side = 12
 3:3/0/terrains_peering_bit/left_side = 12
 3:4/0 = 0
 3:4/0/terrain_set = 0
 3:4/0/terrain = 12
-3:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.6601257, -8, -8, -8, -8, 8, 3.3633575, 8)
+3:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:4/0/terrains_peering_bit/bottom_side = 12
 3:4/0/terrains_peering_bit/left_side = 12
 3:4/0/terrains_peering_bit/top_side = 12
 3:5/0 = 0
 3:5/0/terrain_set = 0
 3:5/0/terrain = 12
+3:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 3:5/0/terrains_peering_bit/left_side = 12
 3:5/0/terrains_peering_bit/top_side = 12
 4:0/0 = 0
@@ -993,7 +1002,7 @@ texture = ExtResource("6_yva2n")
 5:1/0 = 0
 5:1/0/terrain_set = 0
 5:1/0/terrain = 16
-5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.561203, 3.4622803, 8, -8, 8, 8, -8, 8)
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 5:1/0/terrains_peering_bit/right_side = 16
 5:1/0/terrains_peering_bit/bottom_side = 16
 5:1/0/terrains_peering_bit/bottom_left_corner = 16
@@ -1004,7 +1013,7 @@ texture = ExtResource("6_yva2n")
 5:2/0 = 0
 5:2/0/terrain_set = 0
 5:2/0/terrain = 16
-5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(3.561203, -3.4622803, 8, 8, 8, -8, -8, -8)
+5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 5:2/0/terrains_peering_bit/right_side = 16
 5:2/0/terrains_peering_bit/bottom_right_corner = 16
 5:2/0/terrains_peering_bit/bottom_side = 16
@@ -1019,7 +1028,7 @@ texture = ExtResource("6_yva2n")
 6:1/0 = 0
 6:1/0/terrain_set = 0
 6:1/0/terrain = 16
-6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.561203, 3.4622803, -8, -8, -8, 8, 8, 8)
+6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 6:1/0/terrains_peering_bit/right_side = 16
 6:1/0/terrains_peering_bit/bottom_right_corner = 16
 6:1/0/terrains_peering_bit/bottom_side = 16
@@ -1030,7 +1039,7 @@ texture = ExtResource("6_yva2n")
 6:2/0 = 0
 6:2/0/terrain_set = 0
 6:2/0/terrain = 16
-6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-3.561203, -3.4622803, -8, 8, -8, -8, 8, -8)
+6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 6:2/0/terrains_peering_bit/right_side = 16
 6:2/0/terrains_peering_bit/bottom_right_corner = 16
 6:2/0/terrains_peering_bit/bottom_side = 16
@@ -1977,6 +1986,10 @@ texture = ExtResource("17_4h2sa")
 0:0/animation_frame_6/duration = 0.15
 0:0/animation_frame_7/duration = 0.15
 0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrains_peering_bit/bottom_left_corner = 17
+0:0/0/terrains_peering_bit/bottom_side = 17
+0:0/0/terrains_peering_bit/bottom_right_corner = 17
 0:0/0/custom_data_1 = true
 0:1/animation_columns = 8
 0:1/animation_separation = Vector2i(6, 0)
@@ -1989,6 +2002,16 @@ texture = ExtResource("17_4h2sa")
 0:1/animation_frame_6/duration = 0.15
 0:1/animation_frame_7/duration = 0.15
 0:1/0 = 0
+0:1/0/terrain_set = 0
+0:1/0/terrain = 17
+0:1/0/terrains_peering_bit/right_side = 17
+0:1/0/terrains_peering_bit/bottom_right_corner = 17
+0:1/0/terrains_peering_bit/bottom_side = 17
+0:1/0/terrains_peering_bit/bottom_left_corner = 17
+0:1/0/terrains_peering_bit/left_side = 17
+0:1/0/terrains_peering_bit/top_left_corner = 17
+0:1/0/terrains_peering_bit/top_side = 17
+0:1/0/terrains_peering_bit/top_right_corner = 17
 0:1/0/custom_data_1 = true
 0:2/animation_columns = 8
 0:2/animation_separation = Vector2i(6, 0)
@@ -2037,6 +2060,10 @@ texture = ExtResource("17_4h2sa")
 1:0/animation_frame_6/duration = 0.15
 1:0/animation_frame_7/duration = 0.15
 1:0/0 = 0
+1:0/0/terrain_set = 0
+1:0/0/terrains_peering_bit/bottom_left_corner = 17
+1:0/0/terrains_peering_bit/bottom_side = 17
+1:0/0/terrains_peering_bit/bottom_right_corner = 17
 1:0/0/custom_data_1 = true
 1:1/animation_columns = 8
 1:1/animation_separation = Vector2i(6, 0)
@@ -2049,6 +2076,16 @@ texture = ExtResource("17_4h2sa")
 1:1/animation_frame_6/duration = 0.15
 1:1/animation_frame_7/duration = 0.15
 1:1/0 = 0
+1:1/0/terrain_set = 0
+1:1/0/terrain = 17
+1:1/0/terrains_peering_bit/right_side = 17
+1:1/0/terrains_peering_bit/bottom_right_corner = 17
+1:1/0/terrains_peering_bit/bottom_side = 17
+1:1/0/terrains_peering_bit/bottom_left_corner = 17
+1:1/0/terrains_peering_bit/left_side = 17
+1:1/0/terrains_peering_bit/top_left_corner = 17
+1:1/0/terrains_peering_bit/top_side = 17
+1:1/0/terrains_peering_bit/top_right_corner = 17
 1:1/0/custom_data_1 = true
 1:2/animation_columns = 8
 1:2/animation_separation = Vector2i(6, 0)
@@ -2097,6 +2134,16 @@ texture = ExtResource("17_4h2sa")
 2:0/animation_frame_6/duration = 0.15
 2:0/animation_frame_7/duration = 0.15
 2:0/0 = 0
+2:0/0/terrain_set = 0
+2:0/0/terrain = 17
+2:0/0/terrains_peering_bit/right_side = 17
+2:0/0/terrains_peering_bit/bottom_right_corner = 17
+2:0/0/terrains_peering_bit/bottom_side = 17
+2:0/0/terrains_peering_bit/bottom_left_corner = 17
+2:0/0/terrains_peering_bit/left_side = 17
+2:0/0/terrains_peering_bit/top_left_corner = 17
+2:0/0/terrains_peering_bit/top_side = 17
+2:0/0/terrains_peering_bit/top_right_corner = 17
 2:0/0/custom_data_1 = true
 2:1/animation_columns = 8
 2:1/animation_separation = Vector2i(6, 0)
@@ -2109,6 +2156,16 @@ texture = ExtResource("17_4h2sa")
 2:1/animation_frame_6/duration = 0.15
 2:1/animation_frame_7/duration = 0.15
 2:1/0 = 0
+2:1/0/terrain_set = 0
+2:1/0/terrain = 17
+2:1/0/terrains_peering_bit/right_side = 17
+2:1/0/terrains_peering_bit/bottom_right_corner = 17
+2:1/0/terrains_peering_bit/bottom_side = 17
+2:1/0/terrains_peering_bit/bottom_left_corner = 17
+2:1/0/terrains_peering_bit/left_side = 17
+2:1/0/terrains_peering_bit/top_left_corner = 17
+2:1/0/terrains_peering_bit/top_side = 17
+2:1/0/terrains_peering_bit/top_right_corner = 17
 2:1/0/custom_data_1 = true
 2:2/animation_columns = 8
 2:2/animation_separation = Vector2i(6, 0)
@@ -2121,6 +2178,16 @@ texture = ExtResource("17_4h2sa")
 2:2/animation_frame_6/duration = 0.15
 2:2/animation_frame_7/duration = 0.15
 2:2/0 = 0
+2:2/0/terrain_set = 0
+2:2/0/terrain = 17
+2:2/0/terrains_peering_bit/right_side = 17
+2:2/0/terrains_peering_bit/bottom_right_corner = 17
+2:2/0/terrains_peering_bit/bottom_side = 17
+2:2/0/terrains_peering_bit/bottom_left_corner = 17
+2:2/0/terrains_peering_bit/left_side = 17
+2:2/0/terrains_peering_bit/top_left_corner = 17
+2:2/0/terrains_peering_bit/top_side = 17
+2:2/0/terrains_peering_bit/top_right_corner = 17
 2:2/0/custom_data_1 = true
 2:3/animation_columns = 8
 2:3/animation_separation = Vector2i(6, 0)
@@ -2133,6 +2200,16 @@ texture = ExtResource("17_4h2sa")
 2:3/animation_frame_6/duration = 0.15
 2:3/animation_frame_7/duration = 0.15
 2:3/0 = 0
+2:3/0/terrain_set = 0
+2:3/0/terrain = 17
+2:3/0/terrains_peering_bit/right_side = 17
+2:3/0/terrains_peering_bit/bottom_right_corner = 17
+2:3/0/terrains_peering_bit/bottom_side = 17
+2:3/0/terrains_peering_bit/bottom_left_corner = 17
+2:3/0/terrains_peering_bit/left_side = 17
+2:3/0/terrains_peering_bit/top_left_corner = 17
+2:3/0/terrains_peering_bit/top_side = 17
+2:3/0/terrains_peering_bit/top_right_corner = 17
 2:3/0/custom_data_1 = true
 2:4/animation_columns = 8
 2:4/animation_separation = Vector2i(6, 0)
@@ -2145,6 +2222,16 @@ texture = ExtResource("17_4h2sa")
 2:4/animation_frame_6/duration = 0.15
 2:4/animation_frame_7/duration = 0.15
 2:4/0 = 0
+2:4/0/terrain_set = 0
+2:4/0/terrain = 17
+2:4/0/terrains_peering_bit/right_side = 17
+2:4/0/terrains_peering_bit/bottom_right_corner = 17
+2:4/0/terrains_peering_bit/bottom_side = 17
+2:4/0/terrains_peering_bit/bottom_left_corner = 17
+2:4/0/terrains_peering_bit/left_side = 17
+2:4/0/terrains_peering_bit/top_left_corner = 17
+2:4/0/terrains_peering_bit/top_side = 17
+2:4/0/terrains_peering_bit/top_right_corner = 17
 2:4/0/custom_data_1 = true
 3:0/animation_columns = 8
 3:0/animation_separation = Vector2i(6, 0)
@@ -2157,6 +2244,16 @@ texture = ExtResource("17_4h2sa")
 3:0/animation_frame_6/duration = 0.15
 3:0/animation_frame_7/duration = 0.15
 3:0/0 = 0
+3:0/0/terrain_set = 0
+3:0/0/terrain = 17
+3:0/0/terrains_peering_bit/right_side = 17
+3:0/0/terrains_peering_bit/bottom_right_corner = 17
+3:0/0/terrains_peering_bit/bottom_side = 17
+3:0/0/terrains_peering_bit/bottom_left_corner = 17
+3:0/0/terrains_peering_bit/left_side = 17
+3:0/0/terrains_peering_bit/top_left_corner = 17
+3:0/0/terrains_peering_bit/top_side = 17
+3:0/0/terrains_peering_bit/top_right_corner = 17
 3:0/0/custom_data_1 = true
 3:1/animation_columns = 8
 3:1/animation_separation = Vector2i(6, 0)
@@ -2169,6 +2266,12 @@ texture = ExtResource("17_4h2sa")
 3:1/animation_frame_6/duration = 0.15
 3:1/animation_frame_7/duration = 0.15
 3:1/0 = 0
+3:1/0/terrain_set = 0
+3:1/0/terrains_peering_bit/top_side = 17
+3:1/0/terrains_peering_bit/top_left_corner = 17
+3:1/0/terrains_peering_bit/left_side = 17
+3:1/0/terrains_peering_bit/bottom_left_corner = 17
+3:1/0/terrains_peering_bit/top_right_corner = 17
 3:1/0/custom_data_1 = true
 3:2/animation_columns = 8
 3:2/animation_separation = Vector2i(6, 0)
@@ -2181,6 +2284,10 @@ texture = ExtResource("17_4h2sa")
 3:2/animation_frame_6/duration = 0.15
 3:2/animation_frame_7/duration = 0.15
 3:2/0 = 0
+3:2/0/terrain_set = 0
+3:2/0/terrains_peering_bit/bottom_left_corner = 17
+3:2/0/terrains_peering_bit/left_side = 17
+3:2/0/terrains_peering_bit/top_left_corner = 17
 3:2/0/custom_data_1 = true
 3:3/animation_columns = 8
 3:3/animation_separation = Vector2i(6, 0)
@@ -2193,6 +2300,10 @@ texture = ExtResource("17_4h2sa")
 3:3/animation_frame_6/duration = 0.15
 3:3/animation_frame_7/duration = 0.15
 3:3/0 = 0
+3:3/0/terrain_set = 0
+3:3/0/terrains_peering_bit/bottom_left_corner = 17
+3:3/0/terrains_peering_bit/left_side = 17
+3:3/0/terrains_peering_bit/top_left_corner = 17
 3:3/0/custom_data_1 = true
 3:4/animation_columns = 8
 3:4/animation_separation = Vector2i(6, 0)
@@ -2205,6 +2316,12 @@ texture = ExtResource("17_4h2sa")
 3:4/animation_frame_6/duration = 0.15
 3:4/animation_frame_7/duration = 0.15
 3:4/0 = 0
+3:4/0/terrain_set = 0
+3:4/0/terrains_peering_bit/bottom_side = 17
+3:4/0/terrains_peering_bit/bottom_left_corner = 17
+3:4/0/terrains_peering_bit/left_side = 17
+3:4/0/terrains_peering_bit/top_left_corner = 17
+3:4/0/terrains_peering_bit/bottom_right_corner = 17
 3:4/0/custom_data_1 = true
 4:0/animation_columns = 8
 4:0/animation_separation = Vector2i(6, 0)
@@ -2217,6 +2334,16 @@ texture = ExtResource("17_4h2sa")
 4:0/animation_frame_6/duration = 0.15
 4:0/animation_frame_7/duration = 0.15
 4:0/0 = 0
+4:0/0/terrain_set = 0
+4:0/0/terrain = 17
+4:0/0/terrains_peering_bit/right_side = 17
+4:0/0/terrains_peering_bit/bottom_right_corner = 17
+4:0/0/terrains_peering_bit/bottom_side = 17
+4:0/0/terrains_peering_bit/bottom_left_corner = 17
+4:0/0/terrains_peering_bit/left_side = 17
+4:0/0/terrains_peering_bit/top_left_corner = 17
+4:0/0/terrains_peering_bit/top_side = 17
+4:0/0/terrains_peering_bit/top_right_corner = 17
 4:0/0/custom_data_1 = true
 4:1/animation_columns = 8
 4:1/animation_separation = Vector2i(6, 0)
@@ -2229,6 +2356,10 @@ texture = ExtResource("17_4h2sa")
 4:1/animation_frame_6/duration = 0.15
 4:1/animation_frame_7/duration = 0.15
 4:1/0 = 0
+4:1/0/terrain_set = 0
+4:1/0/terrains_peering_bit/top_left_corner = 17
+4:1/0/terrains_peering_bit/top_side = 17
+4:1/0/terrains_peering_bit/top_right_corner = 17
 4:1/0/custom_data_1 = true
 4:2/animation_columns = 8
 4:2/animation_separation = Vector2i(6, 0)
@@ -2253,6 +2384,10 @@ texture = ExtResource("17_4h2sa")
 4:3/animation_frame_6/duration = 0.15
 4:3/animation_frame_7/duration = 0.15
 4:3/0 = 0
+4:3/0/terrain_set = 0
+4:3/0/terrains_peering_bit/bottom_left_corner = 17
+4:3/0/terrains_peering_bit/bottom_side = 17
+4:3/0/terrains_peering_bit/bottom_right_corner = 17
 4:3/0/custom_data_1 = true
 4:4/animation_columns = 8
 4:4/animation_separation = Vector2i(6, 0)
@@ -2265,6 +2400,10 @@ texture = ExtResource("17_4h2sa")
 4:4/animation_frame_6/duration = 0.15
 4:4/animation_frame_7/duration = 0.15
 4:4/0 = 0
+4:4/0/terrain_set = 0
+4:4/0/terrains_peering_bit/bottom_left_corner = 17
+4:4/0/terrains_peering_bit/bottom_side = 17
+4:4/0/terrains_peering_bit/bottom_right_corner = 17
 4:4/0/custom_data_1 = true
 5:0/animation_columns = 8
 5:0/animation_separation = Vector2i(6, 0)
@@ -2277,6 +2416,16 @@ texture = ExtResource("17_4h2sa")
 5:0/animation_frame_6/duration = 0.15
 5:0/animation_frame_7/duration = 0.15
 5:0/0 = 0
+5:0/0/terrain_set = 0
+5:0/0/terrain = 17
+5:0/0/terrains_peering_bit/right_side = 17
+5:0/0/terrains_peering_bit/bottom_right_corner = 17
+5:0/0/terrains_peering_bit/bottom_side = 17
+5:0/0/terrains_peering_bit/bottom_left_corner = 17
+5:0/0/terrains_peering_bit/left_side = 17
+5:0/0/terrains_peering_bit/top_left_corner = 17
+5:0/0/terrains_peering_bit/top_side = 17
+5:0/0/terrains_peering_bit/top_right_corner = 17
 5:0/0/custom_data_1 = true
 5:1/animation_columns = 8
 5:1/animation_separation = Vector2i(6, 0)
@@ -2289,6 +2438,12 @@ texture = ExtResource("17_4h2sa")
 5:1/animation_frame_6/duration = 0.15
 5:1/animation_frame_7/duration = 0.15
 5:1/0 = 0
+5:1/0/terrain_set = 0
+5:1/0/terrains_peering_bit/top_side = 17
+5:1/0/terrains_peering_bit/top_right_corner = 17
+5:1/0/terrains_peering_bit/right_side = 17
+5:1/0/terrains_peering_bit/top_left_corner = 17
+5:1/0/terrains_peering_bit/bottom_right_corner = 17
 5:1/0/custom_data_1 = true
 5:2/animation_columns = 8
 5:2/animation_separation = Vector2i(6, 0)
@@ -2301,6 +2456,10 @@ texture = ExtResource("17_4h2sa")
 5:2/animation_frame_6/duration = 0.15
 5:2/animation_frame_7/duration = 0.15
 5:2/0 = 0
+5:2/0/terrain_set = 0
+5:2/0/terrains_peering_bit/top_right_corner = 17
+5:2/0/terrains_peering_bit/right_side = 17
+5:2/0/terrains_peering_bit/bottom_right_corner = 17
 5:2/0/custom_data_1 = true
 5:3/animation_columns = 8
 5:3/animation_separation = Vector2i(6, 0)
@@ -2313,6 +2472,10 @@ texture = ExtResource("17_4h2sa")
 5:3/animation_frame_6/duration = 0.15
 5:3/animation_frame_7/duration = 0.15
 5:3/0 = 0
+5:3/0/terrain_set = 0
+5:3/0/terrains_peering_bit/top_right_corner = 17
+5:3/0/terrains_peering_bit/right_side = 17
+5:3/0/terrains_peering_bit/bottom_right_corner = 17
 5:3/0/custom_data_1 = true
 5:4/animation_columns = 8
 5:4/animation_separation = Vector2i(6, 0)
@@ -2325,6 +2488,12 @@ texture = ExtResource("17_4h2sa")
 5:4/animation_frame_6/duration = 0.15
 5:4/animation_frame_7/duration = 0.15
 5:4/0 = 0
+5:4/0/terrain_set = 0
+5:4/0/terrains_peering_bit/bottom_side = 17
+5:4/0/terrains_peering_bit/bottom_right_corner = 17
+5:4/0/terrains_peering_bit/right_side = 17
+5:4/0/terrains_peering_bit/top_right_corner = 17
+5:4/0/terrains_peering_bit/bottom_left_corner = 17
 5:4/0/custom_data_1 = true
 6:0/animation_columns = 8
 6:0/animation_separation = Vector2i(6, 0)
@@ -2337,6 +2506,16 @@ texture = ExtResource("17_4h2sa")
 6:0/animation_frame_6/duration = 0.15
 6:0/animation_frame_7/duration = 0.15
 6:0/0 = 0
+6:0/0/terrain_set = 0
+6:0/0/terrain = 17
+6:0/0/terrains_peering_bit/right_side = 17
+6:0/0/terrains_peering_bit/bottom_right_corner = 17
+6:0/0/terrains_peering_bit/bottom_side = 17
+6:0/0/terrains_peering_bit/bottom_left_corner = 17
+6:0/0/terrains_peering_bit/left_side = 17
+6:0/0/terrains_peering_bit/top_left_corner = 17
+6:0/0/terrains_peering_bit/top_side = 17
+6:0/0/terrains_peering_bit/top_right_corner = 17
 6:0/0/custom_data_1 = true
 6:1/animation_columns = 8
 6:1/animation_separation = Vector2i(6, 0)
@@ -2349,6 +2528,16 @@ texture = ExtResource("17_4h2sa")
 6:1/animation_frame_6/duration = 0.15
 6:1/animation_frame_7/duration = 0.15
 6:1/0 = 0
+6:1/0/terrain_set = 0
+6:1/0/terrain = 17
+6:1/0/terrains_peering_bit/right_side = 17
+6:1/0/terrains_peering_bit/bottom_right_corner = 17
+6:1/0/terrains_peering_bit/bottom_side = 17
+6:1/0/terrains_peering_bit/bottom_left_corner = 17
+6:1/0/terrains_peering_bit/left_side = 17
+6:1/0/terrains_peering_bit/top_left_corner = 17
+6:1/0/terrains_peering_bit/top_side = 17
+6:1/0/terrains_peering_bit/top_right_corner = 17
 6:1/0/custom_data_1 = true
 6:2/animation_columns = 8
 6:2/animation_separation = Vector2i(6, 0)
@@ -2361,6 +2550,16 @@ texture = ExtResource("17_4h2sa")
 6:2/animation_frame_6/duration = 0.15
 6:2/animation_frame_7/duration = 0.15
 6:2/0 = 0
+6:2/0/terrain_set = 0
+6:2/0/terrain = 17
+6:2/0/terrains_peering_bit/right_side = 17
+6:2/0/terrains_peering_bit/bottom_right_corner = 17
+6:2/0/terrains_peering_bit/bottom_side = 17
+6:2/0/terrains_peering_bit/bottom_left_corner = 17
+6:2/0/terrains_peering_bit/left_side = 17
+6:2/0/terrains_peering_bit/top_left_corner = 17
+6:2/0/terrains_peering_bit/top_side = 17
+6:2/0/terrains_peering_bit/top_right_corner = 17
 6:2/0/custom_data_1 = true
 6:3/animation_columns = 8
 6:3/animation_separation = Vector2i(6, 0)
@@ -2373,6 +2572,16 @@ texture = ExtResource("17_4h2sa")
 6:3/animation_frame_6/duration = 0.15
 6:3/animation_frame_7/duration = 0.15
 6:3/0 = 0
+6:3/0/terrain_set = 0
+6:3/0/terrain = 17
+6:3/0/terrains_peering_bit/right_side = 17
+6:3/0/terrains_peering_bit/bottom_right_corner = 17
+6:3/0/terrains_peering_bit/bottom_side = 17
+6:3/0/terrains_peering_bit/bottom_left_corner = 17
+6:3/0/terrains_peering_bit/left_side = 17
+6:3/0/terrains_peering_bit/top_left_corner = 17
+6:3/0/terrains_peering_bit/top_side = 17
+6:3/0/terrains_peering_bit/top_right_corner = 17
 6:3/0/custom_data_1 = true
 6:4/animation_columns = 8
 6:4/animation_separation = Vector2i(6, 0)
@@ -2385,6 +2594,16 @@ texture = ExtResource("17_4h2sa")
 6:4/animation_frame_6/duration = 0.15
 6:4/animation_frame_7/duration = 0.15
 6:4/0 = 0
+6:4/0/terrain_set = 0
+6:4/0/terrain = 17
+6:4/0/terrains_peering_bit/right_side = 17
+6:4/0/terrains_peering_bit/bottom_right_corner = 17
+6:4/0/terrains_peering_bit/bottom_side = 17
+6:4/0/terrains_peering_bit/bottom_left_corner = 17
+6:4/0/terrains_peering_bit/left_side = 17
+6:4/0/terrains_peering_bit/top_left_corner = 17
+6:4/0/terrains_peering_bit/top_side = 17
+6:4/0/terrains_peering_bit/top_right_corner = 17
 6:4/0/custom_data_1 = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b17qk"]
@@ -2604,8 +2823,22 @@ texture = ExtResource("24_yubqo")
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5ot5s"]
 texture = ExtResource("25_5ot5s")
 0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrains_peering_bit/bottom_left_corner = 17
+0:0/0/terrains_peering_bit/bottom_side = 17
+0:0/0/terrains_peering_bit/bottom_right_corner = 17
 0:0/0/custom_data_1 = true
 0:1/0 = 0
+0:1/0/terrain_set = 0
+0:1/0/terrain = 17
+0:1/0/terrains_peering_bit/right_side = 17
+0:1/0/terrains_peering_bit/bottom_right_corner = 17
+0:1/0/terrains_peering_bit/bottom_side = 17
+0:1/0/terrains_peering_bit/bottom_left_corner = 17
+0:1/0/terrains_peering_bit/left_side = 17
+0:1/0/terrains_peering_bit/top_left_corner = 17
+0:1/0/terrains_peering_bit/top_side = 17
+0:1/0/terrains_peering_bit/top_right_corner = 17
 0:1/0/custom_data_1 = true
 0:2/0 = 0
 0:2/0/custom_data_1 = true
@@ -2614,8 +2847,22 @@ texture = ExtResource("25_5ot5s")
 0:4/0 = 0
 0:4/0/custom_data_1 = true
 1:0/0 = 0
+1:0/0/terrain_set = 0
+1:0/0/terrains_peering_bit/bottom_left_corner = 17
+1:0/0/terrains_peering_bit/bottom_side = 17
+1:0/0/terrains_peering_bit/bottom_right_corner = 17
 1:0/0/custom_data_1 = true
 1:1/0 = 0
+1:1/0/terrain_set = 0
+1:1/0/terrain = 17
+1:1/0/terrains_peering_bit/right_side = 17
+1:1/0/terrains_peering_bit/bottom_right_corner = 17
+1:1/0/terrains_peering_bit/bottom_side = 17
+1:1/0/terrains_peering_bit/bottom_left_corner = 17
+1:1/0/terrains_peering_bit/left_side = 17
+1:1/0/terrains_peering_bit/top_left_corner = 17
+1:1/0/terrains_peering_bit/top_side = 17
+1:1/0/terrains_peering_bit/top_right_corner = 17
 1:1/0/custom_data_1 = true
 1:2/0 = 0
 1:2/0/custom_data_1 = true
@@ -2624,54 +2871,236 @@ texture = ExtResource("25_5ot5s")
 1:4/0 = 0
 1:4/0/custom_data_1 = true
 2:0/0 = 0
+2:0/0/terrain_set = 0
+2:0/0/terrain = 17
+2:0/0/terrains_peering_bit/right_side = 17
+2:0/0/terrains_peering_bit/bottom_right_corner = 17
+2:0/0/terrains_peering_bit/bottom_side = 17
+2:0/0/terrains_peering_bit/bottom_left_corner = 17
+2:0/0/terrains_peering_bit/left_side = 17
+2:0/0/terrains_peering_bit/top_left_corner = 17
+2:0/0/terrains_peering_bit/top_side = 17
+2:0/0/terrains_peering_bit/top_right_corner = 17
 2:0/0/custom_data_1 = true
 2:1/0 = 0
+2:1/0/terrain_set = 0
+2:1/0/terrain = 17
+2:1/0/terrains_peering_bit/right_side = 17
+2:1/0/terrains_peering_bit/bottom_right_corner = 17
+2:1/0/terrains_peering_bit/bottom_side = 17
+2:1/0/terrains_peering_bit/bottom_left_corner = 17
+2:1/0/terrains_peering_bit/left_side = 17
+2:1/0/terrains_peering_bit/top_left_corner = 17
+2:1/0/terrains_peering_bit/top_side = 17
+2:1/0/terrains_peering_bit/top_right_corner = 17
 2:1/0/custom_data_1 = true
 2:2/0 = 0
+2:2/0/terrain_set = 0
+2:2/0/terrain = 17
+2:2/0/terrains_peering_bit/right_side = 17
+2:2/0/terrains_peering_bit/bottom_right_corner = 17
+2:2/0/terrains_peering_bit/bottom_side = 17
+2:2/0/terrains_peering_bit/bottom_left_corner = 17
+2:2/0/terrains_peering_bit/left_side = 17
+2:2/0/terrains_peering_bit/top_left_corner = 17
+2:2/0/terrains_peering_bit/top_side = 17
+2:2/0/terrains_peering_bit/top_right_corner = 17
 2:2/0/custom_data_1 = true
 2:3/0 = 0
+2:3/0/terrain_set = 0
+2:3/0/terrain = 17
+2:3/0/terrains_peering_bit/right_side = 17
+2:3/0/terrains_peering_bit/bottom_right_corner = 17
+2:3/0/terrains_peering_bit/bottom_side = 17
+2:3/0/terrains_peering_bit/bottom_left_corner = 17
+2:3/0/terrains_peering_bit/left_side = 17
+2:3/0/terrains_peering_bit/top_left_corner = 17
+2:3/0/terrains_peering_bit/top_side = 17
+2:3/0/terrains_peering_bit/top_right_corner = 17
 2:3/0/custom_data_1 = true
 2:4/0 = 0
+2:4/0/terrain_set = 0
+2:4/0/terrain = 17
+2:4/0/terrains_peering_bit/right_side = 17
+2:4/0/terrains_peering_bit/bottom_right_corner = 17
+2:4/0/terrains_peering_bit/bottom_side = 17
+2:4/0/terrains_peering_bit/bottom_left_corner = 17
+2:4/0/terrains_peering_bit/left_side = 17
+2:4/0/terrains_peering_bit/top_left_corner = 17
+2:4/0/terrains_peering_bit/top_side = 17
+2:4/0/terrains_peering_bit/top_right_corner = 17
 2:4/0/custom_data_1 = true
 3:0/0 = 0
+3:0/0/terrain_set = 0
+3:0/0/terrain = 17
+3:0/0/terrains_peering_bit/right_side = 17
+3:0/0/terrains_peering_bit/bottom_right_corner = 17
+3:0/0/terrains_peering_bit/bottom_side = 17
+3:0/0/terrains_peering_bit/bottom_left_corner = 17
+3:0/0/terrains_peering_bit/left_side = 17
+3:0/0/terrains_peering_bit/top_left_corner = 17
+3:0/0/terrains_peering_bit/top_side = 17
+3:0/0/terrains_peering_bit/top_right_corner = 17
 3:0/0/custom_data_1 = true
 3:1/0 = 0
+3:1/0/terrain_set = 0
+3:1/0/terrains_peering_bit/top_side = 17
+3:1/0/terrains_peering_bit/top_left_corner = 17
+3:1/0/terrains_peering_bit/left_side = 17
+3:1/0/terrains_peering_bit/bottom_left_corner = 17
+3:1/0/terrains_peering_bit/top_right_corner = 17
 3:1/0/custom_data_1 = true
 3:2/0 = 0
+3:2/0/terrain_set = 0
+3:2/0/terrains_peering_bit/bottom_left_corner = 17
+3:2/0/terrains_peering_bit/left_side = 17
+3:2/0/terrains_peering_bit/top_left_corner = 17
 3:2/0/custom_data_1 = true
 3:3/0 = 0
+3:3/0/terrain_set = 0
+3:3/0/terrains_peering_bit/bottom_left_corner = 17
+3:3/0/terrains_peering_bit/left_side = 17
+3:3/0/terrains_peering_bit/top_left_corner = 17
 3:3/0/custom_data_1 = true
 3:4/0 = 0
+3:4/0/terrain_set = 0
+3:4/0/terrains_peering_bit/bottom_side = 17
+3:4/0/terrains_peering_bit/bottom_left_corner = 17
+3:4/0/terrains_peering_bit/left_side = 17
+3:4/0/terrains_peering_bit/top_left_corner = 17
+3:4/0/terrains_peering_bit/bottom_right_corner = 17
 3:4/0/custom_data_1 = true
 4:0/0 = 0
+4:0/0/terrain_set = 0
+4:0/0/terrain = 17
+4:0/0/terrains_peering_bit/right_side = 17
+4:0/0/terrains_peering_bit/bottom_right_corner = 17
+4:0/0/terrains_peering_bit/bottom_side = 17
+4:0/0/terrains_peering_bit/bottom_left_corner = 17
+4:0/0/terrains_peering_bit/left_side = 17
+4:0/0/terrains_peering_bit/top_left_corner = 17
+4:0/0/terrains_peering_bit/top_side = 17
+4:0/0/terrains_peering_bit/top_right_corner = 17
 4:0/0/custom_data_1 = true
 4:1/0 = 0
+4:1/0/terrain_set = 0
+4:1/0/terrains_peering_bit/top_left_corner = 17
+4:1/0/terrains_peering_bit/top_side = 17
+4:1/0/terrains_peering_bit/top_right_corner = 17
 4:1/0/custom_data_1 = true
 4:2/0 = 0
 4:2/0/custom_data_1 = true
 4:3/0 = 0
+4:3/0/terrain_set = 0
+4:3/0/terrains_peering_bit/bottom_left_corner = 17
+4:3/0/terrains_peering_bit/bottom_side = 17
+4:3/0/terrains_peering_bit/bottom_right_corner = 17
 4:3/0/custom_data_1 = true
 4:4/0 = 0
+4:4/0/terrain_set = 0
+4:4/0/terrains_peering_bit/bottom_left_corner = 17
+4:4/0/terrains_peering_bit/bottom_side = 17
+4:4/0/terrains_peering_bit/bottom_right_corner = 17
 4:4/0/custom_data_1 = true
 5:0/0 = 0
+5:0/0/terrain_set = 0
+5:0/0/terrain = 17
+5:0/0/terrains_peering_bit/right_side = 17
+5:0/0/terrains_peering_bit/bottom_right_corner = 17
+5:0/0/terrains_peering_bit/bottom_side = 17
+5:0/0/terrains_peering_bit/bottom_left_corner = 17
+5:0/0/terrains_peering_bit/left_side = 17
+5:0/0/terrains_peering_bit/top_left_corner = 17
+5:0/0/terrains_peering_bit/top_side = 17
+5:0/0/terrains_peering_bit/top_right_corner = 17
 5:0/0/custom_data_1 = true
 5:1/0 = 0
+5:1/0/terrain_set = 0
+5:1/0/terrains_peering_bit/top_side = 17
+5:1/0/terrains_peering_bit/top_right_corner = 17
+5:1/0/terrains_peering_bit/right_side = 17
+5:1/0/terrains_peering_bit/top_left_corner = 17
+5:1/0/terrains_peering_bit/bottom_right_corner = 17
 5:1/0/custom_data_1 = true
 5:2/0 = 0
+5:2/0/terrain_set = 0
+5:2/0/terrains_peering_bit/top_right_corner = 17
+5:2/0/terrains_peering_bit/right_side = 17
+5:2/0/terrains_peering_bit/bottom_right_corner = 17
 5:2/0/custom_data_1 = true
 5:3/0 = 0
+5:3/0/terrain_set = 0
+5:3/0/terrains_peering_bit/top_right_corner = 17
+5:3/0/terrains_peering_bit/right_side = 17
+5:3/0/terrains_peering_bit/bottom_right_corner = 17
 5:3/0/custom_data_1 = true
 5:4/0 = 0
+5:4/0/terrain_set = 0
+5:4/0/terrains_peering_bit/bottom_side = 17
+5:4/0/terrains_peering_bit/bottom_right_corner = 17
+5:4/0/terrains_peering_bit/right_side = 17
+5:4/0/terrains_peering_bit/top_right_corner = 17
+5:4/0/terrains_peering_bit/bottom_left_corner = 17
 5:4/0/custom_data_1 = true
 6:0/0 = 0
+6:0/0/terrain_set = 0
+6:0/0/terrain = 17
+6:0/0/terrains_peering_bit/right_side = 17
+6:0/0/terrains_peering_bit/bottom_right_corner = 17
+6:0/0/terrains_peering_bit/bottom_side = 17
+6:0/0/terrains_peering_bit/bottom_left_corner = 17
+6:0/0/terrains_peering_bit/left_side = 17
+6:0/0/terrains_peering_bit/top_left_corner = 17
+6:0/0/terrains_peering_bit/top_side = 17
+6:0/0/terrains_peering_bit/top_right_corner = 17
 6:0/0/custom_data_1 = true
 6:1/0 = 0
+6:1/0/terrain_set = 0
+6:1/0/terrain = 17
+6:1/0/terrains_peering_bit/right_side = 17
+6:1/0/terrains_peering_bit/bottom_right_corner = 17
+6:1/0/terrains_peering_bit/bottom_side = 17
+6:1/0/terrains_peering_bit/bottom_left_corner = 17
+6:1/0/terrains_peering_bit/left_side = 17
+6:1/0/terrains_peering_bit/top_left_corner = 17
+6:1/0/terrains_peering_bit/top_side = 17
+6:1/0/terrains_peering_bit/top_right_corner = 17
 6:1/0/custom_data_1 = true
 6:2/0 = 0
+6:2/0/terrain_set = 0
+6:2/0/terrain = 17
+6:2/0/terrains_peering_bit/right_side = 17
+6:2/0/terrains_peering_bit/bottom_right_corner = 17
+6:2/0/terrains_peering_bit/bottom_side = 17
+6:2/0/terrains_peering_bit/bottom_left_corner = 17
+6:2/0/terrains_peering_bit/left_side = 17
+6:2/0/terrains_peering_bit/top_left_corner = 17
+6:2/0/terrains_peering_bit/top_side = 17
+6:2/0/terrains_peering_bit/top_right_corner = 17
 6:2/0/custom_data_1 = true
 6:3/0 = 0
+6:3/0/terrain_set = 0
+6:3/0/terrain = 17
+6:3/0/terrains_peering_bit/right_side = 17
+6:3/0/terrains_peering_bit/bottom_right_corner = 17
+6:3/0/terrains_peering_bit/bottom_side = 17
+6:3/0/terrains_peering_bit/bottom_left_corner = 17
+6:3/0/terrains_peering_bit/left_side = 17
+6:3/0/terrains_peering_bit/top_left_corner = 17
+6:3/0/terrains_peering_bit/top_side = 17
+6:3/0/terrains_peering_bit/top_right_corner = 17
 6:3/0/custom_data_1 = true
 6:4/0 = 0
+6:4/0/terrain_set = 0
+6:4/0/terrain = 17
+6:4/0/terrains_peering_bit/right_side = 17
+6:4/0/terrains_peering_bit/bottom_right_corner = 17
+6:4/0/terrains_peering_bit/bottom_side = 17
+6:4/0/terrains_peering_bit/bottom_left_corner = 17
+6:4/0/terrains_peering_bit/left_side = 17
+6:4/0/terrains_peering_bit/top_left_corner = 17
+6:4/0/terrains_peering_bit/top_side = 17
+6:4/0/terrains_peering_bit/top_right_corner = 17
 6:4/0/custom_data_1 = true
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nfvlm"]
@@ -2703,18 +3132,60 @@ texture = ExtResource("27_xyp7h")
 0:0/0 = 0
 0:1/0 = 0
 0:2/0 = 0
+0:2/0/terrain_set = 1
+0:2/0/terrain = 2
+0:2/0/terrains_peering_bit/right_side = 2
+0:2/0/terrains_peering_bit/bottom_side = 2
 0:3/0 = 0
+0:3/0/terrain_set = 1
+0:3/0/terrain = 2
+0:3/0/terrains_peering_bit/right_side = 2
+0:3/0/terrains_peering_bit/bottom_side = 2
+0:3/0/terrains_peering_bit/top_side = 2
 0:4/0 = 0
+0:4/0/terrain_set = 1
+0:4/0/terrain = 2
+0:4/0/terrains_peering_bit/right_side = 2
+0:4/0/terrains_peering_bit/top_side = 2
 1:0/0 = 0
 1:1/0 = 0
 1:2/0 = 0
+1:2/0/terrain_set = 1
+1:2/0/terrain = 2
+1:2/0/terrains_peering_bit/right_side = 2
+1:2/0/terrains_peering_bit/bottom_side = 2
+1:2/0/terrains_peering_bit/left_side = 2
 1:3/0 = 0
+1:3/0/terrain_set = 1
+1:3/0/terrain = 2
+1:3/0/terrains_peering_bit/right_side = 2
+1:3/0/terrains_peering_bit/bottom_side = 2
+1:3/0/terrains_peering_bit/left_side = 2
+1:3/0/terrains_peering_bit/top_side = 2
 1:4/0 = 0
+1:4/0/terrain_set = 1
+1:4/0/terrain = 2
+1:4/0/terrains_peering_bit/right_side = 2
+1:4/0/terrains_peering_bit/left_side = 2
+1:4/0/terrains_peering_bit/top_side = 2
 2:0/0 = 0
 2:1/0 = 0
 2:2/0 = 0
+2:2/0/terrain_set = 1
+2:2/0/terrain = 2
+2:2/0/terrains_peering_bit/bottom_side = 2
+2:2/0/terrains_peering_bit/left_side = 2
 2:3/0 = 0
+2:3/0/terrain_set = 1
+2:3/0/terrain = 2
+2:3/0/terrains_peering_bit/bottom_side = 2
+2:3/0/terrains_peering_bit/left_side = 2
+2:3/0/terrains_peering_bit/top_side = 2
 2:4/0 = 0
+2:4/0/terrain_set = 1
+2:4/0/terrain = 2
+2:4/0/terrains_peering_bit/left_side = 2
+2:4/0/terrains_peering_bit/top_side = 2
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3lyym"]
 texture = ExtResource("28_3lyym")
@@ -2740,18 +3211,60 @@ texture = ExtResource("30_5c4cp")
 0:0/0 = 0
 0:1/0 = 0
 0:2/0 = 0
+0:2/0/terrain_set = 1
+0:2/0/terrain = 3
+0:2/0/terrains_peering_bit/right_side = 3
+0:2/0/terrains_peering_bit/bottom_side = 3
 0:3/0 = 0
+0:3/0/terrain_set = 1
+0:3/0/terrain = 3
+0:3/0/terrains_peering_bit/right_side = 3
+0:3/0/terrains_peering_bit/bottom_side = 3
+0:3/0/terrains_peering_bit/top_side = 3
 0:4/0 = 0
+0:4/0/terrain_set = 1
+0:4/0/terrain = 3
+0:4/0/terrains_peering_bit/right_side = 3
+0:4/0/terrains_peering_bit/top_side = 3
 1:0/0 = 0
 1:1/0 = 0
 1:2/0 = 0
+1:2/0/terrain_set = 1
+1:2/0/terrain = 3
+1:2/0/terrains_peering_bit/right_side = 3
+1:2/0/terrains_peering_bit/bottom_side = 3
+1:2/0/terrains_peering_bit/left_side = 3
 1:3/0 = 0
+1:3/0/terrain_set = 1
+1:3/0/terrain = 3
+1:3/0/terrains_peering_bit/right_side = 3
+1:3/0/terrains_peering_bit/bottom_side = 3
+1:3/0/terrains_peering_bit/left_side = 3
+1:3/0/terrains_peering_bit/top_side = 3
 1:4/0 = 0
+1:4/0/terrain_set = 1
+1:4/0/terrain = 3
+1:4/0/terrains_peering_bit/right_side = 3
+1:4/0/terrains_peering_bit/left_side = 3
+1:4/0/terrains_peering_bit/top_side = 3
 2:0/0 = 0
 2:1/0 = 0
 2:2/0 = 0
+2:2/0/terrain_set = 1
+2:2/0/terrain = 3
+2:2/0/terrains_peering_bit/bottom_side = 3
+2:2/0/terrains_peering_bit/left_side = 3
 2:3/0 = 0
+2:3/0/terrain_set = 1
+2:3/0/terrain = 3
+2:3/0/terrains_peering_bit/bottom_side = 3
+2:3/0/terrains_peering_bit/left_side = 3
+2:3/0/terrains_peering_bit/top_side = 3
 2:4/0 = 0
+2:4/0/terrain_set = 1
+2:4/0/terrain = 3
+2:4/0/terrains_peering_bit/left_side = 3
+2:4/0/terrains_peering_bit/top_side = 3
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d5ewc"]
 texture = ExtResource("31_d5ewc")
@@ -9161,11 +9674,17 @@ terrain_set_0/terrain_15/name = "Горы (Сухая поляна)"
 terrain_set_0/terrain_15/color = Color(0.8, 0.6, 0.3, 1)
 terrain_set_0/terrain_16/name = "Горы (Волшебная поляна)"
 terrain_set_0/terrain_16/color = Color(0.6, 0.3, 0.8, 1)
+terrain_set_0/terrain_17/name = "Пещерная вода"
+terrain_set_0/terrain_17/color = Color(0.18, 0.48, 0.78, 1)
 terrain_set_1/mode = 2
 terrain_set_1/terrain_0/name = "Дорога булыжник"
 terrain_set_1/terrain_0/color = Color(0.3, 0.3, 0.3, 1)
 terrain_set_1/terrain_1/name = "Дорога песчанник"
 terrain_set_1/terrain_1/color = Color(0.8, 0.7, 0.5, 1)
+terrain_set_1/terrain_2/name = "ПолПещеры"
+terrain_set_1/terrain_2/color = Color(0.47058824, 0.0627451, 0.2509804, 1)
+terrain_set_1/terrain_3/name = "Пол пещеры 2"
+terrain_set_1/terrain_3/color = Color(0.6457032, 0.38364866, 0.13061738, 1)
 custom_data_layer_0/name = "biome"
 custom_data_layer_0/type = 4
 custom_data_layer_1/name = "is_water"

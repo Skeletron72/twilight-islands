@@ -13,10 +13,10 @@ const SCENE_CAVE_LANTERN = preload("res://scenes/objects/dungeon/cave_lantern.ts
 const SCENE_CAVE_STALAGMITE = preload("res://scenes/objects/dungeon/cave_stalagmite.tscn")
 
 const CAVE_STONES = [
-	preload("res://scenes/objects/stones/stone_1.tscn"),
-	preload("res://scenes/objects/stones/stone_2.tscn"),
-	preload("res://scenes/objects/stones/stone_3.tscn"),
-	preload("res://scenes/objects/stones/stone_4.tscn")
+	preload("res://scenes/objects/dungeon/cave_rock_1.tscn"),
+	preload("res://scenes/objects/dungeon/cave_rock_2.tscn"),
+	preload("res://scenes/objects/dungeon/cave_rock_3.tscn"),
+	preload("res://scenes/objects/dungeon/cave_rock_4.tscn")
 ]
 
 func generate(
@@ -136,10 +136,6 @@ func generate(
 				cur_x = clampi(cur_x, 2, sw - 3)
 				cur_y = clampi(cur_y, 2, swall_y - 2)
 
-	# В залах оставляем природные каменные колонны
-	for ch in chambers:
-		if ch.rx >= 4 and ch.ry >= 3 and randf() < 0.5:
-			s_grid[ch.x][ch.y] = 1
 
 	# Сглаживание клеточным автоматом (2 прохода)
 	for p in range(2):
@@ -181,6 +177,47 @@ func generate(
 	for x in range(scx - 3, scx + 2):
 		for y in range(swall_y + 1, min(sh - 1, swall_y + 3)):
 			s_grid[x][y] = 0
+
+	# 3.5. Размещение природных колонн и островков в залах пещеры
+	for ch in chambers:
+		# Пропускаем входной зал перед коридором
+		if ch.y >= swall_y - 4 and abs(ch.x - scx) <= 3:
+			continue
+		
+		# Форма островка: single (1x1 в s_grid -> 2x2 в grid: 32x32px), horizontal (2x1 -> 4x2: 64x32px), vertical (1x2 -> 2x4: 32x64px)
+		var shape_type = "single"
+		if ch.rx >= 5 and randf() < 0.5:
+			shape_type = "horizontal"
+		elif ch.ry >= 4 and randf() < 0.4:
+			shape_type = "vertical"
+			
+		var cells: Array[Vector2i] = [Vector2i(ch.x, ch.y)]
+		if shape_type == "horizontal":
+			cells.append(Vector2i(ch.x + 1, ch.y))
+		elif shape_type == "vertical":
+			cells.append(Vector2i(ch.x, ch.y + 1))
+			
+		# Проверяем свободное пространство вокруг островка:
+		# Вокруг всех клеток островка должен быть минимум 1 тайл пола во все стороны (в grid это минимум 2 тайла!),
+		# а к югу минимум 2 тайла пола (в grid это 4 тайла: 2 для вертикального фасада скалы + 2 для прохода игрока)
+		var valid = true
+		for c_pos in cells:
+			for dx in range(-1, 2):
+				for dy in range(-1, 3):
+					var nx = c_pos.x + dx
+					var ny = c_pos.y + dy
+					if nx < 1 or nx >= sw - 1 or ny < 1 or ny >= swall_y - 1:
+						valid = false
+						break
+					if s_grid[nx][ny] != 0:
+						valid = false
+						break
+				if not valid: break
+			if not valid: break
+			
+		if valid:
+			for c_pos in cells:
+				s_grid[c_pos.x][c_pos.y] = 1
 
 	# 4. Flood-fill от входа для гарантии 100% связности
 	var visited: Array = []
@@ -333,6 +370,9 @@ func generate(
 				elif f_ne: tile = Vector2i(4, 2)
 				elif f_sw: tile = Vector2i(6, 0)
 				elif f_se: tile = Vector2i(4, 0)
+				else:
+					if x >= 0 and x < w and y >= 0 and y < h:
+						tile = Vector2i(5, 1) # Сплошная каменная текстура в центре колонн/островков
 				
 				if tile != Vector2i(-1, -1):
 					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
@@ -355,12 +395,19 @@ func generate(
 					covered_by_wall.append(Vector2i(x, y + 1))
 					covered_by_wall.append(Vector2i(x, y + 2))
 					
-					var col = CollisionShape2D.new()
-					var shape = RectangleShape2D.new()
-					shape.size = Vector2(16, 16)
-					col.shape = shape
-					col.position = _tile_to_world(Vector2i(x, y + 2))
-					boundary_body.add_child(col)
+					var col_top = CollisionShape2D.new()
+					var shape_top = RectangleShape2D.new()
+					shape_top.size = Vector2(16, 16)
+					col_top.shape = shape_top
+					col_top.position = _tile_to_world(Vector2i(x, y + 1))
+					boundary_body.add_child(col_top)
+
+					var col_bot = CollisionShape2D.new()
+					var shape_bot = RectangleShape2D.new()
+					shape_bot.size = Vector2(16, 16)
+					col_bot.shape = shape_bot
+					col_bot.position = _tile_to_world(Vector2i(x, y + 2))
+					boundary_body.add_child(col_bot)
 
 	_create_boundary_walls_from_grid(boundary_body, grid, w, h)
 
@@ -524,10 +571,14 @@ func generate(
 			if Vector2(x, y + 2).distance_to(Vector2(spawn_tile)) < 4.0: continue
 			if Vector2(x, y + 2).distance_to(Vector2(ladder_down_tile)) < 4.0: continue
 
+			# Не вешать фонари на отдельно стоящие колонны/островки (чтобы сохранялись темные зоны)
+			if y >= 2 and (grid[x][y - 1] == 0 or grid[x][y - 2] == 0):
+				continue
+
 			# Не вешать вплотную к опорам с фонарями
 			var near_support = false
 			for s in placed_supports:
-				if Vector2(x, y).distance_to(Vector2(s)) < 4.0:
+				if Vector2(x, y).distance_to(Vector2(s)) < 6.0:
 					near_support = true
 					break
 			if near_support: continue
@@ -536,11 +587,11 @@ func generate(
 
 	lantern_candidates.shuffle()
 	var placed_lanterns: Array[Vector2i] = []
-	var target_lanterns = randi_range(5, 8)
+	var target_lanterns = randi_range(2, 4)
 	for cand in lantern_candidates:
 		var too_close = false
 		for pl in placed_lanterns:
-			if Vector2(cand).distance_to(Vector2(pl)) < 5.0:
+			if Vector2(cand).distance_to(Vector2(pl)) < 8.0:
 				too_close = true
 				break
 		if too_close: continue
@@ -555,23 +606,68 @@ func generate(
 			break
 
 	# 12. Декоративные сталагмиты на полу (Cave_Decorations.png)
-	var stalagmite_candidates: Array[Vector2i] = []
+	var edge_stalagmite_candidates: Array[Vector2i] = []
+	var open_stalagmite_candidates: Array[Vector2i] = []
 	for cell in valid_floor_cells:
 		if cell in reserved: continue
-		# Сталагмиты естественнее всего смотрятся у краев и выступов пещеры
-		stalagmite_candidates.append(cell)
+		if Vector2(cell).distance_to(Vector2(spawn_tile)) < 3.0: continue
+		if Vector2(cell).distance_to(Vector2(ladder_down_tile)) < 3.0: continue
+		
+		# Определяем, находится ли клетка у стены или колонны
+		var near_wall = false
+		for dx in range(-1, 2):
+			for dy in range(-1, 2):
+				if dx == 0 and dy == 0: continue
+				var nx = cell.x + dx
+				var ny = cell.y + dy
+				if nx < 0 or nx >= w or ny < 0 or ny >= h or grid[nx][ny] == 1 or Vector2i(nx, ny) in covered_dict:
+					near_wall = true
+					break
+			if near_wall: break
+		
+		if near_wall:
+			edge_stalagmite_candidates.append(cell)
+		else:
+			open_stalagmite_candidates.append(cell)
 	
-	stalagmite_candidates.shuffle()
-	var target_stalagmites = randi_range(8, 14)
+	edge_stalagmite_candidates.shuffle()
+	open_stalagmite_candidates.shuffle()
+	
+	var stalagmite_candidates: Array[Vector2i] = []
+	stalagmite_candidates.append_array(edge_stalagmite_candidates)
+	stalagmite_candidates.append_array(open_stalagmite_candidates)
+	
+	var target_stalagmites = clampi(int(valid_floor_cells.size() * 0.09), 30, 50)
 	var placed_stalagmites = 0
 	for cell in stalagmite_candidates:
 		if cell in reserved: continue
 		var stalagmite = SCENE_CAVE_STALAGMITE.instantiate()
 		stalagmite.variant = randi() % 4
-		stalagmite.global_position = _tile_to_world(cell)
+		stalagmite.global_position = _tile_to_world(cell) + Vector2(randf_range(-3, 3), randf_range(-3, 3))
 		interactables.add_child(stalagmite)
 		reserved[cell] = true
 		placed_stalagmites += 1
+		
+		# Формирование органичных скоплений сталагмитов (кластеров из 2-3 штук)
+		if randf() < 0.45 and placed_stalagmites < target_stalagmites:
+			var neighbors = [
+				cell + Vector2i(1, 0), cell + Vector2i(-1, 0),
+				cell + Vector2i(0, 1), cell + Vector2i(0, -1),
+				cell + Vector2i(1, 1), cell + Vector2i(-1, 1)
+			]
+			neighbors.shuffle()
+			for n_cell in neighbors:
+				if n_cell in valid_floor_cells and not n_cell in reserved:
+					if Vector2(n_cell).distance_to(Vector2(spawn_tile)) < 3.0: continue
+					if Vector2(n_cell).distance_to(Vector2(ladder_down_tile)) < 3.0: continue
+					var cluster_stalagmite = SCENE_CAVE_STALAGMITE.instantiate()
+					cluster_stalagmite.variant = randi() % 4
+					cluster_stalagmite.global_position = _tile_to_world(n_cell) + Vector2(randf_range(-3, 3), randf_range(-3, 3))
+					interactables.add_child(cluster_stalagmite)
+					reserved[n_cell] = true
+					placed_stalagmites += 1
+					break
+		
 		if placed_stalagmites >= target_stalagmites:
 			break
 

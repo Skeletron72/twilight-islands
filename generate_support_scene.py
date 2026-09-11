@@ -1,0 +1,33 @@
+import sys
+
+scene_content = """[gd_scene load_steps=3 format=3 uid="uid://cavesupport01"]
+
+[ext_resource type="Texture2D" uid="uid://db2x8cpm3tysx" path="res://assets/new_assets/Cute_Fantasy/Tiles/Cave/Cave_Support_1.png" id="1_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_support"]
+size = Vector2(16, 16)
+
+[node name="CaveSupport" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_tex")
+region_enabled = true
+region_rect = Rect2(0, 0, 80, 48)
+offset = Vector2(0, -24)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="LeftPillar" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-32, 0)
+shape = SubResource("RectangleShape2D_support")
+
+[node name="RightPillar" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(32, 0)
+shape = SubResource("RectangleShape2D_support")
+"""
+
+with open("scenes/objects/dungeon/cave_support.tscn", "w") as f:
+    f.write(scene_content)
