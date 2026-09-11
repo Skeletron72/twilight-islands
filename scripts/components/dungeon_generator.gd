@@ -113,11 +113,11 @@ func generate(
 				
 				# ПРАВИЛЬНЫЙ МАППИНГ ДЛЯ RPG MAKER 3x3 (ВЕРШИНА ГОРЫ)
 				
-				# Внешние углы (ПОМЕНЯЛИ ВСЕ НА ПРОТИВОПОЛОЖНЫЕ!)
-				if f_n and f_w: tile = Vector2i(6, 2)
-				elif f_n and f_e: tile = Vector2i(4, 2)
-				elif f_s and f_w: tile = Vector2i(6, 0)
-				elif f_s and f_e: tile = Vector2i(4, 0)
+				# Внешние углы (Теперь используем тайлы внутренних углов пустоты!)
+				if f_n and f_w: tile = Vector2i(4, 3)
+				elif f_n and f_e: tile = Vector2i(5, 3)
+				elif f_s and f_w: tile = Vector2i(4, 4)
+				elif f_s and f_e: tile = Vector2i(5, 4)
 				
 				# Прямые края
 				elif f_n: tile = Vector2i(5, 2)
@@ -125,11 +125,11 @@ func generate(
 				elif f_w: tile = Vector2i(6, 1)
 				elif f_e: tile = Vector2i(4, 1)
 				
-				# Внутренние углы
-				elif f_nw: tile = Vector2i(4, 3)
-				elif f_ne: tile = Vector2i(5, 3)
-				elif f_sw: tile = Vector2i(4, 4)
-				elif f_se: tile = Vector2i(5, 4)
+				# Внутренние углы (Теперь используем тайлы внешних углов пустоты!)
+				elif f_nw: tile = Vector2i(4, 0)
+				elif f_ne: tile = Vector2i(6, 0)
+				elif f_sw: tile = Vector2i(4, 2)
+				elif f_se: tile = Vector2i(6, 2)
 				
 				if tile != Vector2i(-1, -1):
 					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
@@ -194,7 +194,7 @@ func generate(
 	var reserved = [spawn_tile, ladder_up_tile, ladder_down_tile, ladder_up_tile + Vector2i(0, 1)]
 	for cell in valid_floor_cells:
 		if cell in reserved: continue
-		if randf() < 0.15:
+		if randf() < 0.05: # Уменьшили количество камней по просьбе
 			if DungeonManager and DungeonManager.is_tile_cleared(floor_num, cell): continue
 			var stone = MINABLE_STONES[randi() % MINABLE_STONES.size()].instantiate()
 			stone.global_position = _tile_to_world(cell) + Vector2(randf_range(-4, 4), randf_range(-4, 4))
