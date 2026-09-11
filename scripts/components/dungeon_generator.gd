@@ -27,6 +27,9 @@ func generate(
 	player: Node2D
 ) -> void:
 	
+	var d_seed = DungeonManager.get_or_create_dungeon_seed() if DungeonManager else 12345
+	seed(d_seed + floor_num * 1000)
+
 	floor_layer.clear()
 	wall_layer.clear()
 	for child in boundary_body.get_children():
@@ -420,14 +423,26 @@ func generate(
 		wall_ladder.global_position = _tile_to_world(Vector2i(cx - 4, wall_y + 2)) + Vector2(0, 8)
 		interactables.add_child(wall_ladder)
 
-	# Игрок появляется перед выходом на южной стене
-	if player:
-		player.global_position = _tile_to_world(spawn_tile)
-
 	# СПУСК ВНИЗ: люк в полу Cave_Floor_Ladder (в дальнем зале)
 	var ladder_down = SCENE_LADDER_DOWN.instantiate()
 	ladder_down.global_position = _tile_to_world(ladder_down_tile)
 	interactables.add_child(ladder_down)
+	if DungeonManager:
+		DungeonManager.floor_ladder_tiles[floor_num] = ladder_down_tile
+
+	# Игрок появляется:
+	# Если поднялся по лестнице с нижнего этажа — сразу у люка спуска (ladder_down_tile), а не у выхода
+	# Если вошел с поверхности или спустился сверху — у выхода/лестницы на южной стене (spawn_tile)
+	if player:
+		if DungeonManager and DungeonManager.spawn_at_ladder_down:
+			player.global_position = _tile_to_world(ladder_down_tile) + Vector2(0, 16)
+			DungeonManager.spawn_at_ladder_down = false
+		else:
+			player.global_position = _tile_to_world(spawn_tile)
+		
+		var cam = player.get_node_or_null("Camera2D") as Camera2D
+		if cam:
+			cam.reset_smoothing()
 
 	var reserved = {}
 	# Зона вокруг точки спавна и выхода (радиус 1 тайл)
