@@ -25,6 +25,14 @@ script = ExtResource("1_dng")
 [node name="CaveModulate" type="CanvasModulate" parent="."]
 color = Color(0.24, 0.24, 0.3, 1)
 
+[node name="VoidBackground" type="ColorRect" parent="."]
+z_index = -10
+offset_left = -2000.0
+offset_top = -2000.0
+offset_right = 2000.0
+offset_bottom = 2000.0
+color = Color(0.223529, 0.121569, 0.129412, 1)
+
 [node name="FloorLayer" type="TileMapLayer" parent="."]
 tile_set = ExtResource("2_ts")
 

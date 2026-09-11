@@ -113,40 +113,51 @@ func generate(
 				
 				# ПРАВИЛЬНЫЙ МАППИНГ ДЛЯ RPG MAKER 3x3 (ВЕРШИНА ГОРЫ)
 				
-				# Внешние углы
-				if f_n and f_w: tile = Vector2i(4, 0) # Floor is NW -> This is Top-Left edge of cliff
-				elif f_n and f_e: tile = Vector2i(6, 0) # Floor is NE -> This is Top-Right edge of cliff
-				elif f_s and f_w: tile = Vector2i(4, 2) # Floor is SW -> This is Bottom-Left edge of cliff
-				elif f_s and f_e: tile = Vector2i(6, 2) # Floor is SE -> This is Bottom-Right edge of cliff
+				# Внешние углы (ПОМЕНЯЛИ ВСЕ НА ПРОТИВОПОЛОЖНЫЕ!)
+				if f_n and f_w: tile = Vector2i(6, 2)
+				elif f_n and f_e: tile = Vector2i(4, 2)
+				elif f_s and f_w: tile = Vector2i(6, 0)
+				elif f_s and f_e: tile = Vector2i(4, 0)
 				
 				# Прямые края
-				elif f_n: tile = Vector2i(5, 0) # Floor is N -> This is Top edge of cliff
-				elif f_s: tile = Vector2i(5, 2) # Floor is S -> This is Bottom edge of cliff
-				elif f_w: tile = Vector2i(4, 1) # Floor is W -> This is Left edge of cliff
-				elif f_e: tile = Vector2i(6, 1) # Floor is E -> This is Right edge of cliff
+				elif f_n: tile = Vector2i(5, 2)
+				elif f_s: tile = Vector2i(5, 0)
+				elif f_w: tile = Vector2i(6, 1)
+				elif f_e: tile = Vector2i(4, 1)
 				
-				# Внутренние углы (впадины в скале)
-				elif f_nw: tile = Vector2i(5, 4) # Floor is NW only -> Inner BR corner of cliff
-				elif f_ne: tile = Vector2i(4, 4) # Floor is NE only -> Inner BL corner of cliff
-				elif f_sw: tile = Vector2i(5, 3) # Floor is SW only -> Inner TR corner of cliff
-				elif f_se: tile = Vector2i(4, 3) # Floor is SE only -> Inner TL corner of cliff
+				# Внутренние углы
+				elif f_nw: tile = Vector2i(4, 3)
+				elif f_ne: tile = Vector2i(5, 3)
+				elif f_sw: tile = Vector2i(4, 4)
+				elif f_se: tile = Vector2i(5, 4)
 				
 				if tile != Vector2i(-1, -1):
 					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
 					
 				# Если это Нижний край скалы (Пол находится Снизу), мы должны нарисовать ВЕРТИКАЛЬНУЮ стену (лицо скалы)
-				if f_s or (f_s and f_w) or (f_s and f_e) or f_se or f_sw:
+				if f_s or f_se or f_sw:
 					var face_top = Vector2i(1, 6)
 					var face_bot = Vector2i(1, 7)
 					
-					if f_s and f_w:
+					# Outer corners (swapped)
+					# f_s and f_e -> Vector2i(4,0) -> Top-Left of cliff. The left side of the vertical wall drops here?
+					# Actually, for RPG Maker outer corners, usually the center vertical wall is used, or the edge ones.
+					if f_s and f_e:
 						face_top = Vector2i(0, 6)
 						face_bot = Vector2i(0, 7)
-					elif f_s and f_e:
+					elif f_s and f_w:
 						face_top = Vector2i(2, 6)
 						face_bot = Vector2i(2, 7)
 						
-					# Рисуем вертикальную стену, которая накладывается поверх пола!
+					# Inner corners (swapped)
+					# f_se -> (5,4) (Inner BR). It has a small south face on the left.
+					if f_se and not f_s:
+						face_top = Vector2i(2, 6)
+						face_bot = Vector2i(2, 7)
+					elif f_sw and not f_s:
+						face_top = Vector2i(0, 6)
+						face_bot = Vector2i(0, 7)
+						
 					wall_layer.set_cell(Vector2i(x, y+1), SOURCE_WALLS, face_top)
 					wall_layer.set_cell(Vector2i(x, y+2), SOURCE_WALLS, face_bot)
 
