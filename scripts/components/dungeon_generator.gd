@@ -30,12 +30,9 @@ func generate(
 	for child in interactables.get_children():
 		child.queue_free()
 
-	# Размеры залов случайные и могут быть больше
-	var base_w = 30 + (floor_num * 2) + (randi() % 16)
+	# Размеры залов случайные и могут быть больше (от маленьких до очень больших)
+	var base_w = randi() % 60 + 30 # от 30 до 90
 	var base_h = int(base_w * 0.75)
-	
-	if base_w > 64: base_w = 64
-	if base_h > 48: base_h = 48
 	
 	# Делаем четными для идеального скейла
 	var w: int = base_w - (base_w % 2)
@@ -54,9 +51,10 @@ func generate(
 		s_grid.append(col)
 		
 	# Заполняем шумом (оставляя рамку из стен)
+	# Увеличен порог шума (0.47 вместо 0.42), чтобы пещеры получались более запутанными и узкими
 	for x in range(2, sw - 2):
 		for y in range(2, sh - 2):
-			if randf() > 0.42:
+			if randf() > 0.47:
 				s_grid[x][y] = 0
 				
 	# Сглаживаем клеточным автоматом
