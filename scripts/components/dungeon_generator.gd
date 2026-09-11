@@ -30,19 +30,16 @@ func generate(
 	for child in interactables.get_children():
 		child.queue_free()
 
-	# Размеры залов случайные и могут быть больше (от маленьких до очень больших)
-	var base_w = randi() % 80 + 40 # от 40 до 120
-	var base_h = int(base_w * 0.75)
+	# Размеры залов случайные (от компактных до огромных лабиринтов)
+	var base_w = randi_range(30, 65) # w будет от 60 до 130
+	var base_h = int(base_w * 0.75)  # h будет от 45 до 97
 	
-	# Делаем четными для идеального скейла
-	var w: int = base_w - (base_w % 2)
-	var h: int = base_h - (base_h % 2)
+	var w: int = base_w * 2
+	var h: int = base_h * 2
+	var sw = base_w
+	var sh = base_h
 	
-	# Генерируем пещеру в 2 раза меньшем разрешении, чтобы после увеличения x2 
-	# ВСЕ проходы были минимум 2 тайла, а любые выступы стен были минимум 2х2 тайла (без резких углов)
-	var sw = w / 2
-	var sh = h / 2
-	
+	# 1. Сетка малого разрешения для естественной пещеры
 	var s_grid: Array = []
 	for x in range(sw):
 		var col = []
@@ -50,18 +47,20 @@ func generate(
 		col.fill(1)
 		s_grid.append(col)
 		
-	# Заполняем шумом (оставляя рамку из стен)
-	# Увеличен порог шума (0.47 вместо 0.42), чтобы пещеры получались более запутанными и узкими
+	var scx = sw / 2
+	var swall_y = sh - 5 # Позиция южной стены в малом разрешении
+	
+	# 2. Заполняем шумом верхнюю область пещеры (до южной стены)
 	for x in range(2, sw - 2):
-		for y in range(2, sh - 2):
-			if randf() > 0.47:
+		for y in range(2, swall_y - 2):
+			if randf() > 0.44:
 				s_grid[x][y] = 0
 				
-	# Сглаживаем клеточным автоматом
+	# 3. Сглаживаем клеточным автоматом
 	for i in range(4):
 		var new_s = s_grid.duplicate(true)
 		for x in range(1, sw - 1):
-			for y in range(1, sh - 1):
+			for y in range(1, swall_y - 2):
 				var walls = 0
 				for dx in range(-1, 2):
 					for dy in range(-1, 2):
@@ -72,21 +71,24 @@ func generate(
 				elif walls <= 3:
 					new_s[x][y] = 0
 		s_grid = new_s
-		
-	var scx = sw / 2
-	var scy = sh / 2
-	
-	# Расчищаем зону спавна в малом разрешении
+
+	# 4. Пробиваем коридор из входа прямо на север ВНУТРЬ ПЕЩЕРЫ, пока не встретим открытый пол!
+	var connected_y = 2
+	for y in range(swall_y, 2, -1):
+		s_grid[scx][y] = 0
+		s_grid[scx][y - 1] = 0
+		# Если мы поднялись выше входа и наткнулись на открытую полость пещеры
+		if y < swall_y - 2 and (s_grid[scx - 1][y] == 0 or s_grid[scx + 1][y] == 0 or s_grid[scx][y - 1] == 0):
+			connected_y = y
+			break
+			
+	# Расчищаем перекресток в месте стыка коридора с пещерой, чтобы не было узких тупиков
 	for dx in range(-1, 2):
 		for dy in range(-1, 2):
-			s_grid[scx + dx][scy + dy] = 0
-			
-	# Пробиваем стартовый коридор в малом разрешении ДО flood-fill'а, чтобы соединить спавн с основной пещерой!
-	# Копаем прямо до центра карты, чтобы ГАРАНТИРОВАННО зацепить основную пещеру!
-	for y in range(sh / 2, scy + 1):
-		s_grid[scx][y] = 0
-			
-	# Flood-fill для удаления изолированных комнат
+			if connected_y + dy >= 1:
+				s_grid[scx + dx][connected_y + dy] = 0
+
+	# 5. Flood-fill от входа для удаления изолированных полостей
 	var visited: Array = []
 	for x in range(sw):
 		var col = []
@@ -94,8 +96,8 @@ func generate(
 		col.fill(false)
 		visited.append(col)
 		
-	var queue: Array[Vector2i] = [Vector2i(scx, scy)]
-	visited[scx][scy] = true
+	var queue: Array[Vector2i] = [Vector2i(scx, swall_y)]
+	visited[scx][swall_y] = true
 	
 	while queue.size() > 0:
 		var curr = queue.pop_front()
@@ -114,8 +116,8 @@ func generate(
 		for y in range(sh):
 			if s_grid[x][y] == 0 and not visited[x][y]:
 				s_grid[x][y] = 1
-			
-	# Увеличиваем в 2 раза (ИДЕАЛЬНАЯ ГЕОМЕТРИЯ)
+				
+	# 6. Увеличиваем в 2 раза (ИДЕАЛЬНАЯ ГЕОМЕТРИЯ)
 	var grid: Array = []
 	for x in range(w):
 		var col = []
@@ -127,55 +129,61 @@ func generate(
 		for y in range(h):
 			grid[x][y] = s_grid[x / 2][y / 2]
 			
-	var cx = w / 2
-	var cy = h / 2
-
-	# Расчищаем зону спавна (уже в увеличенном разрешении)
-	for dx in range(-4, 5):
-		for dy in range(-3, 4):
-			grid[cx + dx][cy + dy] = 0
+	var cx = scx * 2
+	var wall_y = swall_y * 2
+	
+	# 7. Четкая геометрия входной комнаты и южной стены:
+	# Очищаем комнату спавна строго под южной стеной
+	for x in range(cx - 7, cx + 8):
+		for y in range(wall_y + 1, min(wall_y + 8, h - 2)):
+			if x >= 1 and x < w - 1 and y >= 1 and y < h - 1:
+				grid[x][y] = 0
+				
+	# Создаем ровную, непрерывную горизонтальную южную стену (от cx-12 до cx+12)
+	for dy in range(-3, 1):
+		var wy = wall_y + dy
+		for x in range(max(1, cx - 12), cx - 1):
+			grid[x][wy] = 1
+		for x in range(cx + 2, min(w - 1, cx + 13)):
+			grid[x][wy] = 1
 			
-	# Создаем массивную стену на севере от спавна, чтобы гарантированно образовать ЮЖНЫЙ фасад скалы!
-	for dx in range(-6, 6):
-		for dy in range(-7, -4):
-			grid[cx + dx][cy + dy] = 1
+	# Ровный коридор шириной ровно 3 тайла (cx - 1, cx, cx + 1)
+	for dy in range(-8, 1):
+		var wy = wall_y + dy
+		if wy >= 1:
+			grid[cx - 1][wy] = 0
+			grid[cx][wy] = 0
+			grid[cx + 1][wy] = 0
+			grid[cx - 2][wy] = 1
+			grid[cx - 3][wy] = 1
+			grid[cx + 2][wy] = 1
+			grid[cx + 3][wy] = 1
 			
-	# Пробиваем ровный коридор на север через эту стену
-	for dy in range(-12, -3):
-		# ИСКЛЮЧЕНИЕ: Для коридора с саппортом делаем ширину ровно 3 тайла (-1, 0, 1),
-		# чтобы ножки саппорта идеально совпали со стенами по краям!
-		for dx in range(-1, 2):
-			grid[cx + dx][cy + dy] = 0
-		# Гарантируем толщину боковых стен коридора
-		grid[cx - 2][cy + dy] = 1
-		grid[cx - 3][cy + dy] = 1
-		grid[cx + 2][cy + dy] = 1
-		grid[cx + 3][cy + dy] = 1
-			
-	# Плавный переход краев в дальнем конце коридора
-	for dx in range(-3, 3):
-		grid[cx + dx][cy - 12] = 0
+	# Плавный широкий выход из коридора в пещеру на северном конце
+	for dx in range(-3, 4):
+		for dy in range(-2, 1):
+			var jx = cx + dx
+			var jy = wall_y - 8 + dy
+			if jx >= 1 and jx < w - 1 and jy >= 1:
+				grid[jx][jy] = 0
 
-	# Саппорт ставится ровно у основания южного фасада скалы (y = cy - 3)
-
+	# 8. Рисуем пол с помощью автотайлинга Terrain
 	var floor_cells: Array[Vector2i] = []
 	for x in range(w):
 		for y in range(h):
 			if grid[x][y] == 0:
 				floor_cells.append(Vector2i(x, y))
 
-	# 4. Draw floor using Terrain
 	if not floor_cells.is_empty():
 		var terrain_id = 2 if (floor_num % 2 == 1) else 3
 		if randf() < 0.2: terrain_id = (3 if terrain_id == 2 else 2)
 		floor_layer.set_cells_terrain_connect(floor_cells, 1, terrain_id)
 
-	# 5. Draw Walls using perfect 3x3 blob logic (с огромным паддингом, чтобы не было выхода в пустоту)
+	# 9. Рисуем стены (с паддингом в 20 тайлов вокруг, чтобы не было видно пустоту)
 	var covered_by_wall: Array[Vector2i] = []
 	var padding = 20
 	for x in range(-padding, w + padding):
 		for y in range(-padding, h + padding):
-			# Если за пределами сетки, считаем, что там скала
 			var is_wall = true
 			if x >= 0 and x < w and y >= 0 and y < h:
 				is_wall = (grid[x][y] == 1)
@@ -195,21 +203,19 @@ func generate(
 				
 				var tile = Vector2i(-1, -1)
 				
-				# ПРАВИЛЬНЫЙ МАППИНГ ДЛЯ RPG MAKER 3x3 (ВЕРШИНА ГОРЫ)
-				
-				# Внешние углы (ИНВЕРТИРОВАННЫЙ МАППИНГ + ПОМЕНЯННЫЕ МЕСТАМИ ВНЕШНИЕ И ВНУТРЕННИЕ)
+				# Внешние углы (ИНВЕРТИРОВАННЫЙ МАППИНГ + ПОМЕНЯННЫЕ МЕСТАМИ ВНЕШНИЕ И ВНУТРЕННИЕ - ЗАФИКСИРОВАНО)
 				if f_n and f_w: tile = Vector2i(4, 3)
 				elif f_n and f_e: tile = Vector2i(5, 3)
 				elif f_s and f_w: tile = Vector2i(4, 4)
 				elif f_s and f_e: tile = Vector2i(5, 4)
 				
-				# Прямые края (Светлая часть к полу, темная внутрь скалы)
+				# Прямые края (Светлая часть к полу, темная внутрь скалы - ЗАФИКСИРОВАНО)
 				elif f_n: tile = Vector2i(5, 2)
 				elif f_s: tile = Vector2i(5, 0)
 				elif f_w: tile = Vector2i(6, 1)
 				elif f_e: tile = Vector2i(4, 1)
 				
-				# Внутренние углы (Инвертированные + ПОМЕНЯННЫЕ МЕСТАМИ)
+				# Внутренние углы (Инвертированные + ПОМЕНЯННЫЕ МЕСТАМИ - ЗАФИКСИРОВАНО)
 				elif f_nw: tile = Vector2i(6, 2)
 				elif f_ne: tile = Vector2i(4, 2)
 				elif f_sw: tile = Vector2i(6, 0)
@@ -218,48 +224,39 @@ func generate(
 				if tile != Vector2i(-1, -1):
 					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
 					
-				# Если это Нижний край скалы (Пол находится Снизу), мы должны нарисовать ВЕРТИКАЛЬНУЮ стену (лицо скалы)
-				if f_s or f_se or f_sw:
+				# ВЕРТИКАЛЬНЫЕ СТЕНЫ (фасад скалы): рисуем ТОЛЬКО если с юга пол!
+				if f_s:
 					var face_top = Vector2i(1, 6)
 					var face_bot = Vector2i(1, 7)
 					
-					# Outer corners (swapped)
-					# f_s and f_e -> Vector2i(4,0) -> Top-Left of cliff. The left side of the vertical wall drops here?
-					# Actually, for RPG Maker outer corners, usually the center vertical wall is used, or the edge ones.
-					if f_s and f_e:
-						face_top = Vector2i(0, 6)
-						face_bot = Vector2i(0, 7)
-					elif f_s and f_w:
+					# Торцы фасада:
+					# Если стена граничит с полом на востоке (левая стена коридора) -> правый торец скалы (2, 6)
+					# Если стена граничит с полом на западе (правая стена коридора) -> левый торец скалы (0, 6)
+					if f_e:
 						face_top = Vector2i(2, 6)
 						face_bot = Vector2i(2, 7)
-						
-					# Inner corners (инвертировано)
-					if f_se and not f_s:
-						face_top = Vector2i(2, 6)
-						face_bot = Vector2i(2, 7)
-					elif f_sw and not f_s:
+					elif f_w:
 						face_top = Vector2i(0, 6)
 						face_bot = Vector2i(0, 7)
 						
-					wall_layer.set_cell(Vector2i(x, y+1), SOURCE_WALLS, face_top)
-					wall_layer.set_cell(Vector2i(x, y+2), SOURCE_WALLS, face_bot)
+					wall_layer.set_cell(Vector2i(x, y + 1), SOURCE_WALLS, face_top)
+					wall_layer.set_cell(Vector2i(x, y + 2), SOURCE_WALLS, face_bot)
 					
-					# Добавляем клетки в список "скрытых", чтобы там не спавнились камни
-					covered_by_wall.append(Vector2i(x, y+1))
-					covered_by_wall.append(Vector2i(x, y+2))
+					covered_by_wall.append(Vector2i(x, y + 1))
+					covered_by_wall.append(Vector2i(x, y + 2))
 					
-					# Создаем коллизию для вертикальной стены (на нижнем тайле y+2)
 					var col = CollisionShape2D.new()
 					var shape = RectangleShape2D.new()
 					shape.size = Vector2(16, 16)
 					col.shape = shape
-					col.position = _tile_to_world(Vector2i(x, y+2))
+					col.position = _tile_to_world(Vector2i(x, y + 2))
 					boundary_body.add_child(col)
 
 	_create_boundary_walls_from_grid(boundary_body, grid, w, h)
 
-	var spawn_tile = Vector2i(cx, cy)
-	var ladder_up_tile = Vector2i(cx, cy - 1)
+	# 10. Размещение объектов
+	var spawn_tile = Vector2i(cx, wall_y + 3)
+	var ladder_up_tile = Vector2i(cx, wall_y + 4)
 	
 	var valid_floor_cells = []
 	for x in range(w):
@@ -276,14 +273,12 @@ func generate(
 			max_dist = d
 			ladder_down_tile = cell
 
-	# Саппорт ставится ровно у основания южного фасада скалы (y = cy - 3)
-	var support_pos = Vector2i(cx, cy - 3)
-	if support_pos != Vector2i(-1, -1):
-		var support = preload("res://scenes/objects/dungeon/cave_support.tscn").instantiate()
-		# Так как коридор теперь 3 тайла (нечетный), он идеально центрирован по тайлу cx!
-		# Сдвигаем Y на +8 (чтобы origin был на нижнем крае тайла, совпадая с физической базой скалы)
-		support.global_position = _tile_to_world(support_pos) + Vector2(0, 8)
-		interactables.add_child(support)
+	# Саппорт ставится ровно у основания южного фасада скалы (y = wall_y + 2)
+	# Его перекладина ровно на уровне wall_y, а стойки упираются в пол у основания фасада
+	var support_pos = Vector2i(cx, wall_y + 2)
+	var support = preload("res://scenes/objects/dungeon/cave_support.tscn").instantiate()
+	support.global_position = _tile_to_world(support_pos) + Vector2(0, 8)
+	interactables.add_child(support)
 
 	var ladder_up = SCENE_LADDER_UP.instantiate()
 	ladder_up.global_position = _tile_to_world(ladder_up_tile)
@@ -299,7 +294,7 @@ func generate(
 	var reserved = [spawn_tile, ladder_up_tile, ladder_down_tile, ladder_up_tile + Vector2i(0, 1)]
 	for cell in valid_floor_cells:
 		if cell in reserved: continue
-		if randf() < 0.05: # Уменьшили количество камней по просьбе
+		if randf() < 0.05:
 			if DungeonManager and DungeonManager.is_tile_cleared(floor_num, cell): continue
 			var stone = MINABLE_STONES[randi() % MINABLE_STONES.size()].instantiate()
 			stone.global_position = _tile_to_world(cell) + Vector2(randf_range(-4, 4), randf_range(-4, 4))
@@ -321,6 +316,7 @@ func _create_boundary_walls_from_grid(body: StaticBody2D, grid: Array, w: int, h
 				var adjacent_floor = false
 				for dx in range(-1, 2):
 					for dy in range(-1, 2):
+						if dx == 0 and dy == 0: continue
 						var nx = x + dx
 						var ny = y + dy
 						if nx >= 0 and nx < w and ny >= 0 and ny < h:
@@ -334,7 +330,6 @@ func _create_boundary_walls_from_grid(body: StaticBody2D, grid: Array, w: int, h
 					var shape = RectangleShape2D.new()
 					shape.size = Vector2(16, 16)
 					col.shape = shape
-					# Коллизия находится на уровне Y стены (основание скалы)
 					col.position = _tile_to_world(Vector2i(x, y)) + Vector2(0, 8)
 					body.add_child(col)
 
