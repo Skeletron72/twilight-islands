@@ -39,13 +39,13 @@ func generate(
 		col.fill(1) # 1 = Wall
 		grid.append(col)
 		
-	# 1. Сellular Automata - Random Fill
+	# 1. Cellular Automata - Random Fill
 	for x in range(3, w - 3):
 		for y in range(4, h - 4):
 			if randf() > 0.42:
 				grid[x][y] = 0 # 0 = Floor
 				
-	# 2. Сellular Automata - Smoothing
+	# 2. Cellular Automata - Smoothing
 	for i in range(4):
 		var new_grid = grid.duplicate(true)
 		for x in range(2, w - 2):
@@ -61,20 +61,44 @@ func generate(
 					new_grid[x][y] = 0
 		grid = new_grid
 		
+	# 3. Widen corridors (minimum 2 tiles wide)
+	for i in range(2):
+		var new_grid = grid.duplicate(true)
+		for x in range(2, w - 2):
+			for y in range(3, h - 3):
+				if grid[x][y] == 0:
+					# Horizontal bottleneck (Wall - Floor - Wall) -> widen to Right
+					if grid[x-1][y] == 1 and grid[x+1][y] == 1:
+						new_grid[x+1][y] = 0
+						new_grid[x+1][y-1] = 0 # help clear corners
+					# Vertical bottleneck (Wall - Floor - Wall) -> widen Down
+					if grid[x][y-1] == 1 and grid[x][y+1] == 1:
+						new_grid[x][y+1] = 0
+						new_grid[x+1][y+1] = 0
+		grid = new_grid
+
 	var cx = w / 2
 	var cy = h / 2
 	for dx in range(-3, 4):
 		for dy in range(-3, 4):
 			grid[cx + dx][cy + dy] = 0
-			
-	var floor_options = [Vector2i(0, 4), Vector2i(1, 4), Vector2i(2, 4), Vector2i(1, 3)]
-	
+
 	var floor_cells: Array[Vector2i] = []
 	for x in range(w):
 		for y in range(h):
 			if grid[x][y] == 0:
 				floor_cells.append(Vector2i(x, y))
-			elif grid[x][y] == 1:
+
+	# 4. Draw floor using Terrain
+	if not floor_cells.is_empty():
+		var terrain_id = 2 if (floor_num % 2 == 1) else 3
+		if randf() < 0.2: terrain_id = (3 if terrain_id == 2 else 2)
+		floor_layer.set_cells_terrain_connect(floor_cells, 1, terrain_id)
+
+	# 5. Draw Walls using perfect 3x3 blob logic
+	for x in range(w):
+		for y in range(h):
+			if grid[x][y] == 1:
 				var f_n = grid[x][y-1] == 0 if y > 0 else false
 				var f_s = grid[x][y+1] == 0 if y < h-1 else false
 				var f_w = grid[x-1][y] == 0 if x > 0 else false
@@ -87,49 +111,46 @@ func generate(
 				
 				var tile = Vector2i(-1, -1)
 				
-				# Прямые внешние стены (3x3 блок)
-				# (4,0) (5,0) (6,0)
-				# (4,1) (5,1) (6,1)
-				# (4,2) (5,2) (6,2)
+				# ПРАВИЛЬНЫЙ МАППИНГ ДЛЯ RPG MAKER 3x3 (ВЕРШИНА ГОРЫ)
 				
-				if f_s and f_e: tile = Vector2i(4, 0) # Floor is SE -> Wall is NW Outer corner
-				elif f_s and f_w: tile = Vector2i(6, 0) # Floor is SW -> Wall is NE Outer corner
-				elif f_n and f_e: tile = Vector2i(4, 2) # Floor is NE -> Wall is SW Outer corner
-				elif f_n and f_w: tile = Vector2i(6, 2) # Floor is NW -> Wall is SE Outer corner
+				# Внешние углы
+				if f_n and f_w: tile = Vector2i(4, 0) # Floor is NW -> This is Top-Left edge of cliff
+				elif f_n and f_e: tile = Vector2i(6, 0) # Floor is NE -> This is Top-Right edge of cliff
+				elif f_s and f_w: tile = Vector2i(4, 2) # Floor is SW -> This is Bottom-Left edge of cliff
+				elif f_s and f_e: tile = Vector2i(6, 2) # Floor is SE -> This is Bottom-Right edge of cliff
 				
-				elif f_s: tile = Vector2i(5, 0) # Floor is S -> Wall is North Edge
-				elif f_n: tile = Vector2i(5, 2) # Floor is N -> Wall is South Edge
-				elif f_e: tile = Vector2i(4, 1) # Floor is E -> Wall is West Edge
-				elif f_w: tile = Vector2i(6, 1) # Floor is W -> Wall is East Edge
+				# Прямые края
+				elif f_n: tile = Vector2i(5, 0) # Floor is N -> This is Top edge of cliff
+				elif f_s: tile = Vector2i(5, 2) # Floor is S -> This is Bottom edge of cliff
+				elif f_w: tile = Vector2i(4, 1) # Floor is W -> This is Left edge of cliff
+				elif f_e: tile = Vector2i(6, 1) # Floor is E -> This is Right edge of cliff
 				
-				# Внутренние углы (4 тайла под 3x3)
-				# Допустим (4,3) (5,3)
-				#        (4,4) (5,4)
-				elif f_se: tile = Vector2i(4, 3) # Floor is SE diagonal only -> Inner corner TL
-				elif f_sw: tile = Vector2i(5, 3) # Floor is SW diagonal only -> Inner corner TR
-				elif f_ne: tile = Vector2i(4, 4) # Floor is NE diagonal only -> Inner corner BL
-				elif f_nw: tile = Vector2i(5, 4) # Floor is NW diagonal only -> Inner corner BR
+				# Внутренние углы (впадины в скале)
+				elif f_nw: tile = Vector2i(5, 4) # Floor is NW only -> Inner BR corner of cliff
+				elif f_ne: tile = Vector2i(4, 4) # Floor is NE only -> Inner BL corner of cliff
+				elif f_sw: tile = Vector2i(5, 3) # Floor is SW only -> Inner TR corner of cliff
+				elif f_se: tile = Vector2i(4, 3) # Floor is SE only -> Inner TL corner of cliff
 				
 				if tile != Vector2i(-1, -1):
 					wall_layer.set_cell(Vector2i(x, y), SOURCE_WALLS, tile)
 					
-				# Рисуем высокую переднюю стену (если стена сверху от пола, значит это Северная стена, которая смотрит на нас)
-				if f_s:
-					# Высокая стена (6 тайлов слева снизу) -> (1, 6) и (1, 7)
-					# Рисуем нижнюю часть высокой стены поверх пола!
-					wall_layer.set_cell(Vector2i(x, y+1), SOURCE_WALLS, Vector2i(1, 6))
-					wall_layer.set_cell(Vector2i(x, y+2), SOURCE_WALLS, Vector2i(1, 7))
+				# Если это Нижний край скалы (Пол находится Снизу), мы должны нарисовать ВЕРТИКАЛЬНУЮ стену (лицо скалы)
+				if f_s or (f_s and f_w) or (f_s and f_e) or f_se or f_sw:
+					var face_top = Vector2i(1, 6)
+					var face_bot = Vector2i(1, 7)
+					
+					if f_s and f_w:
+						face_top = Vector2i(0, 6)
+						face_bot = Vector2i(0, 7)
+					elif f_s and f_e:
+						face_top = Vector2i(2, 6)
+						face_bot = Vector2i(2, 7)
+						
+					# Рисуем вертикальную стену, которая накладывается поверх пола!
+					wall_layer.set_cell(Vector2i(x, y+1), SOURCE_WALLS, face_top)
+					wall_layer.set_cell(Vector2i(x, y+2), SOURCE_WALLS, face_bot)
 
-	
-	# Заливаем пол через Godot Terrains (Match Sides), как просил пользователь!
-	# Предполагается, что пол настроен в terrain_set_1, terrain 2 (или другой, если 2 занят)
-	if not floor_cells.is_empty():
-		var terrain_id = 2 if (floor_num % 2 == 1) else 3 # Нечетные этажи = пол 1 (ID 2), Четные = пол 2 (ID 3)
-		if randf() < 0.2: terrain_id = (3 if terrain_id == 2 else 2) # Немного рандома
-		floor_layer.set_cells_terrain_connect(floor_cells, 1, terrain_id)
-		
 	_create_boundary_walls_from_grid(boundary_body, grid, w, h)
-
 
 	var spawn_tile = Vector2i(cx, cy)
 	var ladder_up_tile = Vector2i(cx, cy - 1)
@@ -197,6 +218,7 @@ func _create_boundary_walls_from_grid(body: StaticBody2D, grid: Array, w: int, h
 					var shape = RectangleShape2D.new()
 					shape.size = Vector2(16, 16)
 					col.shape = shape
+					# Коллизия находится на уровне Y стены (основание скалы)
 					col.position = _tile_to_world(Vector2i(x, y)) + Vector2(0, 8)
 					body.add_child(col)
 
