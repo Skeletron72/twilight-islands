@@ -362,16 +362,40 @@ func generate(
 	# 9. Размещение объектов
 	var spawn_tile = Vector2i(cx - 4, wall_y + 3)
 	
+	var covered_dict = {}
+	for c in covered_by_wall:
+		covered_dict[c] = true
+
 	var valid_floor_cells = []
 	for x in range(w):
 		for y in range(h):
-			if grid[x][y] == 0:
-				if not Vector2i(x, y) in covered_by_wall:
-					valid_floor_cells.append(Vector2i(x, y))
-				
+			if grid[x][y] == 0 and not Vector2i(x, y) in covered_dict:
+				valid_floor_cells.append(Vector2i(x, y))
+
+	# Клетки пола с гарантированным отступом минимум в 1 тайл от любых стен и обрывов
+	var safe_floor_cells: Array[Vector2i] = []
+	for cell in valid_floor_cells:
+		var is_safe = true
+		for dx in range(-1, 2):
+			for dy in range(-1, 2):
+				var nx = cell.x + dx
+				var ny = cell.y + dy
+				if nx < 0 or nx >= w or ny < 0 or ny >= h:
+					is_safe = false
+					break
+				if grid[nx][ny] == 1 or Vector2i(nx, ny) in covered_dict:
+					is_safe = false
+					break
+			if not is_safe:
+				break
+		if is_safe:
+			safe_floor_cells.append(cell)
+
 	var ladder_down_tile = spawn_tile
 	var max_dist = 0.0
-	for cell in valid_floor_cells:
+	# Предпочитаем размещать спуск на безопасном расстоянии от стен
+	var ladder_candidates = safe_floor_cells if safe_floor_cells.size() > 0 else valid_floor_cells
+	for cell in ladder_candidates:
 		var d = Vector2(cell).distance_to(Vector2(spawn_tile))
 		if d > max_dist:
 			max_dist = d
@@ -404,22 +428,23 @@ func generate(
 	ladder_down.global_position = _tile_to_world(ladder_down_tile)
 	interactables.add_child(ladder_down)
 
-	# 10. Спавн камней и руд (не спавним у выхода, саппорта и люка)
-	var reserved = [
-		spawn_tile,
-		Vector2i(cx - 4, wall_y + 2),
-		Vector2i(cx - 5, wall_y + 2),
-		ladder_down_tile,
-		Vector2i(cx, wall_y + 2),
-		Vector2i(cx, wall_y + 1),
-		Vector2i(cx, wall_y)
-	]
-	for cell in valid_floor_cells:
+	# 10. Спавн камней и руд (не спавним у выхода, саппорта и люка, с гарантированным отступом от стен)
+	var reserved = {}
+	# Зона вокруг точки спавна и выхода (радиус 1 тайл)
+	for dx in range(-1, 2):
+		for dy in range(-1, 2):
+			reserved[spawn_tile + Vector2i(dx, dy)] = true
+			reserved[ladder_down_tile + Vector2i(dx, dy)] = true
+			reserved[Vector2i(cx - 4 + dx, wall_y + 2 + dy)] = true
+			reserved[Vector2i(cx + dx, wall_y + 2 + dy)] = true
+
+	for cell in safe_floor_cells:
 		if cell in reserved: continue
-		if randf() < 0.05:
+		if randf() < 0.07:
 			if DungeonManager and DungeonManager.is_tile_cleared(floor_num, cell): continue
 			var stone = MINABLE_STONES[randi() % MINABLE_STONES.size()].instantiate()
-			stone.global_position = _tile_to_world(cell) + Vector2(randf_range(-4, 4), randf_range(-4, 4))
+			# Минимальный джиттер (+-2 пикселя), чтобы камни не стояли строго по сетке, но никогда не наползали на соседние тайлы и стены
+			stone.global_position = _tile_to_world(cell) + Vector2(randf_range(-2, 2), randf_range(-2, 2))
 			interactables.add_child(stone)
 			var c_node = stone
 			var c_fl = floor_num
