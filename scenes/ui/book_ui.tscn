@@ -542,20 +542,29 @@ label_settings = SubResource("LabelSettings_nd61c")
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="BtnTrash" type="TextureButton" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab/LeftPage" unique_id=1223050900]
+[node name="BtnDropN" type="Button" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab/LeftPage" unique_id=1223050910]
 visible = false
-texture_filter = 1
-custom_minimum_size = Vector2(22, 22)
 layout_mode = 0
-offset_left = 160.0
+offset_left = 12.0
 offset_top = 212.0
-offset_right = 182.0
-offset_bottom = 234.0
-tooltip_text = "Выбросить предмет"
+offset_right = 96.0
+offset_bottom = 236.0
+tooltip_text = "Выбрать количество для сброса"
 mouse_default_cursor_shape = 2
-texture_normal = SubResource("AtlasTexture_trash")
-ignore_texture_size = true
-stretch_mode = 5
+text = "Выбросить..."
+
+[node name="BtnDropAll" type="Button" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab/LeftPage" unique_id=1223050911]
+visible = false
+layout_mode = 0
+offset_left = 100.0
+offset_top = 212.0
+offset_right = 184.0
+offset_bottom = 236.0
+tooltip_text = "Выбросить все предметы из стака"
+mouse_default_cursor_shape = 2
+text = "Выбросить всё"
+
+
 
 [node name="RightPage" type="Control" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab" unique_id=1471340789]
 anchors_preset = 0

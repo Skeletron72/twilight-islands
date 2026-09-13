@@ -42,3 +42,17 @@ func _update_visuals() -> void:
 			fire_sfx.play()
 		elif not is_lit and fire_sfx.playing:
 			fire_sfx.stop()
+
+func _process(_delta: float) -> void:
+	if is_lit:
+		# Дождь тушит костер
+		if WeatherManager and WeatherManager.is_precipitation():
+			is_lit = false
+			_update_visuals()
+			return
+			
+		# Поджигаем игрока при наступлении в костер
+		var p = get_tree().get_first_node_in_group("player")
+		if p and is_instance_valid(p) and global_position.distance_to(p.global_position) < 18.0:
+			if p.has_method("apply_burn"):
+				p.apply_burn(6.0)

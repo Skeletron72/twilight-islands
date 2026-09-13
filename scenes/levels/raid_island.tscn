@@ -43,7 +43,10 @@
 [ext_resource type="Script" uid="uid://dwwh8agna7gbs" path="res://scripts/components/day_night_cycle.gd" id="dnc_script"]
 [ext_resource type="Script" uid="uid://bhmsfvptc318j" path="res://scripts/components/firefly_manager.gd" id="firefly_mgr_script"]
 [ext_resource type="PackedScene" uid="uid://slime123" path="res://scenes/characters/skeleton.tscn" id="skeleton_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/characters/slime.tscn" id="slime_enemy_scene"]
 [ext_resource type="Script" uid="uid://o6hw2fq8jn3i" path="res://scripts/components/resource_spawner.gd" id="spawner_script"]
+[ext_resource type="Script" uid="uid://bqk1ar4t3ef88" path="res://scripts/components/water_foam_manager.gd" id="water_foam_mgr_script"]
+[ext_resource type="PackedScene" path="res://scenes/vfx/weather_effects.tscn" id="weather_effects_scene"]
 [ext_resource type="Script" uid="uid://becfq3sbwowyv" path="res://scripts/components/z_sort_fix.gd" id="z_sort_fix_script"]
 
 [sub_resource type="Environment" id="Environment_glow"]
@@ -473,9 +476,6 @@ position = Vector2(489.0679, -600.6515)
 [node name="SpawnedTree_Meadow_112" parent="Interactables" unique_id=283012988 instance=ExtResource("6_wti2m")]
 position = Vector2(714, -452)
 
-[node name="SpawnedTree_Meadow_142" parent="Interactables" unique_id=1744246321 instance=ExtResource("6_wti2m")]
-position = Vector2(1490.4773, -1084.5386)
-
 [node name="SpawnedTree_Meadow_113" parent="Interactables" unique_id=843875298 instance=ExtResource("9_vl4af")]
 position = Vector2(1032.4944, 71.09152)
 
@@ -591,7 +591,7 @@ position = Vector2(1078.9093, 201.1824)
 position = Vector2(1417.0839, -88.63286)
 
 [node name="SpawnedPalm_Beach_9" parent="Interactables" unique_id=604917824 instance=ExtResource("12_1lbgg")]
-position = Vector2(904.43066, -824.07404)
+position = Vector2(901, -796)
 
 [node name="SpawnedPalm_Beach_10" parent="Interactables" unique_id=371025523 instance=ExtResource("12_1lbgg")]
 position = Vector2(55.407467, 216.37596)
@@ -636,7 +636,7 @@ position = Vector2(70.20997, -183.25154)
 position = Vector2(1416.751, -185.79486)
 
 [node name="SpawnedPalm_Beach_24" parent="Interactables" unique_id=283431101 instance=ExtResource("12_1lbgg")]
-position = Vector2(791.1517, -824.05695)
+position = Vector2(805, -816)
 
 [node name="SpawnedPalm_Beach_25" parent="Interactables" unique_id=1682603233 instance=ExtResource("13_nbqy8")]
 position = Vector2(1336.2474, -102.44548)
@@ -645,7 +645,7 @@ position = Vector2(1336.2474, -102.44548)
 position = Vector2(89.97214, 184.11942)
 
 [node name="SpawnedPalm_Beach_27" parent="Interactables" unique_id=1319244708 instance=ExtResource("13_nbqy8")]
-position = Vector2(1369.4855, -728.5966)
+position = Vector2(1286, -744)
 
 [node name="SpawnedPalm_Beach_28" parent="Interactables" unique_id=174283437 instance=ExtResource("13_nbqy8")]
 position = Vector2(1480.2738, -153.22495)
@@ -729,7 +729,7 @@ position = Vector2(695.2171, 246.82254)
 position = Vector2(487.50446, 310.22946)
 
 [node name="SpawnedPalm_Beach_55" parent="Interactables" unique_id=1136595140 instance=ExtResource("12_1lbgg")]
-position = Vector2(1017.43115, -822.99884)
+position = Vector2(1039, -789)
 
 [node name="SpawnedPalm_Beach_56" parent="Interactables" unique_id=904560368 instance=ExtResource("13_nbqy8")]
 position = Vector2(55.05956, -678.25006)
@@ -756,7 +756,7 @@ position = Vector2(9.108877, -119.786835)
 position = Vector2(1206.7307, -809.16815)
 
 [node name="SpawnedPalm_Beach_64" parent="Interactables" unique_id=1393055238 instance=ExtResource("12_1lbgg")]
-position = Vector2(968.73285, -825.22034)
+position = Vector2(951, -814)
 
 [node name="SpawnedPalm_Beach_65" parent="Interactables" unique_id=714892158 instance=ExtResource("12_1lbgg")]
 position = Vector2(454.21457, -776.4934)
@@ -1678,6 +1678,9 @@ target_scene = "res://scenes/levels/home_island.tscn"
 [node name="FireflyManager" type="Node2D" parent="." unique_id=58193021]
 script = ExtResource("firefly_mgr_script")
 
+[node name="WaterFoamManager" type="Node2D" parent="." unique_id=58193025]
+script = ExtResource("water_foam_mgr_script")
+
 [node name="Skeleton1" parent="." unique_id=77011001 instance=ExtResource("skeleton_enemy")]
 position = Vector2(250, 160)
 
@@ -1687,6 +1690,18 @@ position = Vector2(480, 200)
 [node name="Skeleton3" parent="." unique_id=77011003 instance=ExtResource("skeleton_enemy")]
 position = Vector2(350, 280)
 
+[node name="Slime1" parent="." unique_id=77022001 instance=ExtResource("slime_enemy_scene")]
+position = Vector2(180, 220)
+
+[node name="Slime2" parent="." unique_id=77022002 instance=ExtResource("slime_enemy_scene")]
+position = Vector2(420, 150)
+slime_size = 1
+slime_color = 0
+
+[node name="Slime3" parent="." unique_id=77022003 instance=ExtResource("slime_enemy_scene")]
+position = Vector2(300, 340)
+slime_color = 3
+
 [node name="ResourceSpawner" type="Node2D" parent="." unique_id=1582040856]
 visible = false
 script = ExtResource("spawner_script")
@@ -1695,3 +1710,5 @@ tree_min_dist = 32.0
 
 [node name="CaveEntrance" parent="." unique_id=778899004 instance=ExtResource("cave_entrance_scene")]
 position = Vector2(784, -736)
+
+[node name="WeatherEffects" parent="." unique_id=98127342 instance=ExtResource("weather_effects_scene")]

@@ -8,7 +8,7 @@ extends RefCounted
 enum SurfaceType { GRASS, STONE, DIRT, WATER, VOID }
 
 # Стандартный порядок проверки слоев сверху вниз для определения поверхности под ногами
-const LAYER_PRIORITY = ["ObjectsLayer", "GroundDecorationLayer", "RoadsLayer", "CliffsLayer", "WaterLayer", "GrassLayer", "GroundLayer", "ShoreLayer", "OceanLayer"]
+const LAYER_PRIORITY = ["ObjectsLayer", "GroundDecorationLayer", "RoadsLayer", "CliffsLayer", "WaterLayer", "FloorLayer", "GrassLayer", "GroundLayer", "ShoreLayer", "OceanLayer"]
 
 # Маппинг ID террейнов из cute_tileset.tres в имена биомов (на случай отсутствия custom_data)
 
@@ -53,20 +53,28 @@ static func find_world_map(context_node: Node = null) -> Node:
 			return context_node
 		var wm = context_node.get_node_or_null("WorldMap")
 		if wm: return wm
+		if context_node.get_node_or_null("FloorLayer"):
+			return context_node
 		if context_node.is_inside_tree() and context_node.get_tree():
 			var root = context_node.get_tree().current_scene
 			if root:
 				wm = root.get_node_or_null("WorldMap")
 				if wm: return wm
+				if root.get_node_or_null("FloorLayer"):
+					return root
 
 	var tree = Engine.get_main_loop() as SceneTree
 	if tree:
 		if Engine.is_editor_hint() and tree.edited_scene_root:
 			var wm = tree.edited_scene_root.get_node_or_null("WorldMap")
 			if wm: return wm
+			if tree.edited_scene_root.get_node_or_null("FloorLayer"):
+				return tree.edited_scene_root
 		if tree.current_scene:
 			var wm = tree.current_scene.get_node_or_null("WorldMap")
 			if wm: return wm
+			if tree.current_scene.get_node_or_null("FloorLayer"):
+				return tree.current_scene
 
 	return null
 
@@ -134,6 +142,10 @@ static func get_top_tile_info(world_pos: Vector2, world_map: Node = null) -> Dic
 			current_is_water = true
 			current_surface_type = SurfaceType.WATER
 			current_layer_biome = "ocean"
+		elif layer_name == "FloorLayer":
+			current_is_water = false
+			current_surface_type = SurfaceType.STONE
+			current_layer_biome = "cave"
 		else:
 			current_layer_biome = _resolve_biome_from_cell(cell_data)
 			if layer_name == "ShoreLayer" and (current_layer_biome == "clearing" or current_layer_biome == "void"):

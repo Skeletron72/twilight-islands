@@ -2,18 +2,21 @@ extends Node
 
 const ITEM_SIZE = 16
 var atlas_texture_file = preload("res://resources/items/Items.png")
+const RES_ICONS = "res://assets/new_assets/Cute_Fantasy/Icons/No Outline/Resources_Icons_NO_Outline.png"
+const TOOL_ICONS = "res://assets/new_assets/Cute_Fantasy/Icons/No Outline/Tool_Icons_NO_Outline.png"
 
 # База рецептов для крафта
 var RECIPES = {
-	"wooden_axe": {"wood": 2, "stick": 3},
-	"wooden_pickaxe": {"wood": 2, "stick": 3},
-	"stone_axe": {"stick": 2, "stone": 1},
-	"stone_pickaxe": {"stick": 2, "stone": 1},
-	"stone_sword": {"stick": 1, "stone": 2},
-	"cloth_basic": {"wood": 10},
-	"campfire": {"wood": 5, "stone": 3},
+	"axe": {"wood": 3, "stick": 2},
+	"pickaxe": {"wood": 2, "stick": 2, "stone": 2},
+	"sword": {"stick": 1, "stone": 2},
+	"bow": {"wood": 3, "plant_fiber": 4},
+	"arrow": {"stick": 1, "plant_fiber": 1},
+	"cloth_basic": {"plant_fiber": 6},
+	"boots_basic": {"plant_fiber": 4},
+	"campfire": {"wood": 5, "stone": 3, "plant_fiber": 2},
 	"storage_box": {"wood": 10},
-	"tent": {"wood": 6, "stick": 4},
+	"tent": {"wood": 6, "stick": 4, "plant_fiber": 6},
 	"orange_bed": {"wood": 4, "stick": 2, "cloth_basic": 1}
 }
 
@@ -78,17 +81,33 @@ var ITEMS = {
 		"particle_color": Color(0.75, 0.35, 0.95, 1.0)
 	},
 
+	# --- БАЗОВЫЕ РЕСУРСЫ (Строка 4: Дерево, Кость, Палка) ---
 	"wood": {
 		"name": "Древесина",
 		"desc": "Свежее бревно, срубленное на острове.",
 		"max_stack": 99,
-		"grid_pos": Vector2(2, 2)
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(0, 64, 16, 16)
+	},
+	"bone": {
+		"name": "Кость",
+		"desc": "Крепкая кость. Пригодится для крафта и зелий.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(16, 64, 16, 16)
 	},
 	"stick": {
 		"name": "Ветка",
 		"desc": "Обычная деревянная палка. Полезна для крафта.",
 		"max_stack": 99,
-		"grid_pos": Vector2(14, 3)
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(32, 64, 16, 16)
+	},
+	"plant_fiber": {
+		"name": "Растительное волокно",
+		"desc": "Гибкие и прочные растительные волокна из кустарника. Незаменимы для ткани, веревок и снаряжения.",
+		"max_stack": 99,
+		"grid_pos": Vector2(15, 3)
 	},
 	"stone": {
 		"name": "Камень",
@@ -96,11 +115,250 @@ var ITEMS = {
 		"max_stack": 99,
 		"grid_pos": Vector2(2, 1)
 	},
+
+	# --- МИНЕРАЛЫ И МЕТАЛЛЫ (1 крошка, 2 самородок, 3 слиток/огранка) ---
+
+	# Строка 0: 1 Сталь, 2 Сапфир
+	"steel_dust": {
+		"name": "Стальная крошка",
+		"desc": "Мелкая стальная стружка и крошка.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(0, 0, 16, 16)
+	},
+	"ore_steel": {
+		"name": "Стальная руда",
+		"desc": "Плотный самородок руды со стальным отливом.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(16, 0, 16, 16)
+	},
+	"steel_nugget": {
+		"name": "Стальной самородок",
+		"desc": "Плотный самородок руды со стальным отливом.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(16, 0, 16, 16)
+	},
+	"steel_ingot": {
+		"name": "Стальной слиток",
+		"desc": "Закаленный слиток стали высокой прочности.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(32, 0, 16, 16)
+	},
+
+	"sapphire_dust": {
+		"name": "Сапфировая крошка",
+		"desc": "Сияющие синие осколки сапфира.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(48, 0, 16, 16)
+	},
+	"mineral_sapphire": {
+		"name": "Сапфир",
+		"desc": "Благородный синий драгоценный кристалл, хранящий холод глубин.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(64, 0, 16, 16)
+	},
+	"sapphire_raw": {
+		"name": "Необработанный сапфир",
+		"desc": "Природный кристалл сапфира.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(64, 0, 16, 16)
+	},
+	"sapphire_gem": {
+		"name": "Ограненный сапфир",
+		"desc": "Идеально ограненный чистейший сапфир королевского синего цвета.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(80, 0, 16, 16)
+	},
+
+	# Строка 1: 3 Железо, 4 Топаз
+	"iron_dust": {
+		"name": "Железная крошка",
+		"desc": "Остатки железной породы и металлическая пыль.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(0, 16, 16, 16)
+	},
+	"ore_iron": {
+		"name": "Железная руда",
+		"desc": "Тяжелая рудная порода с богатыми включениями железа.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(16, 16, 16, 16)
+	},
+	"iron_nugget": {
+		"name": "Железный самородок",
+		"desc": "Тяжелый самородок железа.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(16, 16, 16, 16)
+	},
+	"iron_ingot": {
+		"name": "Железный слиток",
+		"desc": "Прочный кованый слиток очищенного железа.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(32, 16, 16, 16)
+	},
+
+	"topaz_dust": {
+		"name": "Топазовая крошка",
+		"desc": "Мелкие сверкающие золотисто-оранжевые осколки.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(48, 16, 16, 16)
+	},
+	"mineral_topaz": {
+		"name": "Топаз",
+		"desc": "Солнечно-оранжевый самоцвет с мягким теплым сиянием.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(64, 16, 16, 16)
+	},
+	"topaz_raw": {
+		"name": "Необработанный топаз",
+		"desc": "Природный кристалл топаза.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(64, 16, 16, 16)
+	},
+	"topaz_gem": {
+		"name": "Ограненный топаз",
+		"desc": "Искрящийся теплым светом ювелирный топаз.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(80, 16, 16, 16)
+	},
+
+	# Строка 2: 5 Золото, 6 Рубин
+	"gold_dust": {
+		"name": "Золотой песок",
+		"desc": "Драгоценные крупицы чистого золота.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(0, 32, 16, 16)
+	},
+	"ore_gold": {
+		"name": "Золотая руда",
+		"desc": "Сверкающий золотыми крупинками самородок.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(16, 32, 16, 16)
+	},
+	"gold_nugget": {
+		"name": "Золотой самородок",
+		"desc": "Сверкающий золотом природный самородок.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(16, 32, 16, 16)
+	},
+	"gold_ingot": {
+		"name": "Золотой слиток",
+		"desc": "Тяжелый слиток сияющего золота высшей пробы.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(32, 32, 16, 16)
+	},
+
+	"ruby_dust": {
+		"name": "Рубиновая крошка",
+		"desc": "Алые кристаллические крошки, вспыхивающие на свету.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(48, 32, 16, 16)
+	},
+	"mineral_ruby": {
+		"name": "Рубин",
+		"desc": "Пылающий алый кристалл, высоко ценимый ювелирами.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(64, 32, 16, 16)
+	},
+	"ruby_raw": {
+		"name": "Необработанный рубин",
+		"desc": "Природный осколок алого рубина.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(64, 32, 16, 16)
+	},
+	"ruby_gem": {
+		"name": "Ограненный рубин",
+		"desc": "Безупречный драгоценный камень глубокого рубинового оттенка.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(80, 32, 16, 16)
+	},
+
+	# Строка 3: 7 Малахит, 8 Сумрак
+	"malachite_dust": {
+		"name": "Малахитовая крошка",
+		"desc": "Зеленый порошок и мелкие сколы малахита.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(0, 48, 16, 16)
+	},
+	"mineral_malachite": {
+		"name": "Малахит",
+		"desc": "Насыщенно-зелёный поделочный минерал с шелковистым блеском.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(16, 48, 16, 16)
+	},
+	"malachite_raw": {
+		"name": "Необработанный малахит",
+		"desc": "Природный кусок зеленого малахита.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(16, 48, 16, 16)
+	},
+	"malachite_gem": {
+		"name": "Полированный малахит",
+		"desc": "Гладко отполированный камень с затейливыми узорами колец.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(32, 48, 16, 16)
+	},
+
+	"dusk_dust": {
+		"name": "Пыль Сумрака",
+		"desc": "Таинственная фиолетовая пыльца, мерцающая потусторонними искрами.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(48, 48, 16, 16)
+	},
+	"ore_dusk": {
+		"name": "Осколок Сумрака",
+		"desc": "Сверхредкий фиолетовый кристалл с пульсирующей энергией Бездны.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(64, 48, 16, 16)
+	},
+	"dusk_shard": {
+		"name": "Осколок Сумрака",
+		"desc": "Сверхредкий фиолетовый кристалл с пульсирующей энергией Бездны.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(64, 48, 16, 16)
+	},
+	"dusk_crystal": {
+		"name": "Кристалл Сумрака",
+		"desc": "Очищенный кристалл Сумрака невероятной мощи.",
+		"max_stack": 99,
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(80, 48, 16, 16)
+	},
 	"twilight_ore": {
 		"name": "Сумрачная руда",
 		"desc": "Светящаяся в темноте руда.",
 		"max_stack": 50,
-		"grid_pos": Vector2(5, 3)
+		"custom_atlas": RES_ICONS,
+		"custom_region": Rect2(64, 48, 16, 16)
 	},
 	"coin": {
 		"name": "Золотая монета",
@@ -130,26 +388,37 @@ var ITEMS = {
 		"grid_pos": Vector2(1, 17)
 	},
 	
-	# --- ИНСТРУМЕНТЫ ---
-	"wooden_axe": {
-		"name": "Деревянный топор",
-		"desc": "Слабый, но лучше, чем рубить руками.",
+	# --- ИНСТРУМЕНТЫ И ОРУЖИЕ (Tool_Icons_NO_Outline.png: 1..10) ---
+	# 1 лук
+	"bow": {
+		"name": "Лук",
+		"desc": "Охотничий лук для стрельбы на расстоянии.",
 		"max_stack": 1,
 		"equip_slot": "tool",
-		"damage": 2,
-		"efficiency": 1,
-		"durability": 50,
-		"grid_pos": Vector2(1, 5) # Пример
+		"damage": 6,
+		"durability": 100,
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(0, 0, 16, 16)
 	},
-	"stone_axe": {
-		"name": "Каменный топор",
-		"desc": "Острый камень на палке.",
+	# 2 стрела
+	"arrow": {
+		"name": "Стрела",
+		"desc": "Острая стрела с наконечником и оперением.",
+		"max_stack": 99,
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(16, 0, 16, 16)
+	},
+	# 3 кирка
+	"pickaxe": {
+		"name": "Кирка",
+		"desc": "Универсальная кирка для добычи камня и руды.",
 		"max_stack": 1,
 		"equip_slot": "tool",
-		"damage": 4,
+		"damage": 3,
 		"efficiency": 2,
-		"durability": 120,
-		"grid_pos": Vector2(2, 5)
+		"durability": 100,
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(32, 0, 16, 16)
 	},
 	"wooden_pickaxe": {
 		"name": "Деревянная кирка",
@@ -159,7 +428,8 @@ var ITEMS = {
 		"damage": 2,
 		"efficiency": 1,
 		"durability": 50,
-		"grid_pos": Vector2(1, 9)
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(32, 0, 16, 16)
 	},
 	"stone_pickaxe": {
 		"name": "Каменная кирка",
@@ -169,16 +439,111 @@ var ITEMS = {
 		"damage": 4,
 		"efficiency": 2,
 		"durability": 120,
-		"grid_pos": Vector2(2, 9)
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(32, 0, 16, 16)
 	},
-		"stone_sword": {
+	# 4 топор
+	"axe": {
+		"name": "Топор",
+		"desc": "Острый топор для рубки деревьев.",
+		"max_stack": 1,
+		"equip_slot": "tool",
+		"damage": 4,
+		"efficiency": 2,
+		"durability": 100,
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(48, 0, 16, 16)
+	},
+	"wooden_axe": {
+		"name": "Деревянный топор",
+		"desc": "Слабый, но лучше, чем рубить руками.",
+		"max_stack": 1,
+		"equip_slot": "tool",
+		"damage": 2,
+		"efficiency": 1,
+		"durability": 50,
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(48, 0, 16, 16)
+	},
+	"stone_axe": {
+		"name": "Каменный топор",
+		"desc": "Острый камень на палке.",
+		"max_stack": 1,
+		"equip_slot": "tool",
+		"damage": 4,
+		"efficiency": 2,
+		"durability": 120,
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(48, 0, 16, 16)
+	},
+	# 5 меч
+	"sword": {
+		"name": "Меч",
+		"desc": "Надежное боевое оружие для защиты от монстров.",
+		"max_stack": 1,
+		"equip_slot": "tool",
+		"damage": 8,
+		"durability": 150,
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(64, 0, 16, 16)
+	},
+	"stone_sword": {
 		"name": "Каменный меч",
 		"desc": "Идеально для сражений со скелетами.",
 		"max_stack": 1,
 		"equip_slot": "tool",
 		"damage": 8,
 		"durability": 150,
-		"grid_pos": Vector2(2, 7)
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(64, 0, 16, 16)
+	},
+	# 6 тяпка
+	"hoe": {
+		"name": "Тяпка",
+		"desc": "Тяпка (мотыга) для вспашки земли под грядки.",
+		"max_stack": 1,
+		"equip_slot": "tool",
+		"damage": 2,
+		"durability": 80,
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(80, 0, 16, 16)
+	},
+	# 7 лейка
+	"watering_can": {
+		"name": "Лейка",
+		"desc": "Лейка для полива сельскохозяйственных культур.",
+		"max_stack": 1,
+		"equip_slot": "tool",
+		"durability": 100,
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(96, 0, 16, 16)
+	},
+	# 8 удочка
+	"fishing_rod": {
+		"name": "Удочка",
+		"desc": "Удочка с леской и поплавком для ловли рыбы.",
+		"max_stack": 1,
+		"equip_slot": "tool",
+		"durability": 80,
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(112, 0, 16, 16)
+	},
+	# 9 фонарь
+	"lantern": {
+		"name": "Фонарь",
+		"desc": "Переносной масляный фонарь. Освещает путь в темноте.",
+		"max_stack": 5,
+		"equip_slot": "tool",
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(128, 0, 16, 16)
+	},
+	# 10 факел
+	"torch": {
+		"name": "Факел",
+		"desc": "Яркий факел, разгоняющий ночную тьму и пещерный сумрак.",
+		"max_stack": 99,
+		"custom_atlas": TOOL_ICONS,
+		"custom_region": Rect2(144, 0, 16, 16)
 	},
 	"campfire": {
 		"name": "Костер",
@@ -217,9 +582,18 @@ var ITEMS = {
 	}
 }
 
+const TOOL_ALIASES = {
+	"wooden_axe": "axe",
+	"stone_axe": "axe",
+	"wooden_pickaxe": "pickaxe",
+	"stone_pickaxe": "pickaxe",
+	"stone_sword": "sword"
+}
+
 func get_item(id: String) -> Dictionary:
-	if ITEMS.has(id):
-		return ITEMS[id]
+	var mapped_id = TOOL_ALIASES.get(id, id)
+	if ITEMS.has(mapped_id):
+		return ITEMS[mapped_id]
 	return {}
 
 func get_icon(id: String) -> Texture2D:

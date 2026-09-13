@@ -96,7 +96,7 @@ func interact(player: Node2D) -> void:
 	if is_broken: return
 	
 	# Разрубается только топором!
-	var has_axe = InventoryManager.get_item_amount("stone_axe") > 0 or InventoryManager.get_item_amount("wooden_axe") > 0
+	var has_axe = (InventoryManager.get_active_item_id() == "axe" or InventoryManager.get_item_amount("axe") > 0)
 	if not has_axe:
 		print("Поваленное бревно можно разрубить только топором!")
 		return

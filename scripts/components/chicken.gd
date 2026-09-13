@@ -57,6 +57,16 @@ var is_panicking: bool = false
 var panic_timer: float = 0.0
 var _squash_tween: Tween = null
 
+# Paralysis state
+var is_paralyzed: bool = false
+var paralysis_timer: float = 0.0
+
+func apply_paralysis(duration: float, p_is_twilight: bool = false) -> void:
+	is_paralyzed = true
+	paralysis_timer = max(paralysis_timer, duration)
+	is_panicking = false
+	ParalysisEffect.apply_to(self, duration, p_is_twilight)
+
 # Анимация
 var current_frame: int = 0
 var anim_timer: float = 0.0
@@ -80,6 +90,14 @@ func _physics_process(delta: float) -> void:
 	
 	# Постепенный сброс таймера контакта, если игрока рядом нет
 	push_contact_time = max(0.0, push_contact_time - delta * 0.6)
+
+	if is_paralyzed:
+		paralysis_timer -= delta
+		if paralysis_timer <= 0.0:
+			is_paralyzed = false
+		velocity = push_velocity
+		move_and_slide()
+		return
 
 	# Режим паники / испуга (быстрый отбег от игрока)
 	if is_panicking:

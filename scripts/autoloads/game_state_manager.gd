@@ -18,11 +18,25 @@ func generate_new_raid_seed() -> int:
 var max_health: float = 100.0
 var current_health: float = 100.0
 
+var is_god_mode: bool = false:
+	set(val):
+		is_god_mode = val
+		if is_god_mode:
+			current_health = max_health
+			current_stamina = max_stamina
+			current_hunger = max_hunger
+			is_exhausted = false
+			health_changed.emit(current_health, max_health)
+			stamina_changed.emit(current_stamina, max_stamina)
+			hunger_changed.emit(current_hunger, max_hunger)
+
 signal health_changed(new_value: float, max_value: float)
 signal player_died()
 signal player_hurt()
 
 func take_damage(amount: float) -> void:
+	if is_god_mode:
+		return
 	if current_health > 0:
 		current_health -= amount
 		if current_health > 0:
@@ -42,16 +56,20 @@ var max_stamina: float = 100.0
 var current_stamina: float = 100.0
 
 signal stamina_changed(new_value: float, max_value: float)
+signal stamina_depleted()
 
 var is_exhausted: bool = false
 
 func consume_stamina(amount: float) -> bool:
+	if is_god_mode:
+		return true
 	if current_stamina >= amount and not is_exhausted:
 		current_stamina -= amount
 		if current_stamina <= 0.5:
 			is_exhausted = true
 		stamina_changed.emit(current_stamina, max_stamina)
 		return true
+	stamina_depleted.emit()
 	return false
 
 func add_stamina(amount: float) -> void:
@@ -61,31 +79,117 @@ func add_stamina(amount: float) -> void:
 			is_exhausted = false
 		stamina_changed.emit(current_stamina, max_stamina)
 
+func reset_player_state() -> void:
+	current_health = max_health
+	current_stamina = max_stamina
+	is_exhausted = false
+	health_changed.emit(current_health, max_health)
+	stamina_changed.emit(current_stamina, max_stamina)
+
+
+const DAYS_OF_WEEK = [
+	"Понедельник",
+	"Вторник",
+	"Среда",
+	"Четверг",
+	"Пятница",
+	"Суббота",
+	"Воскресенье"
+]
+
+const DAYS_OF_WEEK_SHORT = [
+	"Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"
+]
+
+var current_hour: float = 6.0
+var current_minute: int = 0
+var day_duration_seconds: float = 480.0 # 8 минут реального времени на 24 игровых часа
+var time_speed: float = 1.0
+var is_time_paused: bool = false
 
 signal time_changed(new_time: TimeOfDay)
 signal day_changed(new_day: int)
+signal clock_ticked(hour: int, minute: int)
+signal day_of_week_changed(day_name: String, day_index: int)
+
+func get_day_of_week() -> String:
+	var idx = (current_day - 1) % 7
+	return DAYS_OF_WEEK[idx]
+
+func get_day_of_week_name() -> String:
+	return get_day_of_week()
+
+func get_day_of_week_short() -> String:
+	var idx = (current_day - 1) % 7
+	return DAYS_OF_WEEK_SHORT[idx]
+
+func get_formatted_time() -> String:
+	return "%02d:%02d" % [int(current_hour), current_minute]
+
+func get_time_string() -> String:
+	return get_formatted_time()
+
+func get_time_of_day_name(time: TimeOfDay = current_time) -> String:
+	match time:
+		TimeOfDay.MORNING:
+			return "Утро"
+		TimeOfDay.DAY:
+			return "День"
+		TimeOfDay.DUSK:
+			return "Вечер"
+		TimeOfDay.NIGHT:
+			return "Ночь"
+	return "День"
+
+func _determine_time_of_day(hour: float) -> TimeOfDay:
+	if hour >= 6.0 and hour < 12.0:
+		return TimeOfDay.MORNING
+	elif hour >= 12.0 and hour < 18.0:
+		return TimeOfDay.DAY
+	elif hour >= 18.0 and hour < 22.0:
+		return TimeOfDay.DUSK
+	else:
+		return TimeOfDay.NIGHT
 
 func advance_time() -> void:
 	match current_time:
 		TimeOfDay.MORNING:
+			current_hour = 12.0
 			set_time(TimeOfDay.DAY)
 		TimeOfDay.DAY:
+			current_hour = 18.0
 			set_time(TimeOfDay.DUSK)
 		TimeOfDay.DUSK:
+			current_hour = 22.0
 			set_time(TimeOfDay.NIGHT)
 		TimeOfDay.NIGHT:
 			advance_day()
+			return
+	current_minute = int((current_hour - floor(current_hour)) * 60.0)
+	clock_ticked.emit(int(current_hour), current_minute)
 
 func set_time(new_time: TimeOfDay) -> void:
-	current_time = new_time
-	time_changed.emit(current_time)
+	if current_time != new_time:
+		current_time = new_time
+		time_changed.emit(current_time)
+
+func set_time_hour(hour: float) -> void:
+	current_hour = fposmod(hour, 24.0)
+	current_minute = int((current_hour - floor(current_hour)) * 60.0)
+	clock_ticked.emit(int(current_hour), current_minute)
+	var new_phase = _determine_time_of_day(current_hour)
+	set_time(new_phase)
 
 func advance_day() -> void:
 	current_day += 1
+	current_hour = 6.0
+	current_minute = 0
 	current_time = TimeOfDay.MORNING
 	generate_new_raid_seed()
 	day_changed.emit(current_day)
+	day_of_week_changed.emit(get_day_of_week(), (current_day - 1) % 7)
 	time_changed.emit(current_time)
+	clock_ticked.emit(6, 0)
 
 var max_hunger: float = 100.0
 var current_hunger: float = 100.0
@@ -330,8 +434,26 @@ func upgrade_boat() -> bool:
 	return true
 
 func _process(delta: float) -> void:
-	# Hunger drains over time. 1 in-game day (15 mins?) let's say 1 point every 10 seconds.
-	if current_hunger > 0:
+	# Automatic Day/Night time progression
+	if not is_time_paused and day_duration_seconds > 0.0 and time_speed > 0.0:
+		var hours_per_sec = 24.0 / day_duration_seconds
+		var old_minute = current_minute
+		current_hour += delta * hours_per_sec * time_speed
+		
+		if current_hour >= 24.0:
+			current_hour -= 24.0
+			advance_day()
+			
+		current_minute = int((current_hour - floor(current_hour)) * 60.0)
+		if current_minute != old_minute:
+			clock_ticked.emit(int(current_hour), current_minute)
+			
+		var target_phase = _determine_time_of_day(current_hour)
+		if target_phase != current_time:
+			set_time(target_phase)
+
+	# Hunger drains over time
+	if not is_god_mode and current_hunger > 0:
 		current_hunger -= (0.1 * delta)
 		if current_hunger < 0:
 			current_hunger = 0

@@ -4,11 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://dg2ggt1sn7sqw" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Cave_Decorations.png" id="2_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
-size = Vector2(10, 4)
+size = Vector2(12, 8)
 
 [node name="CaveStalagmite" type="StaticBody2D" unique_id=1480661346]
 y_sort_enabled = true
-collision_layer = 0
+collision_layer = 1
 collision_mask = 0
 script = ExtResource("1_cst")
 
@@ -20,5 +20,5 @@ region_enabled = true
 region_rect = Rect2(0, 16, 16, 16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=186350881]
-position = Vector2(0, -2)
+position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_base")

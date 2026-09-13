@@ -26,6 +26,8 @@ var overlapping_characters: Array[Node2D] = []
 # Текстуры для лесных и ягодных кустов
 const OUTDOOR_DECOR_TEX = "res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor.png"
 const BERRIES_TEX = "res://assets/new_assets/Cute_Fantasy/Crops/Berries.png"
+const SFX_FRUIT_DROP = preload("res://assets/audio/sfx/nature/03_fruit_drop_1.mp3")
+const SFX_BUSH_RUSTLE = preload("res://assets/audio/sfx/nature/sfx_bush.mp3")
 
 const EMPTY_BUSH_REGIONS = [
 	Rect2(48, 144, 16, 16),  # Большой куст
@@ -65,7 +67,7 @@ func _update_visuals() -> void:
 	if has_berries and berry_type != "none":
 		prompt_text = "Собрать ягоды"
 	else:
-		prompt_text = "Собрать ветки"
+		prompt_text = "Собрать куст"
 		
 	if not sprite: return
 	
@@ -159,7 +161,10 @@ func interact(player: Node2D) -> void:
 func _harvest_berries() -> void:
 	has_berries = false
 	GameStateManager.register_bush_harvested()
-	_play_sfx(randf_range(1.3, 1.6))
+	if AudioManager:
+		AudioManager.play_spatial_sfx(SFX_FRUIT_DROP, global_position, randf_range(0.95, 1.15), -1.0)
+	else:
+		_play_sfx(randf_range(1.3, 1.6))
 	
 	# Пружинистый сбор
 	var pop_tween = create_tween()
@@ -193,7 +198,7 @@ func _gather_bush(player: Node2D) -> void:
 	
 	var audio_mgr = player.get_node_or_null("/root/AudioManager") if player else get_node_or_null("/root/AudioManager")
 	if audio_mgr and audio_mgr.has_method("play_sfx"):
-		audio_mgr.play_sfx(preload("res://assets/audio/sfx/player/sfx_item_pickup.mp3"), randf_range(1.0, 1.15), 0.0)
+		audio_mgr.play_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), randf_range(1.0, 1.2), -1.0)
 		
 	_play_sfx(1.4)
 	_spawn_leaf_particles(randi_range(8, 12), 40.0)
@@ -250,6 +255,8 @@ func _spawn_leaf_particles(count: int, vel: float) -> void:
 
 func _spawn_drops() -> void:
 	_spawn_drops_specific(drop_item_id, randi_range(drop_amount_min, drop_amount_max))
+	# При сборе куста также выпадает растительное волокно (1-2 шт.)
+	_spawn_drops_specific("plant_fiber", randi_range(1, 2))
 
 func _spawn_drops_specific(item_id: String, count: int) -> void:
 	var dropped_scene = preload("res://scenes/objects/dropped_item.tscn")
@@ -260,6 +267,8 @@ func _spawn_drops_specific(item_id: String, count: int) -> void:
 		get_tree().current_scene.add_child(drop)
 
 func _play_sfx(pitch: float) -> void:
-	if sfx and sfx.stream:
+	if sfx:
+		if not sfx.stream:
+			sfx.stream = SFX_BUSH_RUSTLE
 		sfx.pitch_scale = pitch
 		sfx.play()

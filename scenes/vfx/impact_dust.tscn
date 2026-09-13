@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://impact_dust_vfx"]
+
+[ext_resource type="Script" path="res://scripts/vfx/impact_dust.gd" id="1_dust"]
+[ext_resource type="Texture2D" uid="uid://cy2eiq1fbs56t" path="res://assets/sprites/vfx/combat/impact_hit_4_sheet.png" id="2_tex"]
+
+[node name="ImpactDust" type="Node2D"]
+z_index = 50
+script = ExtResource("1_dust")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+hframes = 4

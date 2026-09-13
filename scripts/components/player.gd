@@ -1,8 +1,47 @@
+@tool
 extends CharacterBody2D
 class_name Player
 
 @export var speed: float = 40.0
 @export var hairstyle_index: int = 0 # 0 to 5 for different hairs
+
+@export_group("Editor Preview (Настройка конуса)")
+@export var preview_attack_pose: bool = false: ## Включить предпросмотр удара и конуса прямо в редакторе!
+	set(val):
+		preview_attack_pose = val
+		_apply_editor_preview()
+
+@export_enum("Вниз (Down):0", "Вправо (Right):1", "Вверх (Up):2", "Влево (Left):3") var preview_direction: int = 0: ## Направление взмаха в предпросмотре
+	set(val):
+		preview_direction = val
+		_apply_editor_preview()
+
+@export_group("Combat Tuning")
+@export var attack_hit_frame: int = 1: ## Кадр анимации, на котором наносится урон (0..3)
+	set(val):
+		attack_hit_frame = val
+		_apply_editor_preview()
+
+@export var attack_range: float = 24.0: ## Дальность атаки (радиус конуса в пикселях)
+	set(val):
+		attack_range = val
+		_apply_editor_preview()
+
+@export_range(30.0, 360.0, 5.0) var attack_arc_degrees: float = 110.0: ## Угол конуса атаки в градусах
+	set(val):
+		attack_arc_degrees = val
+		_apply_editor_preview()
+
+@export var attack_point_blank_radius: float = 8.0: ## Радиус удара в упор (даже при сильном перекрытии)
+	set(val):
+		attack_point_blank_radius = val
+		_apply_editor_preview()
+
+@export var attack_base_knockback: float = 180.0 ## Базовый импульс отбрасывания
+@export var debug_show_attack_cone: bool = false ## Показывать ли сектор атаки визуально при взмахе в игре
+
+var _debug_cone_timer: float = 0.0
+var _attack_already_hit: Array[Node2D] = []
 
 @onready var visuals: Node2D = $Visuals
 @onready var interaction_area: Area2D = $InteractionArea
@@ -13,15 +52,51 @@ var hunger_wrapper: Control
 var is_acting: bool = false
 var is_dead: bool = false
 
-# Combat & Health
-var hp_bar: ProgressBar
-var hp_bar_hide_timer: float = 0.0
+# Dodge Roll state
+var is_rolling: bool = false
+var roll_direction: Vector2 = Vector2.ZERO
+var roll_speed: float = 0.0
+var roll_cooldown: float = 0.0
+var _ghost_timer: float = 0.0
 
-# Overhead Stamina Bar
-var stamina_bar: ProgressBar
-var stamina_bar_hide_timer: float = 0.0
-var stamina_fill_style: StyleBoxFlat
-var _stamina_shake_tween: Tween
+# Paralysis state
+var is_paralyzed: bool = false
+var paralysis_timer: float = 0.0
+
+func apply_paralysis(duration: float, p_is_twilight: bool = false) -> void:
+	if is_dead:
+		return
+	is_paralyzed = true
+	paralysis_timer = max(paralysis_timer, duration)
+	is_rolling = false
+	is_acting = false
+	ParalysisEffect.apply_to(self, duration, p_is_twilight)
+
+# Wet status (капли воды стекают с одежды/тела)
+var is_wet: bool = false
+var wet_timer: float = 0.0
+
+# Burn status (статус горения, тушится водой)
+var is_burning: bool = false
+var burn_timer: float = 0.0
+
+func apply_burn(duration: float = 6.0) -> void:
+	if is_dead:
+		return
+	if in_water or is_wet or (WeatherManager and WeatherManager.is_precipitation()):
+		return
+	is_burning = true
+	burn_timer = max(burn_timer, duration)
+	BurnEffect.apply_to(self, duration)
+
+func extinguish_burn() -> void:
+	is_burning = false
+	burn_timer = 0.0
+	var bfx = get_node_or_null("BurnEffect") as BurnEffect
+	if bfx:
+		bfx.extinguish()
+
+# Combat & Health
 var knockback_velocity: Vector2 = Vector2.ZERO
 var is_invulnerable: bool = false
 var invulnerability_timer: float = 0.0
@@ -34,6 +109,7 @@ var _cam_shake_timer: float = 0.0
 
 const SFX_CHAR_HURT = preload("res://assets/audio/sfx/player/sfx_char_voice.mp3")
 const SFX_SWORD_SWING = preload("res://assets/audio/sfx/combat/sfx_sword_swing.mp3")
+const SFX_TOOL_SWISH = preload("res://assets/audio/sfx/tools/sfx_swish.mp3")
 const SFX_HIT_IMPACT = preload("res://assets/audio/sfx/combat/sfx_attack.mp3")
 const SFX_PLAYER_DEATH = preload("res://assets/audio/sfx/player/sfx_death.mp3")
 
@@ -48,6 +124,7 @@ var _eating_cooldown: float = 0.0
 # Footsteps & Surface Audio
 enum SurfaceType { GRASS, STONE, DIRT, WATER }
 var current_surface: SurfaceType = SurfaceType.GRASS
+var in_water: bool = false
 var _step_timer: float = 0.0
 
 @onready var footsteps_player: AudioStreamPlayer = get_node_or_null("FootstepsPlayer")
@@ -69,17 +146,16 @@ const ANIM_MAP = {
 	"death": { "row": 15, "frames": 4 },
 	"axe": { "row": 32, "frames": 6 },
 	"mining": { "row": 35, "frames": 6 },
-	"swimming": { "row": 3, "frames": 6 }
+	"swimming": { "row": 3, "frames": 6 },
+	"roll": { "row": 17, "frames": 8 }
 }
 
 var current_dir: int = 0 # 0=Down, 1=Right, 2=Up
 
 func _ready() -> void:
-	if not footsteps_player:
-		footsteps_player = AudioStreamPlayer.new()
-		footsteps_player.name = "FootstepsPlayer"
-		footsteps_player.bus = &"SFX"
-		add_child(footsteps_player)
+	if not visuals:
+		visuals = get_node_or_null("Visuals")
+
 	# Set up the sprite sheets
 	var tex_base = preload("res://assets/new_assets/Cute_Fantasy/Player/Player_Base/Player_Base_animations.png")
 	var tex_legs = preload("res://assets/new_assets/Cute_Fantasy/Player/Legs/Farmer_Pants/Farmer_Pants_1_Blue.png")
@@ -88,13 +164,8 @@ func _ready() -> void:
 	var tex_head = preload("res://assets/new_assets/Cute_Fantasy/Player/Head/Hair_1/Hair_1_Brown.png")
 	var tex_hands = preload("res://assets/new_assets/Cute_Fantasy/Player/Hands/Hands_1_Bare.png")
 	
-	# Preload tools
-	var tool_sprite = visuals.get_node_or_null("Tool")
-	if tool_sprite:
-		tool_sprite.visible = false
-	
 	for layer_name in LAYERS:
-		var sprite = visuals.get_node_or_null(layer_name)
+		var sprite = visuals.get_node_or_null(layer_name) if visuals else null
 		if sprite:
 			sprite.hframes = 9
 			sprite.vframes = 56
@@ -105,20 +176,55 @@ func _ready() -> void:
 			if layer_name == "Head": sprite.texture = tex_head
 			if layer_name == "Hands": sprite.texture = tex_hands
 
+	# Preload tools
+	var tool_sprite = visuals.get_node_or_null("Tool") if visuals else null
+	if tool_sprite:
+		tool_sprite.visible = false
+
+	if Engine.is_editor_hint():
+		_apply_editor_preview()
+		return
+
+	if not InputMap.has_action("dodge"):
+		InputMap.add_action("dodge")
+		var ev_alt = InputEventKey.new()
+		ev_alt.physical_keycode = KEY_ALT
+		InputMap.action_add_event("dodge", ev_alt)
+
+	if not footsteps_player:
+		footsteps_player = AudioStreamPlayer.new()
+		footsteps_player.name = "FootstepsPlayer"
+		footsteps_player.bus = &"SFX"
+		add_child(footsteps_player)
+
 	InventoryManager.equipment_changed.connect(_update_equipment_visuals)
+	InventoryManager.active_slot_changed.connect(func(_idx):
+		_update_sprites()
+	)
+	InventoryManager.ui_slots_changed.connect(func(idx):
+		if idx == InventoryManager.active_slot_index:
+			_update_sprites()
+	)
 	_update_equipment_visuals()
 	GameStateManager.item_consumed.connect(_on_item_consumed)
 	GameStateManager.time_changed.connect(_on_time_of_day_changed)
 	_on_time_of_day_changed(GameStateManager.current_time)
 
-	_setup_overhead_hp()
-	_setup_overhead_stamina()
-	GameStateManager.health_changed.connect(_on_health_changed)
-	GameStateManager.stamina_changed.connect(_on_stamina_changed)
 	GameStateManager.player_hurt.connect(_on_hurt)
 	GameStateManager.player_died.connect(_on_died)
 
+	# Ensure fresh state on spawn/respawn
+	is_dead = false
+	is_acting = false
+
+	var cone_node = get_node_or_null("AttackConeVisualizer")
+	if cone_node:
+		cone_node.visible = false
+	if GameStateManager.current_health <= 0:
+		GameStateManager.reset_player_state()
+
 	add_to_group("player")
+	WetEffect.attach_to(self)
 
 	_play_anim("idle")
 
@@ -136,109 +242,7 @@ func _on_time_of_day_changed(time: int) -> void:
 	var tween = create_tween()
 	tween.tween_property(lantern_light, "energy", target_energy, 2.0)
 
-func _setup_overhead_hp() -> void:
-	hp_bar = ProgressBar.new()
-	hp_bar.name = "PlayerHPBar"
-	hp_bar.position = Vector2(-15, -28)
-	hp_bar.custom_minimum_size = Vector2(30, 4)
-	hp_bar.show_percentage = false
-	hp_bar.z_index = 200
-	hp_bar.z_as_relative = false
-	
-	var hp_bg = StyleBoxFlat.new()
-	hp_bg.anti_aliasing = false
-	hp_bg.bg_color = Color(0.1, 0.1, 0.12, 0.85)
-	hp_bg.border_width_left = 1; hp_bg.border_width_top = 1; hp_bg.border_width_right = 1; hp_bg.border_width_bottom = 1
-	hp_bg.border_color = Color(0.02, 0.02, 0.02, 1.0)
-	
-	var hp_fill = StyleBoxFlat.new()
-	hp_fill.anti_aliasing = false
-	hp_fill.bg_color = Color(0.9, 0.18, 0.2, 1.0)
-	hp_fill.border_width_left = 1; hp_fill.border_width_top = 1; hp_fill.border_width_right = 1; hp_fill.border_width_bottom = 1
-	hp_fill.border_color = Color(0, 0, 0, 0)
-	
-	hp_bar.add_theme_stylebox_override("background", hp_bg)
-	hp_bar.add_theme_stylebox_override("fill", hp_fill)
-	hp_bar.max_value = GameStateManager.max_health
-	hp_bar.value = GameStateManager.current_health
-	hp_bar.modulate.a = 1.0 if GameStateManager.current_health < GameStateManager.max_health else 0.0
-	add_child(hp_bar)
 
-func _on_health_changed(curr: float, max_val: float) -> void:
-	if not hp_bar: return
-	hp_bar.max_value = max_val
-	hp_bar.value = curr
-	if curr < max_val:
-		hp_bar.modulate.a = 1.0
-		hp_bar_hide_timer = 3.5
-	else:
-		hp_bar_hide_timer = 1.5
-
-func _show_overhead_hp() -> void:
-	if hp_bar:
-		hp_bar.modulate.a = 1.0
-		hp_bar_hide_timer = 3.5
-
-func _setup_overhead_stamina() -> void:
-	stamina_bar = ProgressBar.new()
-	stamina_bar.name = "PlayerStaminaBar"
-	stamina_bar.position = Vector2(-15, -23)
-	stamina_bar.custom_minimum_size = Vector2(30, 3)
-	stamina_bar.show_percentage = false
-	stamina_bar.z_index = 200
-	stamina_bar.z_as_relative = false
-	
-	var bg = StyleBoxFlat.new()
-	bg.anti_aliasing = false
-	bg.bg_color = Color(0.1, 0.1, 0.12, 0.85)
-	bg.border_width_left = 1; bg.border_width_top = 1; bg.border_width_right = 1; bg.border_width_bottom = 1
-	bg.border_color = Color(0.02, 0.02, 0.02, 1.0)
-	
-	stamina_fill_style = StyleBoxFlat.new()
-	stamina_fill_style.anti_aliasing = false
-	stamina_fill_style.bg_color = Color(0.2, 0.85, 0.35, 1.0)
-	stamina_fill_style.border_width_left = 1; stamina_fill_style.border_width_top = 1; stamina_fill_style.border_width_right = 1; stamina_fill_style.border_width_bottom = 1
-	stamina_fill_style.border_color = Color(0, 0, 0, 0)
-	
-	stamina_bar.add_theme_stylebox_override("background", bg)
-	stamina_bar.add_theme_stylebox_override("fill", stamina_fill_style)
-	stamina_bar.max_value = GameStateManager.max_stamina
-	stamina_bar.value = GameStateManager.current_stamina
-	stamina_bar.modulate.a = 1.0 if GameStateManager.current_stamina < GameStateManager.max_stamina else 0.0
-	add_child(stamina_bar)
-
-func _on_stamina_changed(curr: float, max_val: float) -> void:
-	if not stamina_bar: return
-	stamina_bar.max_value = max_val
-	stamina_bar.value = curr
-	
-	if curr < max_val:
-		stamina_bar.modulate.a = 1.0
-		stamina_bar_hide_timer = 1.8
-	else:
-		stamina_bar_hide_timer = 1.0
-		
-	if GameStateManager.is_exhausted:
-		stamina_fill_style.bg_color = Color(0.92, 0.3, 0.2, 1.0)
-		_start_stamina_shake()
-	else:
-		stamina_fill_style.bg_color = Color(0.2, 0.85, 0.35, 1.0)
-		_stop_stamina_shake()
-
-func _start_stamina_shake() -> void:
-	if _stamina_shake_tween and _stamina_shake_tween.is_valid() and _stamina_shake_tween.is_running():
-		return
-	_stamina_shake_tween = create_tween()
-	_stamina_shake_tween.set_loops()
-	_stamina_shake_tween.tween_property(stamina_bar, "position:x", -13.5, 0.04)
-	_stamina_shake_tween.tween_property(stamina_bar, "position:x", -16.5, 0.04)
-	_stamina_shake_tween.tween_property(stamina_bar, "position:x", -15.0, 0.04)
-
-func _stop_stamina_shake() -> void:
-	if _stamina_shake_tween and _stamina_shake_tween.is_valid():
-		_stamina_shake_tween.kill()
-	if stamina_bar:
-		stamina_bar.position.x = -15.0
 
 func take_damage(amount: float, source_pos: Vector2 = Vector2.ZERO) -> void:
 	if is_dead or is_invulnerable:
@@ -256,12 +260,20 @@ func take_damage(amount: float, source_pos: Vector2 = Vector2.ZERO) -> void:
 	
 	GameStateManager.take_damage(amount)
 
+func _spawn_impact_dust(pos: Vector2) -> void:
+	var dust_scene = load("res://scenes/vfx/impact_dust.tscn")
+	if dust_scene:
+		var dust = dust_scene.instantiate()
+		dust.global_position = pos
+		if get_tree() and get_tree().current_scene:
+			get_tree().current_scene.add_child(dust)
+
 func _on_hurt() -> void:
 	if is_dead: return
+	_spawn_impact_dust(global_position + Vector2(0, -6))
 	_flash_red()
 	_play_hurt_sfx()
 	shake_camera(3.5, 0.16)
-	_show_overhead_hp()
 	if current_anim != "attack":
 		is_acting = true
 		_play_anim("hurt")
@@ -269,6 +281,14 @@ func _on_hurt() -> void:
 func _on_died() -> void:
 	is_dead = true
 	is_acting = true
+	is_paralyzed = false
+	is_burning = false
+	var pfx = get_node_or_null("ParalysisEffect")
+	if pfx:
+		pfx.queue_free()
+	var bfx = get_node_or_null("BurnEffect")
+	if bfx:
+		bfx.queue_free()
 	_play_anim("death")
 	_play_death_sfx()
 	shake_camera(6.0, 0.4)
@@ -292,7 +312,13 @@ func _play_death_sfx() -> void:
 	_play_temp_sfx(SFX_PLAYER_DEATH, 0.0, 1.0)
 
 func _play_attack_sfx() -> void:
-	_play_temp_sfx(SFX_SWORD_SWING, -2.0, randf_range(0.9, 1.1))
+	if _has_sword_equipped():
+		_play_temp_sfx(SFX_SWORD_SWING, -2.0, randf_range(0.9, 1.1))
+	else:
+		_play_temp_sfx(SFX_TOOL_SWISH, -4.0, randf_range(1.2, 1.4))
+
+func _play_tool_swish_sfx() -> void:
+	_play_temp_sfx(SFX_TOOL_SWISH, -2.0, randf_range(0.95, 1.1))
 
 func _play_hit_impact_sfx() -> void:
 	_play_temp_sfx(SFX_HIT_IMPACT, -3.0, randf_range(0.95, 1.1))
@@ -309,6 +335,9 @@ func _play_temp_sfx(stream: AudioStream, vol_db: float = 0.0, pitch: float = 1.0
 	sfx.finished.connect(sfx.queue_free)
 
 func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+
 	# Camera shake
 	if _cam_shake_timer > 0.0:
 		_cam_shake_timer -= delta
@@ -333,27 +362,43 @@ func _physics_process(delta: float) -> void:
 			is_invulnerable = false
 			visuals.modulate.a = 1.0
 
-	# Overhead HP bar fadeout
-	if hp_bar and hp_bar.modulate.a > 0.0:
-		if GameStateManager.current_health >= GameStateManager.max_health:
-			hp_bar_hide_timer -= delta
-			if hp_bar_hide_timer <= 0.0:
-				hp_bar.modulate.a = move_toward(hp_bar.modulate.a, 0.0, 2.0 * delta)
-
-	# Overhead Stamina bar fadeout
-	if stamina_bar and stamina_bar.modulate.a > 0.0:
-		if GameStateManager.current_stamina >= GameStateManager.max_stamina:
-			stamina_bar_hide_timer -= delta
-			if stamina_bar_hide_timer <= 0.0:
-				stamina_bar.modulate.a = move_toward(stamina_bar.modulate.a, 0.0, 2.0 * delta)
 
 	# Decay knockback
 	if knockback_velocity.length() > 0.0:
 		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 520.0 * delta)
 
+	# Decay debug cone visualizer
+	if _debug_cone_timer > 0.0:
+		_debug_cone_timer -= delta
+		if _debug_cone_timer <= 0.0:
+			_update_cone_visualizer()
+
+	if roll_cooldown > 0.0:
+		roll_cooldown -= delta
+
 	if is_dead:
 		velocity = knockback_velocity
 		move_and_slide()
+		_process_animation(delta)
+		return
+
+	if is_paralyzed:
+		paralysis_timer -= delta
+		if paralysis_timer <= 0.0:
+			is_paralyzed = false
+		velocity = knockback_velocity
+		move_and_slide()
+		_process_animation(delta)
+		return
+
+	if is_rolling:
+		roll_speed = lerp(roll_speed, 40.0, 4.0 * delta)
+		velocity = roll_direction * roll_speed + knockback_velocity
+		move_and_slide()
+		_ghost_timer += delta
+		if _ghost_timer >= 0.06:
+			_ghost_timer = 0.0
+			_spawn_ghost_trail()
 		_process_animation(delta)
 		return
 
@@ -372,7 +417,7 @@ func _physics_process(delta: float) -> void:
 		direction = mobile_controls.output_vector
 		is_sprinting = direction.length() > 0.6
 		
-	var in_water = false
+	in_water = false
 	var tile_info = BiomeService.get_top_tile_info(global_position + Vector2(0, -4))
 	if tile_info.layer_name != "":
 		in_water = tile_info.is_water
@@ -380,6 +425,25 @@ func _physics_process(delta: float) -> void:
 			current_surface = tile_info.surface as SurfaceType
 		if tile_info.biome != "" and tile_info.biome != "void":
 			current_biome = tile_info.biome
+
+	# Wet status handling (намокание под дождем или в воде)
+	var is_raining = WeatherManager and WeatherManager.is_precipitation()
+	if is_raining or in_water:
+		is_wet = true
+		wet_timer = 6.0
+	elif wet_timer > 0.0:
+		wet_timer -= delta
+		if wet_timer <= 0.0:
+			is_wet = false
+
+	# Burn status handling (тушение водой при намокании или входе в воду)
+	if is_burning:
+		if in_water or is_wet or is_raining:
+			extinguish_burn()
+		else:
+			burn_timer -= delta
+			if burn_timer <= 0.0:
+				is_burning = false
 
 	if direction.length() > 0:
 		# 0=Down, 1=Right, 2=Up
@@ -508,6 +572,7 @@ func _process_animation(delta: float) -> void:
 	
 	var fps_mult = 1.0
 	if current_anim == "run": fps_mult = 1.5
+	elif current_anim == "roll": fps_mult = 3.0 # 18 FPS for roll
 	
 	anim_timer += delta
 	var frame_dur = 1.0 / (fps * fps_mult)
@@ -521,6 +586,12 @@ func _process_animation(delta: float) -> void:
 		if current_frame >= frames:
 			if current_anim == "death":
 				current_frame = frames - 1 # Зависаем на последнем кадре смерти
+			elif current_anim == "roll":
+				is_rolling = false
+				is_acting = false
+				is_invulnerable = false
+				current_frame = 0
+				_play_anim("idle")
 			elif current_anim in ["axe", "mining", "attack", "hurt"]:
 				is_acting = false
 				current_frame = 0
@@ -528,32 +599,51 @@ func _process_animation(delta: float) -> void:
 			else:
 				current_frame = current_frame % frames
 				
-		# Handle action hit frame
-		var hit_frame = 2 if current_anim == "attack" else 3
-		if current_anim in ["axe", "mining", "attack"] and current_frame == hit_frame:
+		# Handle action hit frame / events
+		if current_anim == "attack":
+			if current_frame in [attack_hit_frame, attack_hit_frame + 1]:
+				_execute_sword_attack_hit()
+		elif current_anim in ["axe", "mining"] and current_frame == 3:
 			if current_target and is_instance_valid(current_target):
 				if current_target.has_method("interact"):
 					current_target.interact(self)
-				if current_anim == "attack":
-					shake_camera(2.0, 0.1)
-					_play_hit_impact_sfx()
 		
 		var row = ANIM_MAP[current_anim]["row"]
 		# For attack (6, 9, 12), we multiply current_dir by 3.
+		# For roll, row 17 is Down, 18 is Side, 19 is Up
 		# For most others, it's just + current_dir
 		var actual_row = row
 		if current_anim == "attack":
 			actual_row = row + (current_dir * 3)
+		elif current_anim == "roll":
+			match current_dir:
+				0: actual_row = 17
+				1: actual_row = 18
+				2: actual_row = 19
+				_: actual_row = 17
 		else:
 			actual_row = row + current_dir
 			
 		_update_sprites()
 
 func _update_sprites() -> void:
+	if not visuals:
+		visuals = get_node_or_null("Visuals")
+	if not visuals:
+		return
+	if current_anim == "" or not ANIM_MAP.has(current_anim):
+		return
+
 	var row = ANIM_MAP[current_anim]["row"]
 	var actual_row = row
 	if current_anim == "attack":
 		actual_row = row + (current_dir * 3)
+	elif current_anim == "roll":
+		match current_dir:
+			0: actual_row = 17
+			1: actual_row = 18
+			2: actual_row = 19
+			_: actual_row = 17
 	else:
 		actual_row = row + current_dir
 		
@@ -564,25 +654,222 @@ func _update_sprites() -> void:
 			
 	var tool_sprite: Sprite2D = visuals.get_node_or_null("Tool")
 	if tool_sprite:
-		if current_anim in ["attack", "axe", "mining"]:
-			tool_sprite.visible = true
-			if current_anim == "attack":
+		if current_anim == "attack":
+			if _has_sword_equipped() or (Engine.is_editor_hint() and preview_attack_pose):
+				tool_sprite.visible = true
 				tool_sprite.texture = load("res://assets/new_assets/Cute_Fantasy/Player/Tools/Iron/Iron_Sword.png")
 				tool_sprite.hframes = 4
 				tool_sprite.vframes = 9
 				# Attack row in player body is 6 + (dir*3). In sword it's 0 + (dir*3).
 				var sword_row = actual_row - 6
 				tool_sprite.frame_coords = Vector2i(current_frame, sword_row)
-			elif current_anim in ["axe", "mining"]:
-				tool_sprite.texture = load("res://assets/new_assets/Cute_Fantasy/Player/Tools/Iron/Iron_Tools.png")
-				tool_sprite.hframes = 6
-				tool_sprite.vframes = 12
-				# Axe row in player body is 32 + dir. In tools it's 0 + dir.
-				# Mining row in player body is 35 + dir. In tools it's 3 + dir.
-				var tool_row = actual_row - 32
-				tool_sprite.frame_coords = Vector2i(current_frame, tool_row)
+			else:
+				tool_sprite.visible = false
+		elif current_anim in ["axe", "mining"]:
+			tool_sprite.visible = true
+			tool_sprite.texture = load("res://assets/new_assets/Cute_Fantasy/Player/Tools/Iron/Iron_Tools.png")
+			tool_sprite.hframes = 6
+			tool_sprite.vframes = 12
+			# Axe row in player body is 32 + dir. In tools it's 0 + dir.
+			# Mining row in player body is 35 + dir. In tools it's 3 + dir.
+			var tool_row = actual_row - 32
+			tool_sprite.frame_coords = Vector2i(current_frame, tool_row)
 		else:
 			tool_sprite.visible = false
+
+func _has_sword_equipped() -> bool:
+	var active_id = InventoryManager.get_active_item_id()
+	return active_id in ["sword", "stone_sword"]
+
+func _unhandled_input(event: InputEvent) -> void:
+	if Engine.is_editor_hint() or is_dead or is_paralyzed:
+		return
+
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_ALT or event.physical_keycode == KEY_ALT or event.is_action_pressed("dodge"):
+			_perform_dodge()
+			get_viewport().set_input_as_handled()
+			return
+
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if not PlacementManager.is_placing and _eating_cooldown <= 0.0:
+			# Turn toward mouse click direction if clicking to attack
+			var mouse_pos = get_global_mouse_position()
+			var to_mouse = mouse_pos - global_position
+			if to_mouse.length_squared() > 16.0:
+				if abs(to_mouse.x) > abs(to_mouse.y) * 0.5:
+					current_dir = 1
+					visuals.scale.x = -1 if to_mouse.x < 0 else 1
+				elif to_mouse.y > 0:
+					current_dir = 0
+					visuals.scale.x = 1
+				elif to_mouse.y < 0:
+					current_dir = 2
+					visuals.scale.x = 1
+			_try_interact()
+
+func get_facing_direction() -> Vector2:
+	if not visuals:
+		visuals = get_node_or_null("Visuals")
+	match current_dir:
+		0: return Vector2.DOWN
+		1: return Vector2.LEFT if (visuals and visuals.scale.x < 0) else Vector2.RIGHT
+		2: return Vector2.UP
+	return Vector2.DOWN
+
+func _perform_dodge() -> void:
+	if is_dead or is_rolling or in_water:
+		return
+	if roll_cooldown > 0.0:
+		return
+	if not GameStateManager.consume_stamina(12.0):
+		return
+
+	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var mobile_controls = get_tree().current_scene.get_node_or_null("MobileControls/VirtualJoystick")
+	if mobile_controls and mobile_controls.touch_id != -1 and mobile_controls.output_vector.length() > 0.1:
+		input_dir = mobile_controls.output_vector
+
+	if input_dir.length() > 0.1:
+		roll_direction = input_dir.normalized()
+		# 0=Down (Row 18), 1=Side (Row 19), 2=Up (Row 20)
+		if abs(roll_direction.x) > abs(roll_direction.y) * 0.5:
+			current_dir = 1
+			visuals.scale.x = -1.0 if roll_direction.x < 0 else 1.0
+		elif roll_direction.y > 0:
+			current_dir = 0
+			visuals.scale.x = 1.0
+		elif roll_direction.y < 0:
+			current_dir = 2
+			visuals.scale.x = 1.0
+	else:
+		roll_direction = get_facing_direction()
+
+	is_rolling = true
+	is_acting = true
+	is_invulnerable = true
+	roll_speed = 170.0
+	roll_cooldown = 0.18
+	_ghost_timer = 0.0
+
+	_play_temp_sfx(SFX_TOOL_SWISH, -1.0, randf_range(1.25, 1.4))
+	_spawn_ghost_trail()
+	_play_anim("roll")
+
+func _spawn_ghost_trail() -> void:
+	if not visuals: return
+	var ghost = Node2D.new()
+	ghost.global_position = visuals.global_position
+	ghost.scale = visuals.scale
+	ghost.z_index = z_index - 1
+	
+	for layer_name in LAYERS:
+		var sp = visuals.get_node_or_null(layer_name) as Sprite2D
+		if sp and sp.visible and sp.texture:
+			var copy = Sprite2D.new()
+			copy.texture = sp.texture
+			copy.hframes = sp.hframes
+			copy.vframes = sp.vframes
+			copy.frame_coords = sp.frame_coords
+			copy.position = sp.position
+			copy.offset = sp.offset
+			copy.modulate = Color(0.7, 0.9, 1.3, 0.45) # Soft ethereal glow
+			ghost.add_child(copy)
+			
+	if get_tree() and get_tree().current_scene:
+		get_tree().current_scene.add_child(ghost)
+		var tween = ghost.create_tween()
+		tween.tween_property(ghost, "modulate:a", 0.0, 0.22)
+		tween.tween_callback(ghost.queue_free)
+
+func _perform_sword_attack() -> void:
+	if attack_cooldown > 0.0 or is_acting:
+		return
+	is_acting = true
+	attack_cooldown = 0.35
+	_attack_already_hit.clear()
+	_play_attack_sfx()
+	_play_anim("attack")
+	# Forward lunge in facing direction
+	var facing = get_facing_direction()
+	knockback_velocity += facing * 24.0
+	
+	if debug_show_attack_cone:
+		_debug_cone_timer = 0.25
+		_update_cone_visualizer()
+
+func _get_enemy_hit_info(enemy: Node2D) -> Dictionary:
+	var hurtbox = enemy.get_node_or_null("Hurtbox")
+	if hurtbox:
+		var cs = hurtbox.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if cs and cs.shape is CircleShape2D:
+			return {
+				"center": cs.global_position,
+				"radius": (cs.shape as CircleShape2D).radius
+			}
+	var col = enemy.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if col and col.shape is CircleShape2D:
+		return {
+			"center": col.global_position,
+			"radius": (col.shape as CircleShape2D).radius
+		}
+	return {
+		"center": enemy.global_position + Vector2(0, -6),
+		"radius": 10.0
+	}
+
+func _execute_sword_attack_hit() -> void:
+	var center = global_position + Vector2(0, -6)
+	var facing = get_facing_direction()
+	var has_sword = _has_sword_equipped()
+	var dmg = 12 if has_sword else 4
+	var base_kb = attack_base_knockback if has_sword else (attack_base_knockback * 0.6)
+	var min_dot = cos(deg_to_rad(attack_arc_degrees * 0.5))
+	
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	var hit_count = 0
+	
+	for enemy in enemies:
+		if not is_instance_valid(enemy):
+			continue
+		if enemy.get("is_dead") == true or enemy in _attack_already_hit:
+			continue
+			
+		var hit_info = _get_enemy_hit_info(enemy)
+		var enemy_center: Vector2 = hit_info["center"]
+		var to_enemy = enemy_center - center
+		var dist = to_enemy.length()
+		var enemy_radius: float = hit_info["radius"]
+		var effective_dist = max(0.0, dist - enemy_radius)
+		
+		# Attack range check against enemy body boundary
+		if effective_dist <= attack_range:
+			var in_arc = false
+			if effective_dist <= attack_point_blank_radius:
+				in_arc = true # Point-blank overlap
+			else:
+				var to_dir = to_enemy.normalized() if dist > 0.001 else facing
+				var dot = facing.dot(to_dir)
+				if dot >= min_dot:
+					in_arc = true
+					
+			if in_arc:
+				_attack_already_hit.append(enemy)
+				hit_count += 1
+				var hit_dir = to_enemy.normalized() if dist > 1.0 else facing
+				var kb_impulse = (hit_dir * 0.7 + facing * 0.3).normalized() * base_kb
+				
+				if enemy.has_method("take_damage"):
+					enemy.take_damage(dmg, kb_impulse)
+				elif enemy.has_method("interact"):
+					enemy.interact(self)
+					
+	if hit_count > 0:
+		shake_camera(2.2 if has_sword else 1.2, 0.12)
+		if has_sword:
+			_play_hit_impact_sfx()
+		else:
+			_play_temp_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), -2.0, randf_range(0.85, 1.05))
 
 func _update_auto_target() -> void:
 	var interactables: Array[Node2D] = []
@@ -597,6 +884,9 @@ func _update_auto_target() -> void:
 		if not target_candidate.has_method("interact") and target_candidate.get_parent() and target_candidate.get_parent().has_method("interact"):
 			target_candidate = target_candidate.get_parent()
 		if target_candidate.has_method("interact"):
+			# Exclude enemies from auto-target and highlight
+			if target_candidate.is_in_group("enemies") or target_candidate is EnemySkeleton or target_candidate is SlimeEnemy:
+				continue
 			var dist = global_position.distance_to(target_candidate.global_position)
 			if dist < closest_dist:
 				closest_dist = dist
@@ -616,10 +906,31 @@ func _update_auto_target() -> void:
 			if sprite: sprite.modulate = Color(1.4, 1.4, 1.4, 1.0)
 
 func _try_interact() -> void:
-	if attack_cooldown > 0.0:
+	if attack_cooldown > 0.0 or is_acting:
 		return
 
-	if current_target:
+	# If an enemy is in melee range in front, combat takes defense priority
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	var facing = get_facing_direction()
+	var center = global_position + Vector2(0, -6)
+	var enemy_in_front = false
+	for enemy in enemies:
+		if is_instance_valid(enemy) and not enemy.get("is_dead"):
+			var hit_info = _get_enemy_hit_info(enemy)
+			var to_enemy: Vector2 = hit_info["center"] - center
+			var dist = to_enemy.length()
+			var effective_dist = max(0.0, dist - float(hit_info["radius"]))
+			if effective_dist <= 34.0:
+				var to_dir = to_enemy.normalized() if dist > 0.001 else facing
+				if effective_dist <= 14.0 or facing.dot(to_dir) > 0.15:
+					enemy_in_front = true
+					break
+
+	if enemy_in_front:
+		_perform_sword_attack()
+		return
+
+	if current_target and is_instance_valid(current_target):
 		var dir_to_target = global_position.direction_to(current_target.global_position)
 		if dir_to_target.x != 0:
 			visuals.scale.x = -1 if dir_to_target.x < 0 else 1
@@ -632,45 +943,43 @@ func _try_interact() -> void:
 			current_target.interact(self)
 			return
 			
-		if current_target is Stone or current_target is EnemySkeleton or current_target is TreeObject or current_target is FallenLog or current_target is FallenLogVertical:
+		if current_target is Stone or current_target is TreeObject or current_target is FallenLog or current_target is FallenLogVertical:
+			var active_tool = InventoryManager.get_active_item_id()
 			var has_tool = false
-			
-			if current_target is EnemySkeleton:
-				# Player can fight with sword, tools, or bare hands
-				has_tool = true
-			elif current_target.get("resource_id") == "wood":
-				if InventoryManager.get_item_amount("stone_axe") > 0 or InventoryManager.get_item_amount("wooden_axe") > 0:
+			if current_target.get("resource_id") == "wood":
+				if active_tool in ["axe", "stone_axe", "wooden_axe"]:
 					has_tool = true
+				else:
+					print("Для рубки выберите топор в панели быстрого доступа!")
+					return
 			else:
-				if InventoryManager.get_item_amount("stone_pickaxe") > 0 or InventoryManager.get_item_amount("wooden_pickaxe") > 0:
+				if active_tool in ["pickaxe", "stone_pickaxe", "wooden_pickaxe"]:
 					has_tool = true
+				else:
+					print("Для добычи выберите кирку в панели быстрого доступа!")
+					return
 					
 			if not has_tool:
-				print("Необходим инструмент для этого действия!")
 				return
 				
-			var stamina_cost = 10.0 if current_target is EnemySkeleton else 15.0
-			if GameStateManager.consume_stamina(stamina_cost) or current_target is EnemySkeleton:
+			if GameStateManager.consume_stamina(15.0):
 				is_acting = true
-				if current_target is EnemySkeleton:
-					attack_cooldown = 0.38
-					_play_attack_sfx()
-					_play_anim("attack")
-					# Micro forward lunge toward enemy
-					var lunge = (current_target.global_position - global_position).normalized() * 32.0
-					knockback_velocity += lunge
-				elif current_target.get("resource_id") == "wood":
+				if current_target.get("resource_id") == "wood":
+					_play_tool_swish_sfx()
 					_play_anim("axe")
 				else:
+					_play_tool_swish_sfx()
 					_play_anim("mining")
-			else:
-				# Cannot swing due to no stamina
-				pass
+			return
 		else:
 			# Instant interact (like Boat)
 			current_target.interact(self)
+			return
 	else:
-		pass
+		if InventoryManager.get_active_item_id() == "hoe":
+			_use_hoe()
+		else:
+			_perform_sword_attack()
 
 func _update_equipment_visuals() -> void:
 	var chest_sprite = visuals.get_node_or_null("Chest")
@@ -706,6 +1015,7 @@ func _play_eat_sfx() -> void:
 
 func _use_hoe() -> void:
 	is_acting = true
+	_play_tool_swish_sfx()
 	_play_anim("axe")
 	var timer = get_tree().create_timer(0.3)
 	await timer.timeout
@@ -740,3 +1050,94 @@ func _use_hoe() -> void:
 				
 	is_acting = false
 	_play_anim("idle")
+
+func _notification(what: int) -> void:
+	if Engine.is_editor_hint():
+		if what == NOTIFICATION_EDITOR_PRE_SAVE:
+			if preview_attack_pose:
+				preview_attack_pose = false
+				_apply_editor_preview()
+
+func _update_cone_visualizer() -> void:
+	var cone_node = get_node_or_null("AttackConeVisualizer") as Polygon2D
+	if not cone_node:
+		cone_node = Polygon2D.new()
+		cone_node.name = "AttackConeVisualizer"
+		cone_node.color = Color(1.0, 0.8, 0.2, 0.4)
+		cone_node.z_index = 10
+		add_child(cone_node)
+		
+	var facing = get_facing_direction()
+	var base_angle = facing.angle()
+	var half_angle = deg_to_rad(attack_arc_degrees * 0.5)
+	var center_offset = Vector2(0, -6)
+	
+	var points = PackedVector2Array([center_offset])
+	var segments = 24
+	for i in range(segments + 1):
+		var a = base_angle - half_angle + (half_angle * 2.0 * i / float(segments))
+		points.append(center_offset + Vector2(cos(a), sin(a)) * attack_range)
+	points.append(center_offset)
+	cone_node.polygon = points
+	
+	var line = cone_node.get_node_or_null("Border") as Line2D
+	if not line:
+		line = Line2D.new()
+		line.name = "Border"
+		line.width = 1.5
+		line.default_color = Color(1.0, 0.3, 0.1, 0.9)
+		cone_node.add_child(line)
+	line.points = points
+	
+	var pb_circle = cone_node.get_node_or_null("PointBlank") as Line2D
+	if not pb_circle:
+		pb_circle = Line2D.new()
+		pb_circle.name = "PointBlank"
+		pb_circle.width = 1.0
+		pb_circle.default_color = Color(1.0, 0.2, 0.2, 0.6)
+		cone_node.add_child(pb_circle)
+	var pb_pts = PackedVector2Array()
+	for i in range(17):
+		var a = i * (TAU / 16.0)
+		pb_pts.append(center_offset + Vector2(cos(a), sin(a)) * attack_point_blank_radius)
+	pb_circle.points = pb_pts
+	
+	if Engine.is_editor_hint():
+		cone_node.visible = preview_attack_pose
+	else:
+		cone_node.visible = (debug_show_attack_cone and _debug_cone_timer > 0.0)
+
+func _apply_editor_preview() -> void:
+	if not Engine.is_editor_hint():
+		return
+	if not visuals:
+		visuals = get_node_or_null("Visuals")
+	if not visuals:
+		return
+		
+	var tool_sprite: Sprite2D = visuals.get_node_or_null("Tool")
+	
+	if not preview_attack_pose:
+		current_anim = "idle"
+		current_dir = 0
+		current_frame = 0
+		visuals.scale.x = 1.0
+		if tool_sprite:
+			tool_sprite.visible = false
+		_update_sprites()
+		_update_cone_visualizer()
+		return
+
+	# Show attack pose
+	current_anim = "attack"
+	current_frame = attack_hit_frame
+	
+	if preview_direction == 3: # Left
+		current_dir = 1
+		visuals.scale.x = -1.0
+	else:
+		current_dir = preview_direction
+		visuals.scale.x = 1.0
+		
+	_update_sprites()
+	_update_cone_visualizer()

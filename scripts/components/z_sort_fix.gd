@@ -20,10 +20,6 @@ func _process(_delta: float) -> void:
 				child.z_index = -4000
 				child.z_as_relative = false
 				continue
-			if child is DroppedItem and child.is_in_air:
-				child.z_index = int(child.global_position.y) + 160
-				child.z_as_relative = false
-				continue
 			child.z_index = int(child.global_position.y)
 			child.z_as_relative = false
 			

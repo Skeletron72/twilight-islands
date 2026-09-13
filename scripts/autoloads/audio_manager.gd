@@ -38,6 +38,25 @@ func _ready() -> void:
 	# Запуск фонового звука и музыки
 	call_deferred("_start_initial_audio")
 
+const NATURE_AMBIENCE_SOUNDS = [
+	"res://assets/audio/sfx/nature/sfx_birds.mp3",
+	"res://assets/audio/sfx/nature/sfx_birds_forest.mp3",
+	"res://assets/audio/sfx/nature/Retro Fly 01.mp3"
+]
+
+var _nature_ambience_timer: float = 15.0
+
+func _process(delta: float) -> void:
+	if not is_in_interior and _is_daytime():
+		_nature_ambience_timer -= delta
+		if _nature_ambience_timer <= 0.0:
+			_nature_ambience_timer = randf_range(20.0, 45.0)
+			var path = NATURE_AMBIENCE_SOUNDS[randi() % NATURE_AMBIENCE_SOUNDS.size()]
+			var stream = load(path)
+			if stream:
+				var vol = -14.0 if "Fly" in path else -8.0
+				play_sfx(stream, randf_range(0.9, 1.1), vol)
+
 func _setup_audio_players() -> void:
 	# Музыка (2 плеера для мягкого кроссфейда)
 	_music_player_a = AudioStreamPlayer.new()
@@ -92,7 +111,12 @@ func _is_daytime() -> bool:
 	return GameStateManager.current_time != GameStateManager.TimeOfDay.NIGHT
 
 func _on_time_changed(new_time: int) -> void:
-	_update_time_audio(new_time, 2.5)
+	if not is_in_interior:
+		_update_time_audio(new_time, 2.5)
+	if new_time == GameStateManager.TimeOfDay.MORNING:
+		var morning_sfx = load("res://assets/audio/sfx/nature/sfx_morning.mp3")
+		if morning_sfx:
+			play_sfx(morning_sfx, 1.0, -1.0)
 
 func _update_time_audio(time: int, fade_duration: float) -> void:
 	var target_music: String
@@ -163,8 +187,19 @@ func _on_music_finished(player: AudioStreamPlayer) -> void:
 		)
 
 func set_interior(interior: bool) -> void:
+	if is_in_interior == interior:
+		return
 	is_in_interior = interior
-	_update_time_audio(GameStateManager.current_time, 1.0)
+	if not is_in_interior:
+		_update_time_audio(GameStateManager.current_time, 1.0)
+	else:
+		# В интерьере приглушаем поверхностный шум природы (музыку не перезапускаем)
+		if _ambience_tween and _ambience_tween.is_valid():
+			_ambience_tween.kill()
+		_ambience_tween = create_tween().set_parallel(true)
+		_ambience_tween.tween_property(_ambience_birds, "volume_db", -80.0, 1.0)
+		_ambience_tween.tween_property(_ambience_crickets, "volume_db", -80.0, 1.0)
+		_ambience_tween.tween_property(_ambience_wind, "volume_db", -24.0, 1.0)
 
 # ─── Проигрывание 2D объемных SFX ─────────────────────────────────────────────
 func play_spatial_sfx(stream: AudioStream, global_pos: Vector2, pitch: float = 1.0, volume_db: float = 0.0, max_dist: float = 400.0) -> void:

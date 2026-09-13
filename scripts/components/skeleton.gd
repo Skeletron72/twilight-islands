@@ -1,11 +1,14 @@
-extends Area2D
+extends CharacterBody2D
 class_name EnemySkeleton
 
-@export var speed: float = 22.0
+@export var speed: float = 24.0
 @export var damage: int = 8
 @export var max_hp: int = 40
-@export var detection_radius: float = 160.0
-@export var attack_range: float = 26.0
+@export var detection_radius: float = 130.0
+@export var lose_aggro_radius: float = 185.0
+@export var attack_range: float = 24.0
+@export var attack_windup: float = 0.35
+@export var mass: float = 1.4
 
 const SKELETON_TEX = preload("res://assets/new_assets/Cute_Fantasy/Enemies/Skeleton/Skeleton_Swordman.png")
 const SFX_SWORD_SWING = preload("res://assets/audio/sfx/combat/sfx_sword_swing.mp3")
@@ -20,9 +23,9 @@ const ANIM_DATA = {
 	"walk_right": {"y": 128, "w": 32, "h": 32, "frames": 6, "fps": 6.0, "loop": true},
 	"walk_up": {"y": 160, "w": 32, "h": 32, "frames": 6, "fps": 6.0, "loop": true},
 	"death": {"y": 192, "w": 32, "h": 32, "frames": 4, "fps": 5.0, "loop": false},
-	"attack_down": {"y": 240, "w": 64, "h": 32, "frames": 4, "fps": 7.0, "loop": false},
-	"attack_right": {"y": 304, "w": 64, "h": 32, "frames": 4, "fps": 7.0, "loop": false},
-	"attack_up": {"y": 368, "w": 64, "h": 32, "frames": 4, "fps": 7.0, "loop": false},
+	"attack_down": {"y": 240, "w": 64, "h": 32, "frames": 4, "fps": 8.0, "loop": false},
+	"attack_right": {"y": 304, "w": 64, "h": 32, "frames": 4, "fps": 8.0, "loop": false},
+	"attack_up": {"y": 368, "w": 64, "h": 32, "frames": 4, "fps": 8.0, "loop": false},
 	"hurt_down": {"y": 416, "w": 32, "h": 32, "frames": 4, "fps": 8.0, "loop": false},
 	"hurt_right": {"y": 448, "w": 32, "h": 32, "frames": 4, "fps": 8.0, "loop": false},
 	"hurt_up": {"y": 480, "w": 32, "h": 32, "frames": 4, "fps": 8.0, "loop": false},
@@ -40,11 +43,29 @@ var anim_timer: float = 0.0
 
 var is_acting: bool = false
 var is_dead: bool = false
+var is_aggro: bool = false
 var attack_cooldown: float = 0.0
+var attack_windup_timer: float = 0.0
+var knockback_velocity: Vector2 = Vector2.ZERO
+
+# Paralysis state
+var is_paralyzed: bool = false
+var paralysis_timer: float = 0.0
+
+func apply_paralysis(duration: float, p_is_twilight: bool = false) -> void:
+	if is_dead:
+		return
+	is_paralyzed = true
+	paralysis_timer = max(paralysis_timer, duration)
+	is_acting = false
+	attack_windup_timer = 0.0
+	ParalysisEffect.apply_to(self, duration, p_is_twilight)
+
 var sfx_audio: AudioStreamPlayer2D
 
 func _ready() -> void:
 	hp = max_hp
+	add_to_group("enemies")
 
 	# Setup sprite
 	if sprite:
@@ -59,30 +80,55 @@ func _ready() -> void:
 	sfx_audio.max_distance = 300.0
 	add_child(sfx_audio)
 
-	# Health bar
+	# Health bar (Cute Fantasy UI_Bars: 30x5 mob bar)
 	hp_bar = ProgressBar.new()
-	hp_bar.position = Vector2(-16, -26)
-	hp_bar.custom_minimum_size = Vector2(32, 4)
+	hp_bar.position = Vector2(-15, -26)
+	hp_bar.custom_minimum_size = Vector2(30, 5)
 	hp_bar.show_percentage = false
 	hp_bar.z_index = 50
-	var hp_bg = StyleBoxFlat.new()
-	hp_bg.anti_aliasing = false
-	hp_bg.bg_color = Color(0.1, 0.1, 0.1, 0.8)
-	hp_bg.border_width_left = 1; hp_bg.border_width_top = 1; hp_bg.border_width_right = 1; hp_bg.border_width_bottom = 1
-	hp_bg.border_color = Color(0, 0, 0, 1)
-	var hp_fill = StyleBoxFlat.new()
-	hp_fill.anti_aliasing = false
-	hp_fill.bg_color = Color(0.85, 0.15, 0.15, 1)
-	hp_fill.border_width_left = 1; hp_fill.border_width_top = 1; hp_fill.border_width_right = 1; hp_fill.border_width_bottom = 1
-	hp_fill.border_color = Color(0, 0, 0, 0)
+	hp_bar.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	
+	var ui_bars_tex = preload("res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Bars.png")
+	
+	var hp_bg = StyleBoxTexture.new()
+	hp_bg.texture = ui_bars_tex
+	hp_bg.region_rect = Rect2(1, 15, 30, 5)
+	hp_bg.texture_margin_left = 1.0
+	hp_bg.texture_margin_right = 1.0
+	hp_bg.texture_margin_top = 1.0
+	hp_bg.texture_margin_bottom = 1.0
+	hp_bg.content_margin_left = 1.0
+	hp_bg.content_margin_right = 1.0
+	hp_bg.content_margin_top = 1.0
+	hp_bg.content_margin_bottom = 1.0
+	
+	var hp_fill = StyleBoxTexture.new()
+	hp_fill.texture = ui_bars_tex
+	hp_fill.region_rect = Rect2(2, 7, 28, 3)
+	hp_fill.texture_margin_left = 1.0
+	hp_fill.texture_margin_right = 1.0
+	hp_fill.texture_margin_top = 0.0
+	hp_fill.texture_margin_bottom = 0.0
+	hp_fill.modulate_color = Color(0.85, 0.15, 0.15, 1.0)
+	
 	hp_bar.add_theme_stylebox_override("background", hp_bg)
 	hp_bar.add_theme_stylebox_override("fill", hp_fill)
+	
+	var frame_overlay = TextureRect.new()
+	frame_overlay.name = "FrameOverlay"
+	frame_overlay.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	frame_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var frame_tex = AtlasTexture.new()
+	frame_tex.atlas = ui_bars_tex
+	frame_tex.region = Rect2(1, 21, 30, 5)
+	frame_overlay.texture = frame_tex
+	frame_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	frame_overlay.anchor_right = 1.0
+	frame_overlay.anchor_bottom = 1.0
+	hp_bar.add_child(frame_overlay)
+	
 	hp_bar.visible = false
 	add_child(hp_bar)
-
-	add_to_group("interactable")
-	collision_layer = 4
-	collision_mask = 1
 
 	_play_anim("idle_down")
 
@@ -99,11 +145,34 @@ func _physics_process(delta: float) -> void:
 	if attack_cooldown > 0:
 		attack_cooldown -= delta
 
-	if is_dead or is_acting:
+	# Decay knockback
+	if knockback_velocity.length_squared() > 1.0:
+		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 350.0 * delta)
+	else:
+		knockback_velocity = Vector2.ZERO
+
+	if is_dead:
+		velocity = Vector2.ZERO
+		_process_animation(delta)
+		return
+
+	if is_paralyzed:
+		paralysis_timer -= delta
+		if paralysis_timer <= 0.0:
+			is_paralyzed = false
+		velocity = knockback_velocity
+		move_and_slide()
+		return
+
+	if is_acting:
+		velocity = knockback_velocity
+		move_and_slide()
 		_process_animation(delta)
 		return
 
 	if not is_instance_valid(player):
+		velocity = knockback_velocity
+		move_and_slide()
 		_play_anim("idle_" + facing_dir)
 		_process_animation(delta)
 		return
@@ -111,29 +180,46 @@ func _physics_process(delta: float) -> void:
 	var dist = global_position.distance_to(player.global_position)
 	var dir = global_position.direction_to(player.global_position)
 
-	# Update direction based on vector to player
-	_update_facing(dir)
+	# Detection / Aggro handling
+	if not is_aggro:
+		if dist <= detection_radius:
+			is_aggro = true
+		else:
+			# Outside detection radius: stay in idle without rotating toward player
+			velocity = knockback_velocity
+			move_and_slide()
+			_play_anim("idle_" + facing_dir)
+			_process_animation(delta)
+			return
+	else:
+		if dist > lose_aggro_radius:
+			is_aggro = false
+			velocity = knockback_velocity
+			move_and_slide()
+			_play_anim("idle_" + facing_dir)
+			_process_animation(delta)
+			return
 
-	# If player is outside detection radius, idle
-	if dist > detection_radius:
-		_play_anim("idle_" + facing_dir)
-		_process_animation(delta)
-		return
+	# Update facing direction towards player
+	_update_facing(dir)
 
 	# Attack range check
 	if dist <= attack_range and attack_cooldown <= 0.0:
 		is_acting = true
 		attack_cooldown = 1.8
-		_play_sound(SFX_SWORD_SWING, 0.9, 1.1)
+		attack_windup_timer = attack_windup
+		velocity = Vector2.ZERO
 		_play_anim("attack_" + facing_dir)
 	else:
-		# Chase player
+		# Chase player with physical sliding
 		if dist > attack_range - 4.0:
-			global_position += dir * speed * delta
+			velocity = dir * speed + knockback_velocity
 			_play_anim("walk_" + facing_dir)
 		else:
+			velocity = knockback_velocity
 			_play_anim("idle_" + facing_dir)
 
+	move_and_slide()
 	_process_animation(delta)
 
 func _update_facing(dir: Vector2) -> void:
@@ -171,6 +257,14 @@ func _process_animation(delta: float) -> void:
 	if current_anim == "" or not ANIM_DATA.has(current_anim):
 		return
 
+	# Пауза на замахе перед нанесением удара
+	if current_anim.begins_with("attack_") and attack_windup_timer > 0.0:
+		attack_windup_timer -= delta
+		if attack_windup_timer <= 0.0:
+			_play_sound(SFX_SWORD_SWING, 0.9, 1.1)
+		_apply_frame()
+		return
+
 	var data = ANIM_DATA[current_anim]
 	var anim_fps: float = data["fps"]
 	var total_frames: int = data["frames"]
@@ -203,19 +297,43 @@ func _process_animation(delta: float) -> void:
 
 func _perform_attack_hit() -> void:
 	if is_instance_valid(player):
-		var dist = global_position.distance_to(player.global_position)
+		var to_player = player.global_position - global_position
+		var dist = to_player.length()
 		if dist <= attack_range + 10.0:
-			if player.has_method("take_damage"):
-				player.take_damage(damage, global_position)
-			else:
-				GameStateManager.take_damage(damage)
+			var attack_dir = Vector2.DOWN
+			match facing_dir:
+				"right":
+					attack_dir = Vector2.LEFT if (sprite and sprite.scale.x < 0) else Vector2.RIGHT
+				"up":
+					attack_dir = Vector2.UP
+				"down":
+					attack_dir = Vector2.DOWN
+
+			# Удар поражает цель только если игрок перед скелетом (~180°), если игрок не увернулся за спину
+			if to_player.is_zero_approx() or to_player.normalized().dot(attack_dir) > -0.2:
+				if player.has_method("take_damage"):
+					player.take_damage(damage, global_position)
+				else:
+					GameStateManager.take_damage(damage)
+
+func _spawn_impact_dust(pos: Vector2) -> void:
+	var dust_scene = load("res://scenes/vfx/impact_dust.tscn")
+	if dust_scene:
+		var dust = dust_scene.instantiate()
+		dust.global_position = pos
+		if get_tree() and get_tree().current_scene:
+			get_tree().current_scene.add_child(dust)
 
 func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
 	if is_dead:
 		return
 
 	hp -= amount
+	is_aggro = true # Provoke aggro immediately on taking damage
 	_play_sound(SFX_SKELETON_HURT, 0.9, 1.15)
+	
+	# Spawn impact dust VFX at hit point
+	_spawn_impact_dust(global_position + Vector2(0, -6))
 
 	# Red flash
 	if sprite:
@@ -223,13 +341,21 @@ func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
 		sprite.modulate = Color(2.0, 0.4, 0.4, 1.0)
 		flash_tween.tween_property(sprite, "modulate", Color.WHITE, 0.25)
 
-	# Knockback
+	# Apply knockback based on mass
 	if knockback_dir != Vector2.ZERO:
-		global_position += knockback_dir * 12.0
+		var impulse = knockback_dir
+		if impulse.length_squared() <= 1.5:
+			impulse = impulse.normalized() * 180.0
+		knockback_velocity = impulse / max(0.1, mass)
 
 	if hp <= 0:
 		is_dead = true
 		is_acting = true
+		attack_windup_timer = 0.0
+		is_paralyzed = false
+		var pfx = get_node_or_null("ParalysisEffect")
+		if pfx:
+			pfx.queue_free()
 		collision_layer = 0
 		collision_mask = 0
 		if hp_bar:

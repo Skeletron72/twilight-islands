@@ -72,7 +72,7 @@ func _start_pickup(player: Node2D) -> void:
 
 func _collect() -> void:
 	if AudioManager:
-		AudioManager.play_sfx(preload("res://assets/audio/sfx/player/sfx_item_pickup.mp3"), randf_range(1.0, 1.15), 0.0)
+		AudioManager.play_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), randf_range(1.0, 1.2), -1.0)
 	
 	var tween = create_tween()
 	tween.set_parallel(true)

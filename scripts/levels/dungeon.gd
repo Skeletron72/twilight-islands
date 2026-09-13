@@ -6,6 +6,7 @@ class_name DungeonLevel
 const DungeonGeneratorClass = preload("res://scripts/components/dungeon_generator.gd")
 
 @onready var floor_layer: TileMapLayer = $FloorLayer
+@onready var water_layer: TileMapLayer = $WaterLayer
 @onready var wall_layer: TileMapLayer = $WallLayer
 @onready var boundary_walls: StaticBody2D = $BoundaryWalls
 @onready var interactables: Node2D = $Interactables
@@ -25,14 +26,11 @@ func _ready() -> void:
 		wall_layer,
 		boundary_walls,
 		interactables,
-		player
+		player,
+		water_layer
 	)
 
 	# Cave atmosphere and music
 	if AudioManager:
 		AudioManager.set_interior(true)
 		AudioManager.play_music("res://assets/audio/music/cave.mp3", 0.5)
-
-func _exit_tree() -> void:
-	if AudioManager:
-		AudioManager.set_interior(false)

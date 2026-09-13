@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/components/dropped_item.gd" id="1_drp"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
-radius = 16.0
+radius = 28.0
 
 [node name="DroppedItem" type="Area2D"]
 y_sort_enabled = true

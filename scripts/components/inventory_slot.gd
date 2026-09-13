@@ -106,8 +106,7 @@ func _refresh() -> void:
 			
 		var item_data = ItemDB.get_item(item_id)
 		var item_name = item_data.get("name", item_id)
-		var item_desc = item_data.get("desc", "")
-		tooltip_text = item_name if item_desc == "" else "%s\n%s" % [item_name, item_desc]
+		tooltip_text = item_name
 	else:
 		icon_rect.texture = null
 		amount_label.hide()
@@ -117,19 +116,37 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	if slot_index < 0: return null
 	var item_id = InventoryManager.ui_slots[slot_index]
 	if item_id == "" or InventoryManager.get_item_amount(item_id) <= 0: return null
-	
+
+	var total = InventoryManager.get_item_amount(item_id)
+	var drag_amount = total
+	if Input.is_key_pressed(KEY_CTRL):
+		drag_amount = 1
+	elif Input.is_key_pressed(KEY_SHIFT):
+		drag_amount = max(1, total / 2)
+
 	var preview = TextureRect.new()
 	preview.texture = icon_rect.texture
 	preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	preview.custom_minimum_size = Vector2(44, 44)
 	preview.modulate.a = 0.85
-	
+
+	# Show amount badge on preview when partial drag
+	if drag_amount < total:
+		var lbl = Label.new()
+		lbl.text = "×" + str(drag_amount)
+		lbl.add_theme_font_size_override("font_size", 10)
+		lbl.add_theme_color_override("font_color", Color.WHITE)
+		lbl.add_theme_color_override("font_outline_color", Color.BLACK)
+		lbl.add_theme_constant_override("outline_size", 4)
+		lbl.position = Vector2(24, 26)
+		preview.add_child(lbl)
+
 	var control = Control.new()
 	preview.position = -Vector2(22, 22)
 	control.add_child(preview)
 	set_drag_preview(control)
-	
-	return {"type": "inventory_slot", "slot_index": slot_index}
+
+	return {"type": "inventory_slot", "slot_index": slot_index, "drag_amount": drag_amount}
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if slot_index < 0: return false
@@ -140,14 +157,31 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	if slot_index < 0: return
 	var from_idx = data["slot_index"]
-	if from_idx != slot_index:
+	if from_idx == slot_index: return
+
+	var drag_amount = data.get("drag_amount", -1)
+	var from_item = InventoryManager.ui_slots[from_idx]
+	var total = InventoryManager.get_item_amount(from_item) if from_item != "" else 0
+
+	if drag_amount <= 0 or drag_amount >= total:
 		InventoryManager.swap_ui_slots(from_idx, slot_index)
+	else:
+		InventoryManager.transfer_partial(from_idx, slot_index, drag_amount)
 
 func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		if custom_amount != -1:
-			pass
-		elif slot_index >= 0 and slot_index < InventoryManager.ui_slots.size():
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if custom_amount != -1:
+				pass
+			elif slot_index >= 0 and slot_index < InventoryManager.ui_slots.size():
+				var item_id = InventoryManager.ui_slots[slot_index]
+				if item_id != "":
+					item_clicked.emit(item_id)
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			if custom_amount != -1: return
+			if slot_index < 0 or slot_index >= InventoryManager.ui_slots.size(): return
 			var item_id = InventoryManager.ui_slots[slot_index]
-			if item_id != "":
-				item_clicked.emit(item_id)
+			if item_id == "": return
+			InventoryManager.quick_transfer(slot_index)
+			get_viewport().set_input_as_handled()
+

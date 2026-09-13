@@ -12,6 +12,10 @@ var stump_hp: int = 3
 var is_animating: bool = false
 var resource_id: String = "wood"
 
+const SFX_WOOD_HIT = preload("res://assets/audio/sfx/tools/sfx_wood_hit.mp3")
+const SFX_WOOD_BREAK = preload("res://assets/audio/sfx/tools/sfx_wood_break.mp3")
+const SFX_TREE_RUSTLE = preload("res://assets/audio/sfx/nature/sfx_tree_rustle.mp3")
+
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var interaction_shape: CollisionShape2D = $CollisionShape2D
 @onready var static_shape: CollisionShape2D = $StaticBody/CollisionShape2D
@@ -64,11 +68,15 @@ func interact(player: Node2D) -> void:
 	
 	if current_state == State.FULL_TREE:
 		hp -= 1
+		if AudioManager:
+			AudioManager.play_spatial_sfx(SFX_WOOD_HIT, global_position, randf_range(0.92, 1.08), -2.0)
 		_play_shake_animation()
 		if hp <= 0:
 			_chop_down(player)
 	else:
 		stump_hp -= 1
+		if AudioManager:
+			AudioManager.play_spatial_sfx(SFX_WOOD_HIT, global_position, randf_range(0.92, 1.08), -2.0)
 		_play_shake_animation()
 		if stump_hp <= 0:
 			_destroy_stump()
@@ -83,6 +91,8 @@ func _play_shake_animation() -> void:
 	
 	var shake_tween = create_tween()
 	if current_state == State.FULL_TREE:
+		if AudioManager:
+			AudioManager.play_spatial_sfx(SFX_TREE_RUSTLE, global_position, randf_range(0.95, 1.1), -5.0)
 		# Sway from the bottom pivot
 		shake_tween.tween_property(sprite, "rotation", 0.1, 0.03)
 		shake_tween.tween_property(sprite, "rotation", -0.1, 0.04)
@@ -175,6 +185,8 @@ func _chop_down(player: Node2D) -> void:
 		HomeStateManager.mark_stump(get_path())
 	
 	GameStateManager.register_tree_chopped()
+	if AudioManager:
+		AudioManager.play_spatial_sfx(SFX_WOOD_BREAK, global_position, randf_range(0.95, 1.05), 0.0)
 	_spawn_drops(tree_size == "big", false)
 	
 	# Create the falling top sprite
@@ -226,6 +238,8 @@ func _destroy_stump() -> void:
 	var is_home = (current_scene and current_scene.name == "HomeIsland")
 	if is_home and HomeStateManager:
 		HomeStateManager.mark_destroyed(get_path())
+	if AudioManager:
+		AudioManager.play_spatial_sfx(SFX_WOOD_BREAK, global_position, randf_range(0.95, 1.05), 0.0)
 	_spawn_drops(tree_size == "big", true)
 	queue_free()
 

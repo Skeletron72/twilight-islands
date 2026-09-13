@@ -9,6 +9,9 @@ var resource_id: String = "stone"
 var anim_frame: int = 0
 var anim_timer: float = 0.0
 
+const SFX_STONE_HIT = preload("res://assets/audio/sfx/tools/sfx_stone_hit.mp3")
+const SFX_STONE_BREAK = preload("res://assets/audio/sfx/tools/sfx_stone_break.mp3")
+
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var interaction_shape: CollisionShape2D = $CollisionShape2D
 @onready var static_shape: CollisionShape2D = $StaticBody/CollisionShape2D
@@ -55,6 +58,9 @@ func interact(player: Node2D) -> void:
 	
 	hp -= 1
 	
+	if AudioManager:
+		AudioManager.play_spatial_sfx(SFX_STONE_HIT, global_position, randf_range(0.92, 1.08), -2.0)
+	
 	# Visual feedback: flash and shake
 	var orig_mod = sprite.modulate
 	sprite.modulate = Color(1.5, 0.5, 0.5)
@@ -70,6 +76,8 @@ func interact(player: Node2D) -> void:
 	
 	if hp <= 0:
 		is_dead = true
+		if AudioManager:
+			AudioManager.play_spatial_sfx(SFX_STONE_BREAK, global_position, randf_range(0.95, 1.05), 0.0)
 		var current_scene = get_tree().current_scene
 		var is_home = (current_scene and current_scene.name == "HomeIsland")
 		if (is_permanent or is_home) and HomeStateManager:
@@ -89,7 +97,7 @@ func _collect_as_gatherable(player: Node2D) -> void:
 	# Audio pickup effect
 	var audio_mgr = player.get_node_or_null("/root/AudioManager") if player else get_node_or_null("/root/AudioManager")
 	if audio_mgr and audio_mgr.has_method("play_sfx"):
-		audio_mgr.play_sfx(preload("res://assets/audio/sfx/player/sfx_item_pickup.mp3"), randf_range(1.0, 1.15), 0.0)
+		audio_mgr.play_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), randf_range(1.0, 1.2), -1.0)
 		
 	# Add stone item to inventory
 	InventoryManager.add_item("stone", 1)

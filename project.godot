@@ -15,17 +15,16 @@ run/main_scene="res://scenes/levels/home_island.tscn"
 config/features=PackedStringArray("4.7", "Mobile")
 
 [autoload]
+
 DungeonManager="*res://scripts/autoloads/dungeon_manager.gd"
-
-
 PlacementManager="*res://scripts/autoloads/placement_manager.gd"
 ItemDB="*res://scripts/autoloads/item_db.gd"
 TransitionManager="*res://scripts/autoloads/transition_manager.gd"
 HomeStateManager="*res://scripts/autoloads/home_state_manager.gd"
 InventoryManager="*res://scripts/autoloads/inventory_manager.gd"
 GameStateManager="*res://scripts/autoloads/game_state_manager.gd"
+WeatherManager="*res://scripts/autoloads/weather_manager.gd"
 TentManager="*res://scripts/autoloads/tent_manager.gd"
-DungeonManager="*res://scripts/autoloads/dungeon_manager.gd"
 AudioManager="*res://scripts/autoloads/audio_manager.gd"
 QuestManager="*res://scripts/autoloads/quest_manager.gd"
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"

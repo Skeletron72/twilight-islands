@@ -1,8 +1,9 @@
 extends CanvasLayer
 
-@onready var time_icon: TextureRect = $TimeContainer/TimeIcon
+@onready var time_icon: TextureRect = $TimeIcon
 @onready var time_label: Label = $TimeContainer/TimeLabel
 @onready var day_label: Label = $TimeContainer/DayLabel
+@onready var weather_label: Label = $TimeContainer/WeatherLabel
 @onready var book_ui = $BookUI
 @onready var book_btn: TextureButton = $BookToggleContainer/BookToggleBtn
 @onready var book_key_lbl: Label = $BookToggleContainer/KeyLabel
@@ -16,16 +17,58 @@ var stamina_container: HBoxContainer
 var stamina_bar: ProgressBar
 var stamina_label: Label
 var stamina_icon: TextureRect
-var stamina_fill_style: StyleBoxFlat
+var stamina_fill_style: StyleBoxTexture
+var _stamina_shake_tween: Tween
+
+var hunger_container: HBoxContainer
+var hunger_bar: ProgressBar
+var hunger_label: Label
+var hunger_icon: TextureRect
+var hunger_fill_style: StyleBoxTexture
+
+const UI_BARS_TEX = preload("res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Bars.png")
+
+static func create_player_bar_bg() -> StyleBoxTexture:
+	var sb = StyleBoxTexture.new()
+	sb.texture = UI_BARS_TEX
+	sb.region_rect = Rect2(82, 33, 12, 6)
+	sb.texture_margin_left = 1.0
+	sb.texture_margin_right = 1.0
+	sb.texture_margin_top = 1.0
+	sb.texture_margin_bottom = 1.0
+	sb.content_margin_left = 1.0
+	sb.content_margin_right = 1.0
+	sb.content_margin_top = 1.0
+	sb.content_margin_bottom = 1.0
+	return sb
+
+static func create_player_bar_fill(tint: Color) -> StyleBoxTexture:
+	var sb = StyleBoxTexture.new()
+	sb.texture = UI_BARS_TEX
+	sb.region_rect = Rect2(83, 42, 10, 4)
+	sb.texture_margin_left = 1.0
+	sb.texture_margin_right = 1.0
+	sb.texture_margin_top = 1.0
+	sb.texture_margin_bottom = 1.0
+	sb.content_margin_left = -1.0
+	sb.content_margin_right = -1.0
+	sb.content_margin_top = -1.0
+	sb.content_margin_bottom = -1.0
+	sb.modulate_color = tint
+	return sb
 
 func _ready() -> void:
 	show()
 	_setup_stats_hud()
 	GameStateManager.time_changed.connect(_on_time_changed)
 	GameStateManager.day_changed.connect(_on_day_changed)
+	if GameStateManager.has_signal("clock_ticked"):
+		GameStateManager.clock_ticked.connect(_on_clock_ticked)
+	if GameStateManager.has_signal("day_of_week_changed"):
+		GameStateManager.day_of_week_changed.connect(func(_dname, _idx): _update_time_text())
+	if WeatherManager:
+		WeatherManager.weather_changed.connect(func(_w, _info): _update_time_text())
 	GameStateManager.player_died.connect(_on_player_died)
-	
-
 	
 	_init_time_textures()
 	_update_time_text()
@@ -54,37 +97,39 @@ func _ready() -> void:
 		else:
 			book_key_lbl.text = "[Tab]"
 
+func _on_clock_ticked(_h: int, _m: int) -> void:
+	if time_label:
+		time_label.text = GameStateManager.get_time_of_day_name()
 
-func _on_time_changed(new_time: int) -> void:
+func _on_time_changed(_new_time: int) -> void:
 	_update_time_text()
 
-func _on_day_changed(new_day: int) -> void:
+func _on_day_changed(_new_day: int) -> void:
 	_update_time_text()
 
 func _update_time_text() -> void:
-	var time_str = ""
 	var icon_tex = null
 	match GameStateManager.current_time:
 		GameStateManager.TimeOfDay.MORNING:
-			time_str = "Утро"
 			icon_tex = tex_morning
 		GameStateManager.TimeOfDay.DAY:
-			time_str = "День"
 			icon_tex = tex_day
 		GameStateManager.TimeOfDay.DUSK:
-			time_str = "Вечер"
 			icon_tex = tex_evening
 		GameStateManager.TimeOfDay.NIGHT:
-			time_str = "Ночь"
 			icon_tex = tex_night
 	
-	if time_label: time_label.text = time_str
 	if time_icon: time_icon.texture = icon_tex
-	if day_label: day_label.text = "День %d" % GameStateManager.current_day
+	if time_label:
+		time_label.text = GameStateManager.get_time_of_day_name()
+	if day_label:
+		day_label.text = "%s, День %d" % [GameStateManager.get_day_of_week(), GameStateManager.current_day]
+	if weather_label and WeatherManager:
+		weather_label.text = "Погода: %s" % WeatherManager.get_weather_name()
+		weather_label.add_theme_color_override("font_color", WeatherManager.get_ui_color())
 
-func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("ui_accept"): # Press Space to advance time for testing
-		GameStateManager.advance_time()
+func _process(_delta: float) -> void:
+	pass
 
 func _on_player_died() -> void:
 	print("Player died! Lost raid loot.")
@@ -94,9 +139,12 @@ func _on_player_died() -> void:
 	
 	InventoryManager.clear_temp_inventory()
 	InventoryManager.set_mode(InventoryManager.Mode.SAFE)
-	# Reset stats for next run
-	GameStateManager.current_health = GameStateManager.max_health
-	GameStateManager.current_stamina = GameStateManager.max_stamina
+	# Reset stats and exhaustion for next run
+	GameStateManager.reset_player_state()
+	if DungeonManager:
+		DungeonManager.spawn_at_ladder_down = false
+	if AudioManager:
+		AudioManager.set_interior(false)
 	var tm = get_node_or_null("/root/TransitionManager")
 	if tm:
 		tm.transition_to("res://scenes/levels/home_island.tscn", "Вы погибли...")
@@ -158,18 +206,20 @@ func _update_book_btn_textures() -> void:
 		book_btn.texture_hover = tex_closed_hover
 
 func _setup_stats_hud() -> void:
+	var font_res = preload("res://assets/fonts/WarmPixel.ttf")
+
 	# --- HEALTH BAR ---
 	health_container = HBoxContainer.new()
 	health_container.name = "HealthContainer"
-	health_container.position = Vector2(70, 18)
+	health_container.position = Vector2(70, 16)
 	health_container.custom_minimum_size = Vector2(130, 16)
 	health_container.add_theme_constant_override("separation", 6)
 	health_container.alignment = BoxContainer.ALIGNMENT_BEGIN
 	
 	heart_icon = TextureRect.new()
 	heart_icon.name = "HeartIcon"
-	heart_icon.custom_minimum_size = Vector2(16, 16)
-	heart_icon.pivot_offset = Vector2(8, 8)
+	heart_icon.custom_minimum_size = Vector2(12, 12)
+	heart_icon.pivot_offset = Vector2(6, 6)
 	heart_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	heart_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	var heart_tex = AtlasTexture.new()
@@ -180,40 +230,15 @@ func _setup_stats_hud() -> void:
 	
 	health_bar = ProgressBar.new()
 	health_bar.name = "HealthBar"
-	health_bar.custom_minimum_size = Vector2(64, 7)
+	health_bar.custom_minimum_size = Vector2(64, 6)
 	health_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	health_bar.show_percentage = false
-	
-	var hp_bg = StyleBoxFlat.new()
-	hp_bg.anti_aliasing = false
-	hp_bg.bg_color = Color(0.1, 0.1, 0.12, 0.9)
-	hp_bg.border_width_left = 1; hp_bg.border_width_top = 1; hp_bg.border_width_right = 1; hp_bg.border_width_bottom = 1
-	hp_bg.border_color = Color(0.02, 0.02, 0.02, 1.0)
-	
-	var hp_fill = StyleBoxFlat.new()
-	hp_fill.anti_aliasing = false
-	hp_fill.bg_color = Color(0.9, 0.18, 0.22, 1.0)
-	hp_fill.border_width_left = 1; hp_fill.border_width_top = 1; hp_fill.border_width_right = 1; hp_fill.border_width_bottom = 1
-	hp_fill.border_color = Color(0, 0, 0, 0)
-	
-	health_bar.add_theme_stylebox_override("background", hp_bg)
-	health_bar.add_theme_stylebox_override("fill", hp_fill)
+	health_bar.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	health_bar.add_theme_stylebox_override("background", create_player_bar_bg())
+	health_bar.add_theme_stylebox_override("fill", create_player_bar_fill(Color(0.92, 0.20, 0.22, 1.0)))
 	health_bar.max_value = GameStateManager.max_health
 	health_bar.value = GameStateManager.current_health
 	health_container.add_child(health_bar)
-	
-	health_label = Label.new()
-	health_label.name = "HealthLabel"
-	health_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	var lbl_settings = LabelSettings.new()
-	lbl_settings.font = preload("res://assets/fonts/WarmPixel.ttf")
-	lbl_settings.font_size = 11
-	lbl_settings.font_color = Color(1, 1, 1, 1)
-	lbl_settings.outline_size = 3
-	lbl_settings.outline_color = Color(0, 0, 0, 1)
-	health_label.label_settings = lbl_settings
-	health_label.text = "%d/%d" % [int(ceil(GameStateManager.current_health)), int(GameStateManager.max_health)]
-	health_container.add_child(health_label)
 	
 	add_child(health_container)
 	GameStateManager.health_changed.connect(_on_health_changed)
@@ -222,62 +247,75 @@ func _setup_stats_hud() -> void:
 	# --- STAMINA BAR ---
 	stamina_container = HBoxContainer.new()
 	stamina_container.name = "StaminaContainer"
-	stamina_container.position = Vector2(70, 36)
+	stamina_container.position = Vector2(70, 28)
 	stamina_container.custom_minimum_size = Vector2(130, 16)
 	stamina_container.add_theme_constant_override("separation", 6)
 	stamina_container.alignment = BoxContainer.ALIGNMENT_BEGIN
 	
 	stamina_icon = TextureRect.new()
 	stamina_icon.name = "StaminaIcon"
-	stamina_icon.custom_minimum_size = Vector2(16, 16)
-	stamina_icon.pivot_offset = Vector2(8, 8)
+	stamina_icon.custom_minimum_size = Vector2(12, 12)
+	stamina_icon.pivot_offset = Vector2(6, 6)
 	stamina_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	stamina_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	var sta_tex = AtlasTexture.new()
-	sta_tex.atlas = preload("res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Icons.png")
-	sta_tex.region = Rect2(144, 0, 16, 16)
-	stamina_icon.texture = sta_tex
+	var st_tex = AtlasTexture.new()
+	st_tex.atlas = preload("res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Icons.png")
+	st_tex.region = Rect2(144, 0, 16, 16)
+	stamina_icon.texture = st_tex
 	stamina_container.add_child(stamina_icon)
 	
 	stamina_bar = ProgressBar.new()
 	stamina_bar.name = "StaminaBar"
-	stamina_bar.custom_minimum_size = Vector2(64, 7)
+	stamina_bar.custom_minimum_size = Vector2(64, 6)
 	stamina_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	stamina_bar.show_percentage = false
-	
-	var sta_bg = StyleBoxFlat.new()
-	sta_bg.anti_aliasing = false
-	sta_bg.bg_color = Color(0.1, 0.1, 0.12, 0.9)
-	sta_bg.border_width_left = 1; sta_bg.border_width_top = 1; sta_bg.border_width_right = 1; sta_bg.border_width_bottom = 1
-	sta_bg.border_color = Color(0.02, 0.02, 0.02, 1.0)
-	
-	stamina_fill_style = StyleBoxFlat.new()
-	stamina_fill_style.anti_aliasing = false
-	stamina_fill_style.bg_color = Color(0.2, 0.85, 0.35, 1.0)
-	stamina_fill_style.border_width_left = 1; stamina_fill_style.border_width_top = 1; stamina_fill_style.border_width_right = 1; stamina_fill_style.border_width_bottom = 1
-	stamina_fill_style.border_color = Color(0, 0, 0, 0)
-	
-	stamina_bar.add_theme_stylebox_override("background", sta_bg)
+	stamina_bar.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	stamina_fill_style = create_player_bar_fill(Color(0.25, 0.85, 0.35, 1.0))
+	stamina_bar.add_theme_stylebox_override("background", create_player_bar_bg())
 	stamina_bar.add_theme_stylebox_override("fill", stamina_fill_style)
 	stamina_bar.max_value = GameStateManager.max_stamina
 	stamina_bar.value = GameStateManager.current_stamina
 	stamina_container.add_child(stamina_bar)
 	
-	stamina_label = Label.new()
-	stamina_label.name = "StaminaLabel"
-	stamina_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	var sta_lbl_settings = LabelSettings.new()
-	sta_lbl_settings.font = preload("res://assets/fonts/WarmPixel.ttf")
-	sta_lbl_settings.font_size = 11
-	sta_lbl_settings.font_color = Color(1, 1, 1, 1)
-	sta_lbl_settings.outline_size = 3
-	sta_lbl_settings.outline_color = Color(0, 0, 0, 1)
-	stamina_label.label_settings = sta_lbl_settings
-	stamina_label.text = "%d/%d" % [int(ceil(GameStateManager.current_stamina)), int(GameStateManager.max_stamina)]
-	stamina_container.add_child(stamina_label)
-	
 	add_child(stamina_container)
 	GameStateManager.stamina_changed.connect(_on_stamina_changed_hud)
+	GameStateManager.stamina_depleted.connect(_on_stamina_depleted_hud)
+
+	# --- HUNGER BAR ---
+	hunger_container = HBoxContainer.new()
+	hunger_container.name = "HungerContainer"
+	hunger_container.position = Vector2(70, 40)
+	hunger_container.custom_minimum_size = Vector2(130, 16)
+	hunger_container.add_theme_constant_override("separation", 6)
+	hunger_container.alignment = BoxContainer.ALIGNMENT_BEGIN
+	
+	hunger_icon = TextureRect.new()
+	hunger_icon.name = "HungerIcon"
+	hunger_icon.custom_minimum_size = Vector2(12, 12)
+	hunger_icon.pivot_offset = Vector2(6, 6)
+	hunger_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	hunger_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	var hg_tex = AtlasTexture.new()
+	hg_tex.atlas = preload("res://assets/new_assets/Cute_Fantasy/Icons/No Outline/Food_Icons_NO_Outline.png")
+	hg_tex.region = Rect2(0, 16, 16, 16)
+	hunger_icon.texture = hg_tex
+	hunger_container.add_child(hunger_icon)
+	
+	hunger_bar = ProgressBar.new()
+	hunger_bar.name = "HungerBar"
+	hunger_bar.custom_minimum_size = Vector2(64, 6)
+	hunger_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	hunger_bar.show_percentage = false
+	hunger_bar.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	hunger_fill_style = create_player_bar_fill(Color(0.95, 0.62, 0.18, 1.0))
+	hunger_bar.add_theme_stylebox_override("background", create_player_bar_bg())
+	hunger_bar.add_theme_stylebox_override("fill", hunger_fill_style)
+	hunger_bar.max_value = GameStateManager.max_hunger
+	hunger_bar.value = GameStateManager.current_hunger
+	hunger_container.add_child(hunger_bar)
+	
+	add_child(hunger_container)
+	GameStateManager.hunger_changed.connect(_on_hunger_changed_hud)
 
 func _on_health_changed(new_val: float, max_val: float) -> void:
 	if health_bar:
@@ -291,6 +329,57 @@ func _on_health_changed(new_val: float, max_val: float) -> void:
 		tw_h.tween_property(heart_icon, "scale", Vector2(1.3, 1.3), 0.08)
 		tw_h.tween_property(heart_icon, "scale", Vector2(1.0, 1.0), 0.12)
 
+func _on_stamina_changed_hud(new_val: float, max_val: float) -> void:
+	if stamina_bar:
+		stamina_bar.max_value = max_val
+		var tw = create_tween()
+		tw.tween_property(stamina_bar, "value", new_val, 0.1)
+	if stamina_label:
+		stamina_label.text = "%d/%d" % [int(ceil(new_val)), int(max_val)]
+	if stamina_fill_style:
+		if GameStateManager.is_exhausted:
+			stamina_fill_style.modulate_color = Color(0.92, 0.3, 0.2, 1.0)
+			_start_stamina_shake()
+		else:
+			stamina_fill_style.modulate_color = Color(0.25, 0.85, 0.35, 1.0)
+			_stop_stamina_shake()
+	if stamina_icon:
+		var tw_s = create_tween()
+		tw_s.tween_property(stamina_icon, "scale", Vector2(1.2, 1.2), 0.06)
+		tw_s.tween_property(stamina_icon, "scale", Vector2(1.0, 1.0), 0.1)
+
+func _start_stamina_shake() -> void:
+	if _stamina_shake_tween and _stamina_shake_tween.is_valid() and _stamina_shake_tween.is_running():
+		return
+	if not stamina_container: return
+	_stamina_shake_tween = create_tween()
+	_stamina_shake_tween.set_loops()
+	_stamina_shake_tween.tween_property(stamina_container, "position:x", 67.0, 0.04)
+	_stamina_shake_tween.tween_property(stamina_container, "position:x", 73.0, 0.04)
+	_stamina_shake_tween.tween_property(stamina_container, "position:x", 70.0, 0.04)
+
+func _stop_stamina_shake() -> void:
+	if _stamina_shake_tween and _stamina_shake_tween.is_valid():
+		_stamina_shake_tween.kill()
+	if stamina_container:
+		stamina_container.position.x = 70.0
+
+func _on_stamina_depleted_hud() -> void:
+	if stamina_container:
+		var tw = create_tween()
+		tw.tween_property(stamina_container, "position:x", 66.0, 0.04)
+		tw.tween_property(stamina_container, "position:x", 74.0, 0.04)
+		tw.tween_property(stamina_container, "position:x", 67.0, 0.04)
+		tw.tween_property(stamina_container, "position:x", 73.0, 0.04)
+		tw.tween_property(stamina_container, "position:x", 70.0, 0.04)
+	if stamina_fill_style and not GameStateManager.is_exhausted:
+		stamina_fill_style.modulate_color = Color(0.92, 0.3, 0.2, 1.0)
+		var t = get_tree().create_timer(0.3)
+		t.timeout.connect(func():
+			if not GameStateManager.is_exhausted and stamina_fill_style:
+				stamina_fill_style.modulate_color = Color(0.25, 0.85, 0.35, 1.0)
+		)
+
 func _on_player_hurt_hud() -> void:
 	if health_container:
 		var tw = create_tween()
@@ -298,24 +387,22 @@ func _on_player_hurt_hud() -> void:
 		tw.tween_property(health_container, "position:x", 73.0, 0.04)
 		tw.tween_property(health_container, "position:x", 70.0, 0.03)
 
-func _on_stamina_changed_hud(new_val: float, max_val: float) -> void:
-	if stamina_bar:
-		stamina_bar.max_value = max_val
+func _on_hunger_changed_hud(new_val: float, max_val: float) -> void:
+	if hunger_bar:
+		hunger_bar.max_value = max_val
 		var tw = create_tween()
-		tw.tween_property(stamina_bar, "value", new_val, 0.12)
-	if stamina_label:
-		stamina_label.text = "%d/%d" % [int(ceil(new_val)), int(max_val)]
-	if stamina_fill_style:
-		if GameStateManager.is_exhausted:
-			stamina_fill_style.bg_color = Color(0.92, 0.35, 0.2, 1.0)
-			if stamina_container:
-				var tw_s = create_tween()
-				tw_s.tween_property(stamina_container, "position:x", 67.0, 0.03)
-				tw_s.tween_property(stamina_container, "position:x", 73.0, 0.04)
-				tw_s.tween_property(stamina_container, "position:x", 70.0, 0.03)
+		tw.tween_property(hunger_bar, "value", new_val, 0.15)
+	if hunger_label:
+		hunger_label.text = "%d/%d" % [int(ceil(new_val)), int(max_val)]
+	if hunger_fill_style:
+		if new_val <= 20.0:
+			# Предупреждающий цвет при сильном голоде
+			hunger_fill_style.modulate_color = Color(0.9, 0.25, 0.2, 1.0)
+		elif new_val <= 50.0:
+			hunger_fill_style.modulate_color = Color(0.95, 0.55, 0.15, 1.0)
 		else:
-			stamina_fill_style.bg_color = Color(0.2, 0.85, 0.35, 1.0)
-	if stamina_icon:
+			hunger_fill_style.modulate_color = Color(0.95, 0.65, 0.18, 1.0)
+	if hunger_icon:
 		var tw_i = create_tween()
-		tw_i.tween_property(stamina_icon, "scale", Vector2(1.2, 1.2), 0.06)
-		tw_i.tween_property(stamina_icon, "scale", Vector2(1.0, 1.0), 0.1)
+		tw_i.tween_property(hunger_icon, "scale", Vector2(1.2, 1.2), 0.06)
+		tw_i.tween_property(hunger_icon, "scale", Vector2(1.0, 1.0), 0.1)

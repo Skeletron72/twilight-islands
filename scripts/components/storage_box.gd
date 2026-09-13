@@ -38,11 +38,9 @@ func _should_break_crate() -> bool:
 		return true
 		
 	# 2. В активном слоте хотбара выбран топор или кирка
-	var hotbar = get_tree().current_scene.get_node_or_null("UILayer/HotbarUI")
-	if hotbar and "active_slot_index" in hotbar and hotbar.active_slot_index != -1:
-		var slot_id = InventoryManager.ui_slots[hotbar.active_slot_index]
-		if slot_id in ["wooden_axe", "stone_axe", "wooden_pickaxe", "stone_pickaxe"]:
-			return true
+	var active_id = InventoryManager.get_active_item_id()
+	if active_id in ["axe", "pickaxe", "wooden_axe", "stone_axe", "wooden_pickaxe", "stone_pickaxe"]:
+		return true
 			
 	return false
 

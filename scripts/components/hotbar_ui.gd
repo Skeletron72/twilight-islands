@@ -42,6 +42,8 @@ func _ready() -> void:
 		InventoryManager.ui_slots_changed.connect(_on_ui_slots_changed)
 	if not InventoryManager.inventory_changed.is_connected(_on_inventory_changed):
 		InventoryManager.inventory_changed.connect(_on_inventory_changed)
+	if not InventoryManager.active_slot_changed.is_connected(_on_active_slot_changed):
+		InventoryManager.active_slot_changed.connect(_on_active_slot_changed)
 
 func _input(event: InputEvent) -> void:
 	# Scroll wheel to cycle hotbar
@@ -107,13 +109,16 @@ func _input(event: InputEvent) -> void:
 
 func _set_active_slot(index: int) -> void:
 	if index == active_slot_index:
-		_animate_slot_selection(active_slot_index, false)
-		active_slot_index = -1
-		PlacementManager.stop_placement()
+		InventoryManager.set_active_slot(-1)
+	else:
+		InventoryManager.set_active_slot(index)
+
+func _on_active_slot_changed(new_idx: int) -> void:
+	if active_slot_index == new_idx:
 		return
 	
 	var old_index = active_slot_index
-	active_slot_index = index
+	active_slot_index = new_idx
 	
 	if old_index != -1 and old_index < slots.size():
 		_animate_slot_selection(old_index, false)
@@ -202,8 +207,7 @@ func _update_slot_visual(index: int, is_selected: bool) -> void:
 			
 		var item_data = ItemDB.get_item(item_id)
 		var item_name = item_data.get("name", item_id)
-		var item_desc = item_data.get("desc", "")
-		slot.tooltip_text = item_name if item_desc == "" else "%s\n%s" % [item_name, item_desc]
+		slot.tooltip_text = item_name
 	else:
 		icon.texture = null
 		amount_label.hide()

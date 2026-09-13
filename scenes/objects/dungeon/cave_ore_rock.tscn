@@ -1,13 +1,25 @@
-[gd_scene format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/components/cave_ore_rock.gd" id="1_ore"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Outdoor_Decor_Animations/Rock_Animations/Cave_Rock_1_Anim.png" id="2_tex"]
+[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Outdoor decoration/Ores.png" id="2_tex"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
 radius = 16.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_phys"]
-size = Vector2(14, 8)
+size = Vector2(12, 6)
+
+[sub_resource type="Gradient" id="Gradient_light"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(1, 1, 1, 0.7, 1, 1, 1, 0.25, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_light"]
+gradient = SubResource("Gradient_light")
+width = 48
+height = 48
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.95, 0.5)
 
 [node name="CaveOreRock" type="Area2D" groups=["interactable"]]
 y_sort_enabled = true
@@ -16,12 +28,14 @@ collision_mask = 0
 script = ExtResource("1_ore")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
 texture = ExtResource("2_tex")
 offset = Vector2(0, -6)
 hframes = 8
+vframes = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -4)
+position = Vector2(0, -6)
 shape = SubResource("CircleShape2D_interact")
 
 [node name="StaticBody" type="StaticBody2D" parent="."]
@@ -30,3 +44,27 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody"]
 position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_phys")
+
+[node name="OreLight" type="PointLight2D" parent="."]
+visible = false
+position = Vector2(0, -6)
+energy = 0.55
+texture = SubResource("GradientTexture2D_light")
+texture_scale = 1.0
+
+[node name="SparkleParticles" type="CPUParticles2D" parent="."]
+position = Vector2(0, -6)
+emitting = false
+amount = 4
+lifetime = 1.2
+randomness = 0.4
+emission_shape = 3
+emission_rect_extents = Vector2(5, 5)
+direction = Vector2(0, -1)
+spread = 35.0
+gravity = Vector2(0, -8)
+initial_velocity_min = 4.0
+initial_velocity_max = 8.0
+scale_amount_min = 1.0
+scale_amount_max = 2.0
+color = Color(0.85, 0.45, 1, 0.9)

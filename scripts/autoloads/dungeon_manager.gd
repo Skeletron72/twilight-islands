@@ -60,6 +60,8 @@ func previous_floor() -> void:
 		exit_to_surface()
 
 func exit_to_surface() -> void:
+	if AudioManager:
+		AudioManager.set_interior(false)
 	var target_scene = surface_return_scene
 	if target_scene == "" or not ResourceLoader.exists(target_scene):
 		target_scene = "res://scenes/levels/home_island.tscn"

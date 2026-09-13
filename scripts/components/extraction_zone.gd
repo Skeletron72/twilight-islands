@@ -59,7 +59,7 @@ func _update_visuals() -> void:
 			rotation_degrees = -5.5
 			self.modulate = Color(0.68, 0.62, 0.55, 0.95)
 			if prompt_label:
-				prompt_label.text = "🔨 [E] Остов лодки (Сломана)"
+				prompt_label.text = "[E] Остов лодки (Сломана)"
 				prompt_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.45))
 		else:
 			# Repaired boat
@@ -68,14 +68,14 @@ func _update_visuals() -> void:
 			var tier = GameStateManager.get_current_boat_tier()
 			var tier_name = tier.get("name", "Лодка")
 			if prompt_label:
-				prompt_label.text = "⛵ [E] %s (Ур. %d)" % [tier_name, level]
+				prompt_label.text = "[E] %s (Ур. %d)" % [tier_name, level]
 				prompt_label.add_theme_color_override("font_color", Color(0.6, 1.0, 0.6))
 	else:
 		# Raid island: extraction boat
 		rotation_degrees = 0.0
 		self.modulate = Color.WHITE
 		if prompt_label:
-			prompt_label.text = "⛵ [E] Эвакуация домой"
+			prompt_label.text = "Эвакуация домой"
 			prompt_label.add_theme_color_override("font_color", Color(1.0, 0.95, 0.6))
 
 func _on_boat_upgraded(_new_level: int) -> void:

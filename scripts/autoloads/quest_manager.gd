@@ -89,23 +89,23 @@ var quests: Dictionary = {
 		],
 		"rewards": [
 			{"type": "coin", "item_id": "coin", "name": "Монеты", "amount": 150},
-			{"type": "item", "item_id": "stone_sword", "name": "Каменный меч", "amount": 1}
+			{"type": "item", "item_id": "sword", "name": "Меч", "amount": 1}
 		]
 	},
 	"side_01": {
 		"id": "side_01",
 		"title": "Орудия труда",
 		"category": CAT_SIDE,
-		"desc": "Рубить твердые пальмы голыми руками слишком долго и утомительно. Смастерите деревянный топор из бревен и веток.",
+		"desc": "Рубить твердые пальмы голыми руками слишком долго и утомительно. Смастерите топор из бревен и веток.",
 		"icon_atlas": "res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Icons.png",
 		"icon_region": Rect2(304, 32, 16, 16),
 		"status": "active",
 		"objectives": [
 			{
-				"id": "wooden_axe",
-				"text": "Создать деревянный топор",
+				"id": "axe",
+				"text": "Создать топор",
 				"type": "craft",
-				"target_item": "wooden_axe",
+				"target_item": "axe",
 				"target_amount": 1,
 				"current_amount": 0,
 				"is_done": false
@@ -170,7 +170,7 @@ var quests: Dictionary = {
 		],
 		"rewards": [
 			{"type": "coin", "item_id": "coin", "name": "Монеты", "amount": 120},
-			{"type": "item", "item_id": "wooden_pickaxe", "name": "Деревянная кирка", "amount": 1}
+			{"type": "item", "item_id": "pickaxe", "name": "Кирка", "amount": 1}
 		]
 	},
 	"explore_02": {

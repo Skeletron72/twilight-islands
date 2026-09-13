@@ -77,8 +77,10 @@ func _ready() -> void:
 		char_slot.set_slot_index(i)
 		# For character tab, clicking currently equips it (from previous logic)
 		char_slot.item_clicked.connect(func(id):
-			InventoryManager.equip(id)
-			_refresh_character_tab()
+			var item_data = ItemDB.get_item(id)
+			if item_data.has("equip_slot") and item_data["equip_slot"] in ["head", "chest", "boots", "accessory", "artifact"]:
+				InventoryManager.equip(id)
+				_refresh_character_tab()
 		)
 		
 	# Listen to UI slot changes
@@ -94,8 +96,10 @@ func _ready() -> void:
 			
 	if btn_save:
 		btn_save.pressed.connect(_on_save_pressed)
-	if btn_trash:
-		btn_trash.pressed.connect(_on_trash_pressed)
+	if btn_drop_n:
+		btn_drop_n.pressed.connect(_on_drop_n_pressed)
+	if btn_drop_all:
+		btn_drop_all.pressed.connect(_on_drop_all_pressed)
 		
 	_setup_quest_categories()
 	_setup_achieve_search()
@@ -233,7 +237,8 @@ func _switch_tab(index: int) -> void:
 @onready var detail_icon: TextureRect = $DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab/LeftPage/IconRect
 @onready var stats_scroll: ScrollContainer = get_node_or_null("DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab/LeftPage/StatsScroll")
 @onready var stats_list: Control = get_node_or_null("DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab/LeftPage/StatsScroll/StatsList")
-@onready var btn_trash: TextureButton = get_node_or_null("DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab/LeftPage/BtnTrash")
+@onready var btn_drop_n: Button = get_node_or_null("DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab/LeftPage/BtnDropN")
+@onready var btn_drop_all: Button = get_node_or_null("DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab/LeftPage/BtnDropAll")
 
 var selected_inventory_slot: Control = null
 var current_selected_item_id: String = ""
@@ -260,8 +265,11 @@ func _refresh_inventory() -> void:
 
 func _show_item_details(item_id: String) -> void:
 	current_selected_item_id = item_id
-	if btn_trash:
-		btn_trash.visible = (item_id != "")
+	var has_item = (item_id != "")
+	if btn_drop_n:
+		btn_drop_n.visible = has_item
+	if btn_drop_all:
+		btn_drop_all.visible = has_item
 		
 	if item_id == "":
 		if selected_inventory_slot and selected_inventory_slot.has_method("set_selected"):
@@ -330,36 +338,151 @@ func _update_item_stats(item: Dictionary) -> void:
 			
 	stats_scroll.visible = has_stats
 
-func _on_trash_pressed() -> void:
-	if current_selected_item_id == "":
-		return
-	if InventoryManager.get_item_amount(current_selected_item_id) <= 0:
-		return
-		
+func _drop_items_from_inventory(item_id: String, amount: int) -> void:
+	if item_id == "" or amount <= 0: return
+	if InventoryManager.get_item_amount(item_id) <= 0: return
+
 	var player = get_tree().get_first_node_in_group("player")
-	if player and player.get_parent():
-		var dropped_scene = preload("res://scenes/objects/dropped_item.tscn")
-		var drop = dropped_scene.instantiate()
-		drop.item_id = current_selected_item_id
-		drop.global_position = player.global_position + Vector2(randf_range(-10, 10), 12)
-		player.get_parent().add_child(drop)
-		
-	InventoryManager.remove_item(current_selected_item_id, 1)
-	
-	var sfx = preload("res://assets/audio/sfx/player/sfx_item_pickup.mp3")
-	var asp = AudioStreamPlayer.new()
-	asp.stream = sfx
-	asp.bus = "Master"
-	add_child(asp)
-	asp.play()
-	asp.finished.connect(asp.queue_free)
-	
-	var rem_amount = InventoryManager.get_item_amount(current_selected_item_id)
+	var world_pos = Vector2.ZERO
+	if player:
+		world_pos = player.global_position + Vector2(randf_range(-10, 10), 12)
+
+	InventoryManager.drop_item(item_id, amount, world_pos)
+
+	if AudioManager:
+		AudioManager.play_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), 1.0, -1.0)
+	else:
+		var sfx = preload("res://assets/audio/ui/sfx_pop.mp3")
+		var asp = AudioStreamPlayer.new()
+		asp.stream = sfx
+		asp.bus = "Master"
+		add_child(asp)
+		asp.play()
+		asp.finished.connect(asp.queue_free)
+
+	var rem_amount = InventoryManager.get_item_amount(item_id)
 	_refresh_inventory()
 	if rem_amount > 0:
-		_show_item_details(current_selected_item_id)
+		_show_item_details(item_id)
 	else:
 		_show_item_details("")
+
+func _on_drop_all_pressed() -> void:
+	var total = InventoryManager.get_item_amount(current_selected_item_id)
+	_drop_items_from_inventory(current_selected_item_id, total)
+
+func _on_drop_n_pressed() -> void:
+	if current_selected_item_id == "": return
+	var total = InventoryManager.get_item_amount(current_selected_item_id)
+	if total <= 0: return
+	if total == 1:
+		_drop_items_from_inventory(current_selected_item_id, 1)
+		return
+	_open_amount_dialog(total)
+
+func _open_amount_dialog(max_amount: int) -> void:
+	# Remove any existing dialog
+	var old = get_node_or_null("AmountDialog")
+	if old:
+		old.queue_free()
+
+	# Overlay to catch clicks outside
+	var overlay = ColorRect.new()
+	overlay.name = "AmountDialog"
+	overlay.color = Color(0, 0, 0, 0.45)
+	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(overlay)
+
+	# Dialog panel styled to match the book aesthetic
+	var panel = PanelContainer.new()
+	panel.theme = theme
+	var sb = StyleBoxFlat.new()
+	sb.bg_color = Color(0.92, 0.87, 0.77, 1.0) # Paper-like tone matching the book
+	sb.set_border_width_all(2)
+	sb.border_color = Color(0.4, 0.28, 0.18, 1.0)
+	sb.set_corner_radius_all(6)
+	sb.content_margin_left = 16
+	sb.content_margin_right = 16
+	sb.content_margin_top = 12
+	sb.content_margin_bottom = 12
+	panel.add_theme_stylebox_override("panel", sb)
+
+	panel.custom_minimum_size = Vector2(210, 110)
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	panel.grow_vertical = Control.GROW_DIRECTION_BOTH
+	overlay.add_child(panel)
+
+	var vbox = VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 8)
+	panel.add_child(vbox)
+
+	var item_data = ItemDB.get_item(current_selected_item_id)
+	var item_name = item_data.get("name", current_selected_item_id)
+
+	var title_lbl = Label.new()
+	title_lbl.text = "Сколько выбросить?"
+	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title_lbl.add_theme_font_override("font", preload("res://assets/fonts/Chalkboard.ttf"))
+	title_lbl.add_theme_font_size_override("font_size", 14)
+	title_lbl.add_theme_color_override("font_color", Color(0.25, 0.15, 0.08, 1.0))
+	vbox.add_child(title_lbl)
+
+	var item_lbl = Label.new()
+	item_lbl.text = "%s (всего: %d)" % [item_name, max_amount]
+	item_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	item_lbl.add_theme_font_override("font", preload("res://assets/fonts/WarmPixel.ttf"))
+	item_lbl.add_theme_font_size_override("font_size", 10)
+	item_lbl.add_theme_color_override("font_color", Color(0.4, 0.3, 0.2, 1.0))
+	vbox.add_child(item_lbl)
+
+	var spin = SpinBox.new()
+	spin.min_value = 1
+	spin.max_value = max_amount
+	spin.value = 1
+	spin.alignment = HORIZONTAL_ALIGNMENT_CENTER
+	spin.custom_minimum_size = Vector2(100, 24)
+	spin.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	var line_edit = spin.get_line_edit()
+	if line_edit:
+		line_edit.add_theme_color_override("font_color", Color(0.2, 0.1, 0.05, 1.0))
+	vbox.add_child(spin)
+
+	var hbox = HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 10)
+	hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.add_child(hbox)
+
+	var btn_cancel = Button.new()
+	btn_cancel.text = "Отмена"
+	btn_cancel.custom_minimum_size = Vector2(75, 24)
+	btn_cancel.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	hbox.add_child(btn_cancel)
+
+	var btn_ok = Button.new()
+	btn_ok.text = "Выбросить"
+	btn_ok.custom_minimum_size = Vector2(85, 24)
+	btn_ok.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	hbox.add_child(btn_ok)
+
+	var item_id_captured = current_selected_item_id
+
+	btn_cancel.pressed.connect(overlay.queue_free)
+	btn_ok.pressed.connect(func():
+		var amt = int(spin.value)
+		overlay.queue_free()
+		_drop_items_from_inventory(item_id_captured, amt)
+	)
+
+	overlay.gui_input.connect(func(event: InputEvent):
+		if event is InputEventMouseButton and event.pressed:
+			var local_mouse = panel.get_local_mouse_position()
+			if not Rect2(Vector2.ZERO, panel.size).has_point(local_mouse):
+				overlay.queue_free()
+	)
+
+
 
 # --- TAB 2: CHARACTER LOGIC ---
 @onready var char_equip_grid = $DimBackground/CenterContainer/BookContainer/BookPanel/Pages/CharacterTab/LeftPage/EquipGrid
@@ -935,7 +1058,7 @@ const NPC_DATA = {
 		"hearts": 5.0,
 		"quote": "«Здешние грибы и ягоды обладают целебной силой. Береги природу острова, и она спасет тебя в трудную минуту!»",
 		"fav_gifts": ["red_mushroom", "blue_mushroom", "purple_mushroom"],
-		"dis_gifts": ["wooden_axe", "stone_axe"]
+		"dis_gifts": ["axe", "wooden_axe", "stone_axe"]
 	}
 }
 

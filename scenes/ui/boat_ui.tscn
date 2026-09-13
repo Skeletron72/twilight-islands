@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://boatui123"]
 
-[ext_resource type="Script" path="res://scripts/components/boat_ui.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy_UI/UI/Book_UI.png" id="2_tex"]
-[ext_resource type="FontFile" path="res://assets/fonts/Chalkboard.ttf" id="3_font"]
-[ext_resource type="Theme" path="res://resources/themes/theme_cute_fantasy.tres" id="4_theme"]
+[ext_resource type="Script" uid="uid://b85x0kfewpwhh" path="res://scripts/components/boat_ui.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://b8lx4ujyxn2ok" path="res://assets/new_assets/Cute_Fantasy_UI/UI/Book_UI.png" id="2_tex"]
+[ext_resource type="FontFile" uid="uid://cp5m6git4cdoo" path="res://assets/fonts/Chalkboard.ttf" id="3_font"]
+[ext_resource type="Theme" uid="uid://pjmt11cfvbwk" path="res://resources/themes/theme_cute_fantasy.tres" id="4_theme"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_book"]
 atlas = ExtResource("2_tex")
@@ -16,10 +16,10 @@ font_color = Color(0.2, 0.1, 0.05, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_sub"]
 font = ExtResource("3_font")
-font_size = 10
+font_size = 12
 font_color = Color(0.3, 0.2, 0.1, 1)
 
-[node name="BoatUI" type="Control"]
+[node name="BoatUI" type="Control" unique_id=1570194979]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -30,7 +30,7 @@ grow_vertical = 2
 theme = ExtResource("4_theme")
 script = ExtResource("1_script")
 
-[node name="DimBackground" type="ColorRect" parent="."]
+[node name="DimBackground" type="ColorRect" parent="." unique_id=76656238]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -39,7 +39,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.55)
 
-[node name="CenterContainer" type="CenterContainer" parent="DimBackground"]
+[node name="CenterContainer" type="CenterContainer" parent="DimBackground" unique_id=187721358]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -47,7 +47,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BookPanel" type="TextureRect" parent="DimBackground/CenterContainer"]
+[node name="BookPanel" type="TextureRect" parent="DimBackground/CenterContainer" unique_id=5587813]
 texture_filter = 1
 custom_minimum_size = Vector2(500, 300)
 layout_mode = 2
@@ -56,7 +56,7 @@ texture = SubResource("AtlasTexture_book")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Pages" type="MarginContainer" parent="DimBackground/CenterContainer/BookPanel"]
+[node name="Pages" type="Control" parent="DimBackground/CenterContainer/BookPanel" unique_id=1940785134]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -64,89 +64,133 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 22
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 22
 
-[node name="HBoxContainer" type="HBoxContainer" parent="DimBackground/CenterContainer/BookPanel/Pages"]
-layout_mode = 2
-theme_override_constants/separation = 40
+[node name="LeftPage" type="Control" parent="DimBackground/CenterContainer/BookPanel/Pages" unique_id=1775082496]
+anchors_preset = 0
+offset_left = 28.0
+offset_top = 20.0
+offset_right = 224.0
+offset_bottom = 268.0
 
-[node name="LeftPage" type="VBoxContainer" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 6
-
-[node name="TitleLabel" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage"]
-layout_mode = 2
+[node name="TitleLabel" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/LeftPage" unique_id=1565527720]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 15.0
+offset_top = 4.0
+offset_right = 191.0
+offset_bottom = 26.0
 text = "МОРСКОЙ ПРИЧАЛ"
 label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage"]
-layout_mode = 2
-
-[node name="TierNameLabel" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage"]
-layout_mode = 2
+[node name="TierNameLabel" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/LeftPage" unique_id=1201825417]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 18.0
+offset_top = 24.0
+offset_right = 194.0
+offset_bottom = 44.0
 text = "Разбитый остов (Ур. 0)"
 label_settings = SubResource("LabelSettings_title")
 
-[node name="StatusLabel" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage"]
-layout_mode = 2
-text = "● СЛОМАНА"
+[node name="StatusLabel" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/LeftPage" unique_id=1127571662]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 43.0
+offset_right = 192.0
+offset_bottom = 59.0
+text = "СЛОМАНА"
 label_settings = SubResource("LabelSettings_sub")
 
-[node name="DescLabel" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage"]
-layout_mode = 2
+[node name="DescLabel" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/LeftPage" unique_id=2105847533]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 14.0
+offset_top = 70.0
+offset_right = 197.0
+offset_bottom = 115.0
 text = "Лодка сильно повреждена прибоем..."
 label_settings = SubResource("LabelSettings_sub")
 autowrap_mode = 3
 
-[node name="PerksHeader" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage"]
-layout_mode = 2
+[node name="PerksHeader" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/LeftPage" unique_id=93842399]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 120.0
+offset_right = 199.0
+offset_bottom = 171.0
 text = "Свойства судна:"
 label_settings = SubResource("LabelSettings_sub")
 
-[node name="PerksContainer" type="VBoxContainer" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage"]
-layout_mode = 2
-size_flags_vertical = 3
+[node name="PerksContainer" type="VBoxContainer" parent="DimBackground/CenterContainer/BookPanel/Pages/LeftPage" unique_id=1968733929]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 10.0
+offset_top = 140.0
+offset_right = 186.0
+offset_bottom = 236.0
 
-[node name="RightPage" type="VBoxContainer" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 6
+[node name="RightPage" type="Control" parent="DimBackground/CenterContainer/BookPanel/Pages" unique_id=1982031682]
+anchors_preset = 0
+offset_left = 256.0
+offset_top = 20.0
+offset_right = 452.0
+offset_bottom = 268.0
 
-[node name="UpgradeTitleLabel" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage"]
-layout_mode = 2
+[node name="UpgradeTitleLabel" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/RightPage" unique_id=2121669903]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 15.0
+offset_top = 4.0
+offset_right = 191.0
+offset_bottom = 26.0
 text = "РЕМОНТ КОРПУСА"
 label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 
-[node name="HSeparator2" type="HSeparator" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage"]
-layout_mode = 2
-
-[node name="NextTierLabel" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage"]
-layout_mode = 2
+[node name="NextTierLabel" type="Label" parent="DimBackground/CenterContainer/BookPanel/Pages/RightPage" unique_id=433012159]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 20.0
+offset_top = 30.0
+offset_right = 199.0
+offset_bottom = 54.0
 text = "Для восстановления необходимо:"
 label_settings = SubResource("LabelSettings_sub")
 autowrap_mode = 3
 
-[node name="RequirementsContainer" type="VBoxContainer" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage"]
-layout_mode = 2
-size_flags_vertical = 3
+[node name="RequirementsContainer" type="VBoxContainer" parent="DimBackground/CenterContainer/BookPanel/Pages/RightPage" unique_id=1719548878]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 21.0
+offset_top = 58.0
+offset_right = 199.0
+offset_bottom = 148.0
 
-[node name="ActionButton" type="Button" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage"]
-custom_minimum_size = Vector2(0, 26)
-layout_mode = 2
-text = "🔨 Починить лодку"
+[node name="ActionButton" type="Button" parent="DimBackground/CenterContainer/BookPanel/Pages/RightPage" unique_id=970281]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 26.0
+offset_top = 152.0
+offset_right = 194.0
+offset_bottom = 178.0
+text = "Починить лодку"
 
-[node name="SailButton" type="Button" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage"]
-custom_minimum_size = Vector2(0, 26)
-layout_mode = 2
-text = "⛵ Отплыть в экспедицию"
+[node name="SailButton" type="Button" parent="DimBackground/CenterContainer/BookPanel/Pages/RightPage" unique_id=241579729]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 26.0
+offset_top = 179.0
+offset_right = 194.0
+offset_bottom = 205.0
+text = "Отплыть в экспедицию"
 
-[node name="CloseButton" type="Button" parent="DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage"]
-custom_minimum_size = Vector2(0, 22)
-layout_mode = 2
-text = "Закрыть (Esc)"
+[node name="CloseButton" type="Button" parent="DimBackground/CenterContainer/BookPanel/Pages/RightPage" unique_id=434010257]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 26.0
+offset_top = 206.0
+offset_right = 194.0
+offset_bottom = 231.0
+text = "Закрыть"

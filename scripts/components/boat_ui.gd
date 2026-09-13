@@ -1,17 +1,17 @@
 extends Control
 
-@onready var title_label = $DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage/TitleLabel
-@onready var tier_name_label = $DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage/TierNameLabel
-@onready var status_label = $DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage/StatusLabel
-@onready var desc_label = $DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage/DescLabel
-@onready var perks_container = $DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/LeftPage/PerksContainer
+@onready var title_label = %TitleLabel if has_node("%TitleLabel") else get_node_or_null("DimBackground/CenterContainer/BookPanel/Pages/LeftPage/TitleLabel")
+@onready var tier_name_label = %TierNameLabel if has_node("%TierNameLabel") else get_node_or_null("DimBackground/CenterContainer/BookPanel/Pages/LeftPage/TierNameLabel")
+@onready var status_label = %StatusLabel if has_node("%StatusLabel") else get_node_or_null("DimBackground/CenterContainer/BookPanel/Pages/LeftPage/StatusLabel")
+@onready var desc_label = %DescLabel if has_node("%DescLabel") else get_node_or_null("DimBackground/CenterContainer/BookPanel/Pages/LeftPage/DescLabel")
+@onready var perks_container = %PerksContainer if has_node("%PerksContainer") else get_node_or_null("DimBackground/CenterContainer/BookPanel/Pages/LeftPage/PerksContainer")
 
-@onready var upgrade_title_label = $DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage/UpgradeTitleLabel
-@onready var next_tier_label = $DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage/NextTierLabel
-@onready var requirements_container = $DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage/RequirementsContainer
-@onready var action_button = $DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage/ActionButton
-@onready var sail_button = $DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage/SailButton
-@onready var close_button = $DimBackground/CenterContainer/BookPanel/Pages/HBoxContainer/RightPage/CloseButton
+@onready var upgrade_title_label = %UpgradeTitleLabel if has_node("%UpgradeTitleLabel") else get_node_or_null("DimBackground/CenterContainer/BookPanel/Pages/RightPage/UpgradeTitleLabel")
+@onready var next_tier_label = %NextTierLabel if has_node("%NextTierLabel") else get_node_or_null("DimBackground/CenterContainer/BookPanel/Pages/RightPage/NextTierLabel")
+@onready var requirements_container = %RequirementsContainer if has_node("%RequirementsContainer") else get_node_or_null("DimBackground/CenterContainer/BookPanel/Pages/RightPage/RequirementsContainer")
+@onready var action_button = %ActionButton if has_node("%ActionButton") else get_node_or_null("DimBackground/CenterContainer/BookPanel/Pages/RightPage/ActionButton")
+@onready var sail_button = %SailButton if has_node("%SailButton") else get_node_or_null("DimBackground/CenterContainer/BookPanel/Pages/RightPage/SailButton")
+@onready var close_button = %CloseButton if has_node("%CloseButton") else get_node_or_null("DimBackground/CenterContainer/BookPanel/Pages/RightPage/CloseButton")
 
 var current_boat_node: Node2D = null
 
@@ -96,10 +96,10 @@ func _refresh_ui() -> void:
 	tier_name_label.text = "%s (Ур. %d)" % [cur_tier.get("name", "Лодка"), b_level]
 	
 	if is_broken:
-		status_label.text = "● СЛОМАНА — ТРЕБУЕТСЯ РЕМОНТ"
+		status_label.text = "СЛОМАНА — ТРЕБУЕТСЯ РЕМОНТ"
 		status_label.add_theme_color_override("font_color", Color(0.85, 0.2, 0.2))
 	else:
-		status_label.text = "● ГОТОВА К ПЛАВАНИЮ"
+		status_label.text = "ГОТОВА К ПЛАВАНИЮ"
 		status_label.add_theme_color_override("font_color", Color(0.2, 0.7, 0.2))
 
 	desc_label.text = cur_tier.get("desc", "")
@@ -130,11 +130,11 @@ func _refresh_ui() -> void:
 		if is_broken:
 			upgrade_title_label.text = "РЕМОНТ КОРПУСА"
 			next_tier_label.text = "Для восстановления необходимо:"
-			action_button.text = "🔨 Починить лодку"
+			action_button.text = "Починить лодку"
 		else:
 			upgrade_title_label.text = "МОДЕРНИЗАЦИЯ СУДНА"
 			next_tier_label.text = "Следующий ранг: %s" % next_tier.get("name", "")
-			action_button.text = "🛠 " + cur_tier.get("action_title", "Улучшить")
+			action_button.text = "Улучшить"
 		
 		action_button.visible = true
 		var can_upgrade = true
@@ -179,4 +179,4 @@ func _refresh_ui() -> void:
 		sail_button.visible = false
 	else:
 		sail_button.visible = true
-		sail_button.text = "⛵ Отплыть на Сумеречный Остров"
+		sail_button.text = "Отплыть в экспедицию"
