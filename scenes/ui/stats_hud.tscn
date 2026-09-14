@@ -111,20 +111,18 @@ theme_override_constants/separation = 5
 
 [node name="HeartIcon" type="TextureRect" parent="HealthContainer" unique_id=636588916]
 texture_filter = 1
-custom_minimum_size = Vector2(8, 8)
+custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_vertical = 4
 texture = SubResource("AtlasTexture_heart")
 expand_mode = 1
 stretch_mode = 5
-pivot_offset = Vector2(4, 4)
 
 [node name="HealthBar" type="ProgressBar" parent="HealthContainer" unique_id=998925492]
 texture_filter = 1
 custom_minimum_size = Vector2(64, 6)
 layout_mode = 2
 size_flags_vertical = 4
-mouse_filter = 0
 theme_override_styles/background = SubResource("StyleBoxTexture_bg_hp")
 theme_override_styles/fill = SubResource("StyleBoxTexture_fill_hp")
 value = 20.0
@@ -134,7 +132,6 @@ show_percentage = false
 visible = false
 texture_filter = 1
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 1, 1, 0.95)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
 theme_override_constants/outline_size = 3
@@ -152,20 +149,18 @@ theme_override_constants/separation = 5
 
 [node name="StaminaIcon" type="TextureRect" parent="StaminaContainer" unique_id=1321856476]
 texture_filter = 1
-custom_minimum_size = Vector2(8, 8)
+custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_vertical = 4
 texture = SubResource("AtlasTexture_stamina")
 expand_mode = 1
 stretch_mode = 5
-pivot_offset = Vector2(4, 4)
 
 [node name="StaminaBar" type="ProgressBar" parent="StaminaContainer" unique_id=489781900]
 texture_filter = 1
 custom_minimum_size = Vector2(64, 6)
 layout_mode = 2
 size_flags_vertical = 4
-mouse_filter = 0
 theme_override_styles/background = SubResource("StyleBoxTexture_bg_st")
 theme_override_styles/fill = SubResource("StyleBoxTexture_fill_st")
 value = 20.0
@@ -175,7 +170,6 @@ show_percentage = false
 visible = false
 texture_filter = 1
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 1, 1, 0.95)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
 theme_override_constants/outline_size = 3
@@ -193,20 +187,18 @@ theme_override_constants/separation = 5
 
 [node name="HungerIcon" type="TextureRect" parent="HungerContainer" unique_id=1235579635]
 texture_filter = 1
-custom_minimum_size = Vector2(8, 8)
+custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 size_flags_vertical = 4
 texture = SubResource("AtlasTexture_hunger")
 expand_mode = 1
 stretch_mode = 5
-pivot_offset = Vector2(4, 4)
 
 [node name="HungerBar" type="ProgressBar" parent="HungerContainer" unique_id=15833843]
 texture_filter = 1
 custom_minimum_size = Vector2(64, 6)
 layout_mode = 2
 size_flags_vertical = 4
-mouse_filter = 0
 theme_override_styles/background = SubResource("StyleBoxTexture_bg_hg")
 theme_override_styles/fill = SubResource("StyleBoxTexture_fill_hg")
 value = 20.0
@@ -216,7 +208,6 @@ show_percentage = false
 visible = false
 texture_filter = 1
 layout_mode = 2
-size_flags_vertical = 4
 theme_override_colors/font_color = Color(1, 1, 1, 0.95)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
 theme_override_constants/outline_size = 3

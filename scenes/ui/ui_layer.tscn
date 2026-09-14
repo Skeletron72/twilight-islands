@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://debugpanel123" path="res://scenes/ui/debug_panel.tscn" id="10_debug"]
 [ext_resource type="PackedScene" uid="uid://statshud123" path="res://scenes/ui/stats_hud.tscn" id="11_statshud"]
 [ext_resource type="PackedScene" uid="uid://thoughtlog123" path="res://scenes/ui/thought_log_ui.tscn" id="12_thoughtlog"]
+[ext_resource type="PackedScene" uid="uid://dialogueui123" path="res://scenes/ui/dialogue_ui.tscn" id="13_dia"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_book_closed"]
 atlas = ExtResource("2_tex")
@@ -126,3 +127,6 @@ visible = false
 [node name="StatsHud" parent="." unique_id=1607764612 instance=ExtResource("11_statshud")]
 
 [node name="ThoughtLogUI" parent="." unique_id=1607764613 instance=ExtResource("12_thoughtlog")]
+
+[node name="DialogueUI" parent="." unique_id=1607764614 instance=ExtResource("13_dia")]
+visible = false

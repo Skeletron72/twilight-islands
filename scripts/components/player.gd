@@ -62,8 +62,16 @@ var _ghost_timer: float = 0.0
 # Punch combo state (4-hit combo: 1=Strong, 2=Fast, 3=Fast, 4=Lunge finisher)
 var punch_combo_step: int = 0
 var punch_combo_timer: float = 0.0
-const PUNCH_COMBO_WINDOW: float = 0.55
+const PUNCH_COMBO_WINDOW: float = 0.85
 var current_punch_step: int = 0
+var _buffered_punch: bool = false
+
+# Sword combo state (3-hit combo: 0=Slash, 1=Reverse Slash, 2=Crosscut Finisher)
+var sword_combo_step: int = 0
+var sword_combo_timer: float = 0.0
+const SWORD_COMBO_WINDOW: float = 0.90
+var current_sword_step: int = 0
+var _buffered_sword: bool = false
 
 # Paralysis state
 var is_paralyzed: bool = false
@@ -89,7 +97,8 @@ var burn_timer: float = 0.0
 func apply_burn(duration: float = 6.0) -> void:
 	if is_dead:
 		return
-	if in_water or is_wet or (WeatherManager and WeatherManager.is_precipitation()):
+	var wm = get_node_or_null("/root/WeatherManager")
+	if in_water or is_wet or (wm and wm.has_method("is_precipitation") and wm.is_precipitation()):
 		return
 	is_burning = true
 	burn_timer = max(burn_timer, duration)
@@ -118,6 +127,15 @@ const SFX_SWORD_SWING = preload("res://assets/audio/sfx/combat/sfx_sword_swing.m
 const SFX_TOOL_SWISH = preload("res://assets/audio/sfx/tools/sfx_swish.mp3")
 const SFX_HIT_IMPACT = preload("res://assets/audio/sfx/combat/sfx_attack.mp3")
 const SFX_PLAYER_DEATH = preload("res://assets/audio/sfx/player/sfx_death.mp3")
+
+# Combat VFX Sheets
+const VFX_DASH_DUST = preload("res://assets/sprites/vfx/combat/impact_dust_dash_sheet.png")
+const VFX_DUST_CLOUD = preload("res://assets/sprites/vfx/combat/impact_dust_cloud_sheet.png")
+const VFX_IMPACT_HIT_1 = preload("res://assets/sprites/vfx/combat/impact_hit_1_sheet.png")
+const VFX_SLASH_1 = preload("res://assets/sprites/vfx/combat/slash_1_sheet.png")
+const VFX_SLASH_V2 = preload("res://assets/sprites/vfx/combat/slash_v2_sheet.png")
+const VFX_SLASH_V3 = preload("res://assets/sprites/vfx/combat/slash_v3_sheet.png")
+const VFX_SLASH_CROSSCUT = preload("res://assets/sprites/vfx/combat/slash_crosscut_sheet.png")
 
 # Animation State
 var current_biome: String = "clearing"
@@ -232,7 +250,28 @@ func _ready() -> void:
 	add_to_group("player")
 	WetEffect.attach_to(self)
 
+	if HomeStateManager and HomeStateManager.spawn_on_shore:
+		HomeStateManager.spawn_on_shore = false
+		call_deferred("_apply_shore_landing")
+
 	_play_anim("idle")
+
+func _apply_shore_landing() -> void:
+	var boat = get_node_or_null("../Boat")
+	if not boat:
+		boat = get_tree().get_first_node_in_group("boat")
+		
+	if boat:
+		global_position = boat.global_position + Vector2(35, 0)
+	else:
+		global_position = Vector2(75, 160)
+		
+	current_dir = 1
+	if visuals:
+		visuals.scale.x = 1
+	_play_anim("idle")
+	if ExpeditionManager:
+		ExpeditionManager.post_thought("Лодка причалила к песчаному берегу Домашнего острова...", Color(0.6, 0.9, 0.75))
 
 func _on_time_of_day_changed(time: int) -> void:
 	if not lantern_light: return
@@ -264,24 +303,74 @@ func take_damage(amount: float, source_pos: Vector2 = Vector2.ZERO) -> void:
 	is_invulnerable = true
 	invulnerability_timer = I_FRAME_DURATION
 	
+	if DialogueManager and DialogueManager.is_in_dialogue:
+		DialogueManager.end_dialogue()
+		if ExpeditionManager:
+			ExpeditionManager.post_thought("Нападение прервало разговор!", Color(1.0, 0.4, 0.4))
+	
 	GameStateManager.take_damage(amount)
 
-func _spawn_impact_dust(pos: Vector2) -> void:
-	var dust_scene = load("res://scenes/vfx/impact_dust.tscn")
-	if dust_scene:
-		var dust = dust_scene.instantiate()
-		dust.global_position = pos
+func _spawn_vfx(tex: Texture2D, hframes: int, pos: Vector2, rot: float = 0.0, scale_vec: Vector2 = Vector2.ONE, fps_val: float = 20.0, z_idx: int = 50, offset_vec: Vector2 = Vector2.ZERO) -> void:
+	if not tex: return
+	var vfx_scene = load("res://scenes/vfx/animated_vfx.tscn")
+	if vfx_scene:
+		var vfx = vfx_scene.instantiate() as AnimatedVFX
+		vfx.global_position = pos
+		vfx.setup(tex, hframes, fps_val, scale_vec, rot, Color.WHITE, z_idx, offset_vec)
 		if get_tree() and get_tree().current_scene:
-			get_tree().current_scene.add_child(dust)
+			get_tree().current_scene.add_child(vfx)
+
+func _spawn_punch_hit_vfx(pos: Vector2) -> void:
+	# Randomly alternate between blunt dust cloud (impact_dust_cloud_sheet) and hit impact 1 (impact_hit_1_sheet)
+	if randf() < 0.5:
+		_spawn_vfx(VFX_DUST_CLOUD, 7, pos, randf_range(-0.35, 0.35), Vector2(0.46, 0.46), 22.0, z_index + 1)
+	else:
+		_spawn_vfx(VFX_IMPACT_HIT_1, 6, pos, randf_range(-0.35, 0.35), Vector2(0.48, 0.48), 24.0, z_index + 1)
+
+func _spawn_impact_dust(pos: Vector2, force_cloud: bool = false) -> void:
+	if force_cloud or randf() < 0.5:
+		_spawn_vfx(VFX_DUST_CLOUD, 7, pos, randf_range(-0.35, 0.35), Vector2(0.46, 0.46), 22.0, z_index + 1)
+	else:
+		var dust_scene = load("res://scenes/vfx/impact_dust.tscn")
+		if dust_scene:
+			var dust = dust_scene.instantiate()
+			dust.global_position = pos
+			if get_tree() and get_tree().current_scene:
+				get_tree().current_scene.add_child(dust)
+
+func _spawn_dash_dust(pos: Vector2, dir: Vector2) -> void:
+	var angle = dir.angle()
+	_spawn_vfx(VFX_DASH_DUST, 8, pos + Vector2(0, 4), angle, Vector2(0.48, 0.48), 24.0, z_index - 1, Vector2(-16, 0))
+
+func _spawn_sword_slash(pos: Vector2, facing: Vector2, is_reverse: bool = false) -> void:
+	var roll = randi() % 3
+	var tex = VFX_SLASH_1
+	var hf = 4
+	match roll:
+		0:
+			tex = VFX_SLASH_1
+			hf = 4
+		1:
+			tex = VFX_SLASH_V2
+			hf = 4
+		2:
+			tex = VFX_SLASH_V3
+			hf = 5
+	var angle = facing.angle()
+	var scale_y = -0.55 if is_reverse else 0.55
+	_spawn_vfx(tex, hf, pos, angle, Vector2(0.55, scale_y), 24.0, z_index + 2)
 
 func _on_hurt() -> void:
 	if is_dead: return
 	punch_combo_step = 0
 	punch_combo_timer = 0.0
+	sword_combo_step = 0
+	sword_combo_timer = 0.0
+	_buffered_sword = false
 	if is_rolling:
 		is_rolling = false
 		roll_speed = 0.0
-	_spawn_impact_dust(global_position + Vector2(0, -6))
+	_spawn_impact_dust(global_position + Vector2(0, -6), true)
 	_flash_red()
 	_play_hurt_sfx()
 	shake_camera(3.5, 0.16)
@@ -296,6 +385,9 @@ func _on_died() -> void:
 	roll_speed = 0.0
 	punch_combo_step = 0
 	punch_combo_timer = 0.0
+	sword_combo_step = 0
+	sword_combo_timer = 0.0
+	_buffered_sword = false
 	is_paralyzed = false
 	is_burning = false
 	var pfx = get_node_or_null("ParalysisEffect")
@@ -371,8 +463,11 @@ func _physics_process(delta: float) -> void:
 	# I-frames processing
 	if is_invulnerable:
 		invulnerability_timer -= delta
-		var blink = int(invulnerability_timer * 16.0) % 2 == 0
-		visuals.modulate.a = 0.35 if blink else 1.0
+		if not is_rolling:
+			var blink = int(invulnerability_timer * 16.0) % 2 == 0
+			visuals.modulate.a = 0.35 if blink else 1.0
+		else:
+			visuals.modulate.a = 1.0
 		if invulnerability_timer <= 0.0:
 			is_invulnerable = false
 			visuals.modulate.a = 1.0
@@ -394,6 +489,11 @@ func _physics_process(delta: float) -> void:
 		if punch_combo_timer <= 0.0:
 			punch_combo_step = 0
 
+	if not is_acting and sword_combo_timer > 0.0:
+		sword_combo_timer -= delta
+		if sword_combo_timer <= 0.0:
+			sword_combo_step = 0
+
 	if roll_cooldown > 0.0:
 		roll_cooldown -= delta
 
@@ -414,12 +514,25 @@ func _physics_process(delta: float) -> void:
 
 	if is_rolling:
 		if current_anim != "roll":
-			is_rolling = false
-			roll_speed = 0.0
+			_end_roll()
 		else:
 			roll_speed = lerp(roll_speed, 40.0, 4.0 * delta)
 			velocity = roll_direction * roll_speed + knockback_velocity
 			move_and_slide()
+			
+			# Softly nudge enemies aside if rolling past them without explosive physics
+			var enemies = get_tree().get_nodes_in_group("enemies")
+			for enemy in enemies:
+				if is_instance_valid(enemy) and not enemy.get("is_dead"):
+					var to_enemy = enemy.global_position - global_position
+					var dist = to_enemy.length()
+					if dist < 14.0 and dist > 0.1:
+						var nudge_dir = to_enemy.normalized()
+						if enemy.has_method("receive_push"):
+							enemy.receive_push(nudge_dir, 35.0, delta)
+						elif "knockback_velocity" in enemy:
+							enemy.knockback_velocity = nudge_dir * 30.0
+
 			_ghost_timer += delta
 			if _ghost_timer >= 0.06:
 				_ghost_timer = 0.0
@@ -575,22 +688,29 @@ func _play_footstep_sound() -> void:
 
 var last_played_dir: int = -1
 
-func _play_anim(anim_name: String) -> void:
-	if current_anim == anim_name and current_dir == last_played_dir:
+func _play_anim(anim_name: String, force_restart: bool = false) -> void:
+	if not force_restart and current_anim == anim_name and current_dir == last_played_dir:
 		return
 	
-	if current_anim != anim_name:
+	if current_anim != anim_name or force_restart:
 		current_frame = 0
 		anim_timer = 0.0
 		if anim_name != "roll" and is_rolling:
-			is_rolling = false
-			roll_speed = 0.0
+			_end_roll()
 		
 	current_anim = anim_name
 	last_played_dir = current_dir
 	
 	# Immediately update sprite frame when changing animation or direction
 	_update_sprites()
+
+func _end_roll() -> void:
+	if is_rolling:
+		is_rolling = false
+		set_collision_layer_value(1, true)
+		roll_speed = 0.0
+		is_acting = false
+		is_invulnerable = false
 
 func get_last_direction() -> int:
 	return current_dir
@@ -609,6 +729,11 @@ func _process_animation(delta: float) -> void:
 				fps_mult = 1.25 # Выпад вперед
 			else:
 				fps_mult = 1.05 # Первый сильный удар
+		else:
+			if current_sword_step == 2:
+				fps_mult = 1.85 # 3-я атака: быстрое комбо "туда-сюда"
+			else:
+				fps_mult = 1.0 # Первые 2 атаки бьют в обычном темпе как раньше!
 	
 	anim_timer += delta
 	var frame_dur = 1.0 / (fps * fps_mult)
@@ -623,15 +748,18 @@ func _process_animation(delta: float) -> void:
 			if current_anim == "death":
 				current_frame = frames - 1 # Зависаем на последнем кадре смерти
 			elif current_anim == "roll":
-				is_rolling = false
-				is_acting = false
-				is_invulnerable = false
+				_end_roll()
 				current_frame = 0
 				_play_anim("idle")
 			elif current_anim in ["axe", "mining", "attack", "hurt"]:
+				var was_sword_attack = (current_anim == "attack" and _has_sword_equipped())
 				is_acting = false
 				current_frame = 0
 				_play_anim("idle")
+				if was_sword_attack and _buffered_sword and sword_combo_step > 0:
+					_buffered_sword = false
+					_perform_sword_attack()
+					return
 			else:
 				current_frame = current_frame % frames
 				
@@ -639,6 +767,10 @@ func _process_animation(delta: float) -> void:
 		if current_anim == "attack":
 			if current_frame in [attack_hit_frame, attack_hit_frame + 1]:
 				_execute_sword_attack_hit()
+				if not _has_sword_equipped() and _buffered_punch:
+					_buffered_punch = false
+					_perform_punch_attack()
+					return
 		elif current_anim in ["axe", "mining"] and current_frame == 3:
 			if current_target and is_instance_valid(current_target):
 				if current_target.has_method("interact"):
@@ -651,7 +783,8 @@ func _process_animation(delta: float) -> void:
 		var actual_row = row
 		if current_anim == "attack":
 			if _has_sword_equipped():
-				actual_row = row + (current_dir * 3)
+				var sword_sub_row = current_sword_step % 3
+				actual_row = row + (current_dir * 3) + sword_sub_row
 			else:
 				var punch_sub_row = current_punch_step % 3
 				actual_row = row + (current_dir * 3) + punch_sub_row
@@ -678,7 +811,8 @@ func _update_sprites() -> void:
 	var actual_row = row
 	if current_anim == "attack":
 		if _has_sword_equipped():
-			actual_row = row + (current_dir * 3)
+			var sword_sub_row = current_sword_step % 3
+			actual_row = row + (current_dir * 3) + sword_sub_row
 		else:
 			var punch_sub_row = current_punch_step % 3
 			actual_row = row + (current_dir * 3) + punch_sub_row
@@ -790,7 +924,14 @@ func _perform_dodge() -> void:
 		roll_direction = get_facing_direction()
 
 	is_rolling = true
+	set_collision_layer_value(1, false)
 	is_acting = true
+	_buffered_punch = false
+	punch_combo_step = 0
+	punch_combo_timer = 0.0
+	_buffered_sword = false
+	sword_combo_step = 0
+	sword_combo_timer = 0.0
 	is_invulnerable = true
 	invulnerability_timer = 0.35
 	roll_speed = 170.0
@@ -798,6 +939,7 @@ func _perform_dodge() -> void:
 	_ghost_timer = 0.0
 
 	_play_temp_sfx(SFX_TOOL_SWISH, -1.0, randf_range(1.25, 1.4))
+	_spawn_dash_dust(global_position, roll_direction)
 	_spawn_ghost_trail()
 	_play_anim("roll")
 
@@ -836,27 +978,63 @@ func _perform_attack() -> void:
 func _perform_sword_attack() -> void:
 	if attack_cooldown > 0.0 or is_acting:
 		return
-	# Атака мечом требует выносливости (8 единиц)
-	if not GameStateManager.consume_stamina(8.0):
+
+	var stamina_cost = 6.0
+	if sword_combo_step == 2:
+		stamina_cost = 8.0 # Finisher
+
+	if not GameStateManager.consume_stamina(stamina_cost):
 		return
+
 	is_acting = true
-	attack_cooldown = 0.35
+	current_sword_step = sword_combo_step
 	_attack_already_hit.clear()
-	_play_attack_sfx()
-	_play_anim("attack")
-	# Forward lunge in facing direction
+	_buffered_sword = false
+
 	var facing = get_facing_direction()
-	knockback_velocity += facing * 24.0
+	var slash_pos = global_position + facing * 16.0 + Vector2(0, -6)
+
+	match current_sword_step:
+		0:
+			# Удар 1: Обычный взмах как раньше
+			attack_cooldown = 0.35
+			knockback_velocity += facing * 24.0
+			_play_temp_sfx(SFX_SWORD_SWING, -1.0, randf_range(0.95, 1.1))
+			sword_combo_step = 1
+			sword_combo_timer = SWORD_COMBO_WINDOW
+		1:
+			# Удар 2: Второй взмах как раньше (реверсивный)
+			attack_cooldown = 0.35
+			knockback_velocity += facing * 24.0
+			_play_temp_sfx(SFX_SWORD_SWING, 0.0, randf_range(1.1, 1.25))
+			sword_combo_step = 2
+			sword_combo_timer = SWORD_COMBO_WINDOW
+		2:
+			# Удар 3: Быстрое комбо "туда-сюда" с перекрёстным ударом (Crosscut)
+			# Меньше урона (не имба) и ТОЛЬКО В ОДНОГО ВРАГА ВПЕРЕДИ!
+			attack_cooldown = 0.40
+			knockback_velocity += facing * 36.0
+			_play_temp_sfx(SFX_SWORD_SWING, 1.5, randf_range(1.3, 1.45))
+			# Всегда показываем перекрёстный разрез при финишном комбо
+			_spawn_vfx(VFX_SLASH_CROSSCUT, 5, slash_pos + facing * 4.0, 0.0, Vector2(1.2, 1.2), 16.0, z_index + 2)
+			sword_combo_step = 0
+			sword_combo_timer = 0.0
+
+	_play_anim("attack", true)
 	
 	if debug_show_attack_cone:
 		_debug_cone_timer = 0.25
 		_update_cone_visualizer()
 
 func _perform_punch_attack() -> void:
-	# Если мы в фазе восстановления предыдущего удара (кадр 2..3) — позволяем продолжить серию
+	if _has_sword_equipped():
+		return
+
+	# Если мы уже в фазе удара/восстановления (кадр >= 1) — позволяем отменить задержку и продолжить комбо
 	if is_acting:
-		if current_anim == "attack" and not _has_sword_equipped() and current_frame >= 2 and attack_cooldown <= 0.12:
+		if current_anim == "attack" and current_frame >= 1:
 			is_acting = false
+			attack_cooldown = 0.0
 		else:
 			return
 			
@@ -864,11 +1042,11 @@ func _perform_punch_attack() -> void:
 		return
 
 	# Расход стамины на удары кулаками (быстрые удары по 4 стамины, мощные/финишер 6-8)
-	var stamina_cost = 5.0
+	var stamina_cost = 4.0
 	if punch_combo_step == 3:
-		stamina_cost = 8.0
-	elif punch_combo_step in [1, 2]:
-		stamina_cost = 4.0
+		stamina_cost = 7.0
+	elif punch_combo_step == 0:
+		stamina_cost = 5.0
 
 	if not GameStateManager.consume_stamina(stamina_cost):
 		return
@@ -876,34 +1054,35 @@ func _perform_punch_attack() -> void:
 	is_acting = true
 	current_punch_step = punch_combo_step
 	_attack_already_hit.clear()
+	_buffered_punch = false
 	
 	var facing = get_facing_direction()
 	
 	match current_punch_step:
 		0:
-			# Удар 1: Прямой удар (1-2 урона)
-			attack_cooldown = 0.28
+			# Удар 1: Прямой силовой удар (1-2 урона)
+			attack_cooldown = 0.25
 			knockback_velocity += facing * 22.0
 			_play_temp_sfx(SFX_HIT_IMPACT, -2.0, randf_range(0.95, 1.05))
 		1:
-			# Удар 2: Быстрый хук
-			attack_cooldown = 0.16
-			knockback_velocity += facing * 12.0
+			# Удар 2: Быстрый хук слева (1-2 урона)
+			attack_cooldown = 0.18
+			knockback_velocity += facing * 14.0
 			_play_temp_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), 0.5, randf_range(1.25, 1.4))
 		2:
-			# Удар 3: Второй быстрый хук
-			attack_cooldown = 0.16
-			knockback_velocity += facing * 16.0
+			# Удар 3: Быстрый хук справа (1-2 урона)
+			attack_cooldown = 0.18
+			knockback_velocity += facing * 18.0
 			_play_temp_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), 1.0, randf_range(1.35, 1.5))
 		3:
-			# Удар 4: Финальный выпад вперед с рывком
-			attack_cooldown = 0.40
-			knockback_velocity += facing * 145.0 # Мощный выпад/рывок вперед
+			# Удар 4: Финальный выпад вперед с рывком (3-4 урона)
+			attack_cooldown = 0.42
+			knockback_velocity += facing * 155.0 # Мощный выпад/рывок вперед
 			_spawn_impact_dust(global_position + Vector2(0, -4))
 			_play_temp_sfx(SFX_SWORD_SWING, 1.2, randf_range(1.15, 1.3))
 			_play_temp_sfx(SFX_HIT_IMPACT, 1.2, randf_range(0.85, 0.95))
 			
-	_play_anim("attack")
+	_play_anim("attack", true)
 	
 	# Продвигаем комбо на следующий шаг
 	punch_combo_step = (punch_combo_step + 1) % 4
@@ -938,94 +1117,153 @@ func _execute_sword_attack_hit() -> void:
 	var crit_chance = 0.20
 	var base_kb = attack_base_knockback
 	var shake_power = 2.2
+	var is_single_target = false
 	
-	if not has_sword:
+	if has_sword:
+		match current_sword_step:
+			0:
+				base_dmg = 12
+				base_kb = 180.0
+				crit_chance = 0.18
+				shake_power = 2.0
+				is_single_target = false
+			1:
+				base_dmg = 12
+				base_kb = 180.0
+				crit_chance = 0.18
+				shake_power = 2.0
+				is_single_target = false
+			2:
+				# Финальный перекрёстный удар:
+				# Меньше урона (не имба), только в одного врага впереди!
+				base_dmg = 7
+				base_kb = 165.0
+				crit_chance = 0.25
+				shake_power = 2.4
+				is_single_target = true
+	else:
 		match current_punch_step:
 			0:
-				# Удар 1: 1-2 урона
 				base_dmg = 2
 				base_kb = 110.0
 				crit_chance = 0.10
 				shake_power = 1.6
 			1:
-				# Удар 2: 1-2 урона
 				base_dmg = 1
 				base_kb = 60.0
 				crit_chance = 0.10
 				shake_power = 1.1
 			2:
-				# Удар 3: 1-2 урона
 				base_dmg = 2
 				base_kb = 75.0
 				crit_chance = 0.10
 				shake_power = 1.3
 			3:
-				# Удар 4: Финальный выпад вперед (акцентный удар, 3-4 урона)
 				base_dmg = 3
 				base_kb = 210.0
-				crit_chance = 0.25 # Чуть выше шанс крита на финишере
+				crit_chance = 0.25
 				shake_power = 2.8
 	
 	var min_dot = cos(deg_to_rad(attack_arc_degrees * 0.5))
 	var enemies = get_tree().get_nodes_in_group("enemies")
 	var hit_count = 0
 	var has_crit_hit = false
-	
-	for enemy in enemies:
-		if not is_instance_valid(enemy):
-			continue
-		if enemy.get("is_dead") == true or enemy in _attack_already_hit:
-			continue
-			
-		var hit_info = _get_enemy_hit_info(enemy)
-		var enemy_center: Vector2 = hit_info["center"]
-		var to_enemy = enemy_center - center
-		var dist = to_enemy.length()
-		var enemy_radius: float = hit_info["radius"]
-		var effective_dist = max(0.0, dist - enemy_radius)
-		
-		# Дальность атаки: для выпада вперед зона поражения шире
-		var extra_reach = 8.0 if (not has_sword and current_punch_step == 3) else 0.0
-		if effective_dist <= (attack_range + extra_reach):
-			var in_arc = false
-			if effective_dist <= attack_point_blank_radius:
-				in_arc = true # Point-blank overlap
-			else:
+
+	if is_single_target:
+		# Перекрёстный удар: поражает ТОЛЬКО ОДНОГО ближайшего врага прямо по курсу
+		var best_enemy: Node2D = null
+		var best_dist: float = INF
+		var best_hit_dir: Vector2 = facing
+
+		for enemy in enemies:
+			if not is_instance_valid(enemy) or enemy.get("is_dead") == true or enemy in _attack_already_hit:
+				continue
+			var hit_info = _get_enemy_hit_info(enemy)
+			var to_enemy = hit_info["center"] - center
+			var dist = to_enemy.length()
+			var effective_dist = max(0.0, dist - float(hit_info["radius"]))
+			if effective_dist <= (attack_range + 6.0):
 				var to_dir = to_enemy.normalized() if dist > 0.001 else facing
-				var dot = facing.dot(to_dir)
-				if dot >= min_dot:
+				if effective_dist <= attack_point_blank_radius or facing.dot(to_dir) >= min_dot:
+					if dist < best_dist:
+						best_dist = dist
+						best_enemy = enemy
+						best_hit_dir = to_dir
+
+		if best_enemy:
+			_attack_already_hit.append(best_enemy)
+			hit_count += 1
+			var is_crit = randf() < crit_chance
+			if is_crit:
+				has_crit_hit = true
+			var raw_dmg = round(float(base_dmg) * randf_range(0.9, 1.15))
+			if is_crit:
+				raw_dmg = round(raw_dmg * 2.0)
+			var dmg = int(max(1.0, raw_dmg))
+			var kb_impulse = (best_hit_dir * 0.7 + facing * 0.3).normalized() * (base_kb * (1.3 if is_crit else 1.0))
+			if best_enemy.has_method("take_damage"):
+				best_enemy.take_damage(dmg, kb_impulse, is_crit)
+			elif best_enemy.has_method("interact"):
+				best_enemy.interact(self)
+			# Sword combo finisher: Crosscut 2x bigger (1.2 scale) centered on hit enemy! No dust cloud.
+			_spawn_vfx(VFX_SLASH_CROSSCUT, 5, best_enemy.global_position + Vector2(0, -6), 0.0, Vector2(1.2, 1.2), 24.0, z_index + 2)
+	else:
+		# Сплэш атака: поражает всех врагов в конусе
+		for enemy in enemies:
+			if not is_instance_valid(enemy) or enemy.get("is_dead") == true or enemy in _attack_already_hit:
+				continue
+				
+			var hit_info = _get_enemy_hit_info(enemy)
+			var enemy_center: Vector2 = hit_info["center"]
+			var to_enemy = enemy_center - center
+			var dist = to_enemy.length()
+			var enemy_radius: float = hit_info["radius"]
+			var effective_dist = max(0.0, dist - enemy_radius)
+			
+			var extra_reach = 8.0 if (not has_sword and current_punch_step == 3) else 0.0
+			if effective_dist <= (attack_range + extra_reach):
+				var in_arc = false
+				if effective_dist <= attack_point_blank_radius:
 					in_arc = true
+				else:
+					var to_dir = to_enemy.normalized() if dist > 0.001 else facing
+					var dot = facing.dot(to_dir)
+					if dot >= min_dot:
+						in_arc = true
+						
+				if in_arc:
+					_attack_already_hit.append(enemy)
+					hit_count += 1
+					var hit_dir = to_enemy.normalized() if dist > 1.0 else facing
+					var is_crit = randf() < crit_chance
+					if is_crit:
+						has_crit_hit = true
 					
-			if in_arc:
-				_attack_already_hit.append(enemy)
-				hit_count += 1
-				var hit_dir = to_enemy.normalized() if dist > 1.0 else facing
-				
-				# Крит удар (2x урон, увеличенное отбрасывание, сочный визуальный фидбек)
-				var is_crit = randf() < crit_chance
-				if is_crit:
-					has_crit_hit = true
-				
-				# Небольшой диапазон урона для динамики боя (~85%..120%)
-				var dmg_variance = randf_range(0.85, 1.20)
-				var raw_dmg = round(float(base_dmg) * dmg_variance)
-				if is_crit:
-					raw_dmg = round(raw_dmg * 2.0)
-				var dmg = int(max(1.0, raw_dmg))
-				
-				var kb_mult = 1.35 if is_crit else 1.0
-				var kb_impulse = (hit_dir * 0.7 + facing * 0.3).normalized() * (base_kb * kb_mult)
-				
-				if enemy.has_method("take_damage"):
-					enemy.take_damage(dmg, kb_impulse, is_crit)
-				elif enemy.has_method("interact"):
-					enemy.interact(self)
+					var dmg_variance = randf_range(0.85, 1.20)
+					var raw_dmg = round(float(base_dmg) * dmg_variance)
+					if is_crit:
+						raw_dmg = round(raw_dmg * 2.0)
+					var dmg = int(max(1.0, raw_dmg))
+					
+					var kb_mult = 1.35 if is_crit else 1.0
+					var kb_impulse = (hit_dir * 0.7 + facing * 0.3).normalized() * (base_kb * kb_mult)
+					
+					if enemy.has_method("take_damage"):
+						enemy.take_damage(dmg, kb_impulse, is_crit)
+					elif enemy.has_method("interact"):
+						enemy.interact(self)
+					
+					if has_sword:
+						# Sword slashes only appear on enemy hit! No dust cloud.
+						_spawn_sword_slash(enemy_center, facing, current_sword_step == 1)
+					else:
+						# Punch hits: alternate between dust cloud and impact hit 1
+						_spawn_punch_hit_vfx(enemy_center)
 					
 	if hit_count > 0:
 		if has_crit_hit:
 			shake_camera(shake_power * 1.5, 0.18)
 			_play_temp_sfx(SFX_HIT_IMPACT, 1.5, randf_range(1.25, 1.4))
-			_spawn_impact_dust(global_position + facing * 12.0)
 		else:
 			shake_camera(shake_power, 0.12)
 			if has_sword:
@@ -1033,7 +1271,7 @@ func _execute_sword_attack_hit() -> void:
 			else:
 				if current_punch_step == 3:
 					_play_temp_sfx(SFX_HIT_IMPACT, 1.2, randf_range(0.9, 1.05))
-					_spawn_impact_dust(global_position + facing * 10.0)
+					_spawn_punch_hit_vfx(global_position + facing * 10.0)
 				elif current_punch_step in [1, 2]:
 					_play_temp_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), 1.0, randf_range(1.2, 1.4))
 				else:
@@ -1052,7 +1290,9 @@ func _update_auto_target() -> void:
 		if not target_candidate.has_method("interact") and target_candidate.get_parent() and target_candidate.get_parent().has_method("interact"):
 			target_candidate = target_candidate.get_parent()
 		if target_candidate.has_method("interact"):
-			# Exclude enemies from auto-target and highlight
+			# Exclude invisible entities or enemies from auto-target and highlight
+			if not target_candidate.is_visible_in_tree():
+				continue
 			if target_candidate.is_in_group("enemies") or target_candidate is EnemySkeleton or target_candidate is SlimeEnemy:
 				continue
 			var dist = global_position.distance_to(target_candidate.global_position)
@@ -1074,6 +1314,22 @@ func _update_auto_target() -> void:
 			if sprite: sprite.modulate = Color(1.4, 1.4, 1.4, 1.0)
 
 func _try_interact() -> void:
+	# Если сейчас выполняется атака (мечом или кулаками) — продолжаем комбо или буферизуем ввод
+	if _has_sword_equipped() and current_anim == "attack":
+		if current_frame >= 1:
+			_perform_sword_attack()
+			return
+		else:
+			_buffered_sword = true
+			return
+	elif not _has_sword_equipped() and current_anim == "attack":
+		if current_frame >= 1:
+			_perform_punch_attack()
+			return
+		else:
+			_buffered_punch = true
+			return
+
 	if attack_cooldown > 0.0 or is_acting:
 		return
 
@@ -1179,7 +1435,6 @@ func _play_eat_sfx() -> void:
 	add_child(sfx)
 	sfx.play()
 	sfx.finished.connect(sfx.queue_free)
-# trigger cache rebuild
 
 func _use_hoe() -> void:
 	is_acting = true
@@ -1187,35 +1442,59 @@ func _use_hoe() -> void:
 	_play_anim("axe")
 	var timer = get_tree().create_timer(0.3)
 	await timer.timeout
-	
+
 	var world_map = get_tree().current_scene.get_node_or_null("WorldMap")
 	if world_map:
 		var ground = world_map.get_node_or_null("GroundLayer")
 		if ground:
+			# Определяем тайл перед игроком (по направлению взгляда)
 			var dir_vec = Vector2.ZERO
 			if current_dir == 0: dir_vec = Vector2(0, 16)
 			elif current_dir == 1: dir_vec = Vector2(16, 0)
 			elif current_dir == 2: dir_vec = Vector2(0, -16)
 			if visuals.scale.x < 0 and current_dir == 1: dir_vec.x = -16
-			
+
 			var target_pos = global_position + dir_vec
 			var map_pos = ground.local_to_map(target_pos)
-			
+
 			var ts = ground.tile_set
+			if not ts:
+				is_acting = false
+				_play_anim("idle")
+				return
+
+			# Ищем ID terrain-а FarmLand
 			var farmland_id = -1
-			if ts:
-				for i in range(ts.get_terrains_count(0)):
-					if ts.get_terrain_name(0, i) == "FarmLand":
-						farmland_id = i
-						break
-						
-			if farmland_id != -1:
-				var cell_data = ground.get_cell_tile_data(map_pos)
-				if cell_data and cell_data.get_custom_data("can_hoe") == true:
-					ground.set_cells_terrain_connect([map_pos], 0, farmland_id)
-				else:
-					print("Здесь нельзя копать! Нужна земля.")
-				
+			for i in range(ts.get_terrains_count(0)):
+				if ts.get_terrain_name(0, i) == "FarmLand":
+					farmland_id = i
+					break
+
+			if farmland_id == -1:
+				is_acting = false
+				_play_anim("idle")
+				return
+
+			# Проверяем что тайл — трава (terrain_set 0, terrain 0/6/7/8)
+			# Terrain 0 = Базовая трава, 6 = Лесная, 7 = Сухая, 8 = Волшебная
+			const GRASS_TERRAIN_IDS := [0, 6, 7, 8]
+			var cell_data = ground.get_cell_tile_data(map_pos)
+			var is_grass = false
+			if cell_data:
+				var t_set = cell_data.terrain_set
+				var t_id  = cell_data.terrain
+				if t_set == 0 and t_id in GRASS_TERRAIN_IDS:
+					is_grass = true
+
+			if is_grass:
+				# Вспахиваем — заменяем тайл на FarmLand с автосвязью terrain
+				ground.set_cells_terrain_connect([map_pos], 0, farmland_id)
+				# Пыль от вспашки
+				_spawn_impact_dust(ground.map_to_local(map_pos) + world_map.global_position, true)
+			else:
+				# Нельзя тяпать — нет травы
+				print("[Hoe] Нельзя вспахать — здесь нет травы.")
+
 	is_acting = false
 	_play_anim("idle")
 

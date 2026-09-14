@@ -27,10 +27,23 @@ const SHAPES = {
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var col_shape: CollisionShape2D = $CollisionShape2D
 
+var occupant: Node2D = null
+
 func _ready() -> void:
 	add_to_group("interactable")
+	add_to_group("beds")
 	y_sort_enabled = true
 	_update_orientation()
+
+func is_occupied() -> bool:
+	return is_instance_valid(occupant)
+
+func occupy(npc: Node2D) -> void:
+	occupant = npc
+
+func vacate(npc: Node2D) -> void:
+	if occupant == npc:
+		occupant = null
 
 func set_direction(dir: int) -> void:
 	current_direction = dir % 3

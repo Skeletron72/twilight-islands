@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://animated_vfx_scene"]
+
+[ext_resource type="Script" path="res://scripts/vfx/animated_vfx.gd" id="1_vfx"]
+
+[node name="AnimatedVFX" type="Node2D"]
+z_index = 50
+script = ExtResource("1_vfx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1

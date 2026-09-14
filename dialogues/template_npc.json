@@ -1,0 +1,59 @@
+{
+  "_comment": "Шаблон диалога для любого NPC. Скопируйте и меняйте под свои задачи!",
+  "start": {
+    "speaker": "Имя Персонажа",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Приветствую, путник! Что привело тебя в наши края?",
+    "choices": [
+      {
+        "text": "Расскажи мне об этом острове.",
+        "next": "lore"
+      },
+      {
+        "text": "Мне нужна твоя помощь.",
+        "next": "quest_offer"
+      },
+      {
+        "text": "До встречи! [Завершить]",
+        "next": "end"
+      }
+    ]
+  },
+  "lore": {
+    "speaker": "Имя Персонажа",
+    "text": "Эти острова полны тайн и опасностей. Днем здесь спокойно, но в сумерках начинается [color=#b57edc]Сумеречный Шторм[/color]...",
+    "choices": [
+      {
+        "text": "Понятно, спасибо за предупреждение.",
+        "next": "start"
+      }
+    ]
+  },
+  "quest_offer": {
+    "speaker": "Имя Персонажа",
+    "text": "Если принесешь мне [color=#ffdd77]3 камня[/color], я поделюсь с тобой полезным припасом!",
+    "choices": [
+      {
+        "text": "Вот твои камни! [Отдать 3 камня]",
+        "condition": "has_item:stone:3",
+        "action": "give_item:stone:3",
+        "next": "quest_reward"
+      },
+      {
+        "text": "Я вернусь, когда соберу.",
+        "next": "end"
+      }
+    ]
+  },
+  "quest_reward": {
+    "speaker": "Имя Персонажа",
+    "text": "Превосходно! Держи эту награду в благодарность.",
+    "action": "receive_item:gold:5",
+    "choices": [
+      {
+        "text": "Спасибо!",
+        "next": "end"
+      }
+    ]
+  }
+}

@@ -126,11 +126,19 @@ func _refresh_ui() -> void:
 		upgrade_title_label.text = "МАКСИМАЛЬНЫЙ РАНГ"
 		next_tier_label.text = "Судно улучшено до предела!"
 		action_button.visible = false
+	elif not is_broken and not (HomeStateManager and HomeStateManager.is_workshop_ready()):
+		# No upgrade exists on the raft before the workshop is built
+		upgrade_title_label.text = "ПЛОТ ГОТОВ К ВЫЛАЗКАМ"
+		if HomeStateManager and HomeStateManager.workshop_under_construction:
+			next_tier_label.text = "Плот исправен и готов к экспедициям.\nФинн строит верфь (осталось %d дн.). Модернизация судов откроется после завершения стройки!" % HomeStateManager.get_days_remaining()
+		else:
+			next_tier_label.text = "Плот исправен и готов к экспедициям.\nМодернизация судна откроется после спасения Финна и возведения корабельной верфи."
+		action_button.visible = false
 	else:
 		if is_broken:
 			upgrade_title_label.text = "РЕМОНТ КОРПУСА"
 			next_tier_label.text = "Для восстановления необходимо:"
-			action_button.text = "Починить лодку"
+			action_button.text = "Починить плот"
 		else:
 			upgrade_title_label.text = "МОДЕРНИЗАЦИЯ СУДНА"
 			next_tier_label.text = "Следующий ранг: %s" % next_tier.get("name", "")

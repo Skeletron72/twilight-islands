@@ -39,6 +39,8 @@ func _ready() -> void:
 	# Populate UI slots with existing items on startup
 	for item_id in inventory.keys():
 		_update_ui_slots(item_id, inventory[item_id])
+		if ItemDB:
+			ItemDB.check_discovery(item_id)
 
 func add_item(item_id: String, amount: int = 1) -> void:
 	if amount <= 0: return
@@ -53,6 +55,9 @@ func add_item(item_id: String, amount: int = 1) -> void:
 	# Combine for display/UI if needed, but for now just signal the total
 	_update_ui_slots(item_id, get_item_amount(item_id))
 	inventory_changed.emit(item_id, get_item_amount(item_id))
+	
+	if ItemDB:
+		ItemDB.check_discovery(item_id)
 
 func remove_item(item_id: String, amount: int = 1) -> bool:
 	if get_item_amount(item_id) < amount:
@@ -83,6 +88,9 @@ func get_item_amount(item_id: String) -> int:
 	if inventory.has(item_id): total += inventory[item_id]
 	if temp_inventory.has(item_id): total += temp_inventory[item_id]
 	return total
+
+func has_item(item_id: String, amount: int = 1) -> bool:
+	return get_item_amount(item_id) >= amount
 
 func set_mode(new_mode: Mode) -> void:
 	current_mode = new_mode

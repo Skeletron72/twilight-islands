@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://shipwright_workshop_01"]
+
+[ext_resource type="Script" path="res://scripts/components/shipwright_workshop.gd" id="1_sw"]
+[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/Buildings/Buildings/Houses/Wood/House_1_Wood_Base_Blue.png" id="2_house_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
+size = Vector2(24, 18)
+
+[node name="ShipwrightWorkshop" type="StaticBody2D" groups=["buildings", "interactable"]]
+y_sort_enabled = true
+collision_layer = 5
+collision_mask = 1
+script = ExtResource("1_sw")
+
+[node name="PierContainer" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="HouseSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_house_tex")
+offset = Vector2(0, -56)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-44, -4, -44, -38, 44, -38, 44, -4, 14, -4, 14, -20, -14, -20, -14, -4)
+
+[node name="DoorArea" type="Area2D" parent="." groups=["interactable"]]
+position = Vector2(0, -10)
+collision_layer = 2
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorArea"]
+shape = SubResource("RectangleShape2D_door")
+
+[node name="PromptLabel" type="Label" parent="DoorArea"]
+offset_left = -60.0
+offset_top = -42.0
+offset_right = 60.0
+offset_bottom = -22.0
+theme_override_colors/font_color = Color(1, 0.9, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 10
+text = "[E] Мастерская"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MooringPoint" type="Marker2D" parent="."]
+position = Vector2(30, 42)
+
+[node name="FinnPoint" type="Marker2D" parent="."]
+position = Vector2(16, 10)

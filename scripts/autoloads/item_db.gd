@@ -20,6 +20,77 @@ var RECIPES = {
 	"orange_bed": {"wood": 4, "stick": 2, "cloth_basic": 1}
 }
 
+signal recipe_unlocked(recipe_id: String)
+
+# Стартовые рецепты, открытые со старта
+const STARTING_RECIPES: Array[String] = [
+	"campfire",
+	"axe",
+	"cloth_basic"
+]
+
+# Правила открытия рецептов при получении ключевых материалов (Discovery)
+const DISCOVERY_RULES: Dictionary = {
+	"stone": ["pickaxe", "sword"],
+	"plant_fiber": ["boots_basic", "arrow"],
+	"cloth_basic": ["orange_bed"],
+	"wood": ["storage_box", "tent"],
+	"stick": ["bow"]
+}
+
+# Подсказки для закрытых рецептов
+const RECIPE_HINTS: Dictionary = {
+	"pickaxe": "Найдите и соберите каменный булыжник (камень)",
+	"sword": "Найдите и соберите каменный булыжник (камень)",
+	"bow": "Соберите палки и волокна",
+	"arrow": "Соберите растительные волокна",
+	"boots_basic": "Соберите растительные волокна",
+	"orange_bed": "Сотките льняную ткань или обучитесь у Корабельщика Финна",
+	"storage_box": "Соберите древесину (топором из деревьев)",
+	"tent": "Соберите древесину, палки и волокна",
+}
+
+var unlocked_recipes: Dictionary = {}
+
+func _ready() -> void:
+	for r in STARTING_RECIPES:
+		unlocked_recipes[r] = true
+
+func is_recipe_unlocked(recipe_id: String) -> bool:
+	return unlocked_recipes.get(recipe_id, false)
+
+func unlock_recipe(recipe_id: String, silent: bool = false) -> bool:
+	if not RECIPES.has(recipe_id):
+		return false
+	if is_recipe_unlocked(recipe_id):
+		return false
+		
+	unlocked_recipes[recipe_id] = true
+	recipe_unlocked.emit(recipe_id)
+	
+	if not silent and is_inside_tree():
+		var item = get_item(recipe_id)
+		var item_name = item.get("name", recipe_id)
+		var exp_mgr = get_node_or_null("/root/ExpeditionManager")
+		if exp_mgr and exp_mgr.has_method("post_thought"):
+			exp_mgr.post_thought("📜 Новый рецепт открыт: %s!" % item_name, Color(1.0, 0.85, 0.35))
+		var audio_mgr = get_node_or_null("/root/AudioManager")
+		if audio_mgr and audio_mgr.has_method("play_sfx"):
+			var sfx = load("res://assets/audio/sfx/player/sfx_craft.mp3")
+			if sfx:
+				audio_mgr.play_sfx(sfx)
+	return true
+
+func check_discovery(item_id: String) -> void:
+	if DISCOVERY_RULES.has(item_id):
+		for recipe_id in DISCOVERY_RULES[item_id]:
+			if not is_recipe_unlocked(recipe_id):
+				unlock_recipe(recipe_id)
+
+func get_recipe_unlock_hint(recipe_id: String) -> String:
+	return RECIPE_HINTS.get(recipe_id, "Исследуйте остров и находите новые материалы")
+
+
 var ITEMS = {
 	# --- РЕСУРСЫ ---
 		"red_berry": {

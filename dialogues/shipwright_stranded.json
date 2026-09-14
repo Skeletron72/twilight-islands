@@ -1,0 +1,112 @@
+{
+  "start": {
+    "branches": [
+      {
+        "condition": "shipwright_wood_given",
+        "next": "already_following"
+      },
+      {
+        "condition": "quest_claimed:shipwright_wood",
+        "next": "already_following"
+      },
+      {
+        "condition": "quest_active:shipwright_wood",
+        "next": "waiting_for_wood"
+      },
+      {
+        "condition": "has_flag:shipwright_spoken_once",
+        "next": "waiting_for_wood"
+      },
+      {
+        "condition": "default",
+        "next": "crash_intro"
+      }
+    ]
+  },
+  "crash_intro": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Ох-х-х... Голова раскалывается... Шхуну разбило в щепки об эти проклятые рифы... Сумеречный шторм налетел внезапно! Я едва выполз на песок...",
+    "choices": [
+      {
+        "text": "Ты ранен? Чем я могу помочь?",
+        "action": "set_flag:shipwright_spoken_once;start_quest:shipwright_wood",
+        "next": "ask_help"
+      },
+      {
+        "text": "Держись, я осмотрюсь вокруг и вернусь.",
+        "action": "set_flag:shipwright_spoken_once;start_quest:shipwright_wood",
+        "next": "end"
+      }
+    ]
+  },
+  "ask_help": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Мне бы пару крепких досок, чтобы смастерить шину и временное оружие против тварей. Если у тебя найдется [color=#ffdd77]5 единиц древесины[/color], я буду по гроб жизни благодарен!",
+    "choices": [
+      {
+        "text": "Вот, держи [Отдать 5 древесины]",
+        "condition": "has_item:wood:5",
+        "action": "give_item:wood:5;claim_reward:shipwright_wood;set_flag:shipwright_wood_given;stand_up",
+        "next": "wood_given"
+      },
+      {
+        "text": "У меня пока нет столько дерева, сейчас добуду.",
+        "next": "end"
+      }
+    ]
+  },
+  "waiting_for_wood": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Ты вернулся! Удалось раздобыть [color=#ffdd77]5 единиц древесины[/color]? Без них мне не смастерить шину и не отбиться от тварей...",
+    "choices": [
+      {
+        "text": "Да, вот бревна! [Отдать 5 древесины]",
+        "condition": "has_item:wood:5",
+        "action": "give_item:wood:5;claim_reward:shipwright_wood;set_flag:shipwright_wood_given;stand_up",
+        "next": "wood_given"
+      },
+      {
+        "text": "Пока еще ищу, скоро вернусь.",
+        "next": "end"
+      }
+    ]
+  },
+  "wood_given": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Ого, отличный дуб! С такими досками мы не пропадем. Спасибо тебе, друг! Ты спас моряка от верной гибели.",
+    "action": "stand_up",
+    "choices": [
+      {
+        "text": "Пойдем со мной к лодке, уплывем на мой домашний остров!",
+        "action": "start_following",
+        "next": "following_accepted"
+      }
+    ]
+  },
+  "following_accepted": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "С превеликим удовольствием! На берегу кишат твари, держись рядом — я пущу в ход свои кулаки!",
+    "choices": [
+      {
+        "text": "За мной!",
+        "next": "end"
+      }
+    ]
+  },
+  "already_following": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Я прикрою спину! Веди к лодке, пока шторм не накрыл нас с головой!",
+    "choices": [
+      {
+        "text": "Вперед, прорываемся!",
+        "next": "end"
+      }
+    ]
+  }
+}

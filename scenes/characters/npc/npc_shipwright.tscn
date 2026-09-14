@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://npcshipwright123"]
+
+[ext_resource type="Script" path="res://scripts/components/npc_shipwright.gd" id="1_fin"]
+[ext_resource type="Texture2D" path="res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fisherman_Fin_Combat.png" id="2_fintex"]
+[ext_resource type="FontFile" uid="uid://cp5m6git4cdoo" path="res://assets/fonts/Chalkboard.ttf" id="3_font"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_body"]
+radius = 4.0
+height = 10.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 24.0
+
+[node name="NpcShipwright" type="CharacterBody2D"]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_fin")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_fintex")
+offset = Vector2(0, -18)
+region_enabled = true
+region_rect = Rect2(0, 0, 64, 64)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_body")
+
+[node name="InteractArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea"]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_interact")
+
+[node name="PromptLabel" type="Label" parent="."]
+visible = false
+z_index = 50
+texture_filter = 1
+offset_left = -70.0
+offset_top = -34.0
+offset_right = 70.0
+offset_bottom = -14.0
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 9
+theme_override_colors/font_color = Color(1, 0.9, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+text = "[E] Корабельщик"
+horizontal_alignment = 1
+vertical_alignment = 1

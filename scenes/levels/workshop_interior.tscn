@@ -1,0 +1,151 @@
+[gd_scene format=3 uid="uid://workshop_interior_scene_01"]
+
+[ext_resource type="Script" path="res://scripts/components/workshop_interior.gd" id="1_wi"]
+[ext_resource type="Texture2D" uid="uid://cypy2u661u1v" path="res://assets/new_assets/Cute_Fantasy/Buildings/Houses_Interiors/Interior_Walls.png" id="2_walls"]
+[ext_resource type="Texture2D" uid="uid://dpsawe8w0c3t" path="res://assets/new_assets/Cute_Fantasy/Buildings/Houses_Interiors/Wood_Floor_Tiles.png" id="3_floor"]
+[ext_resource type="Texture2D" uid="uid://pixel_light_circle_33" path="res://assets/textures/lights/pixel_light_circle.png" id="4_light"]
+[ext_resource type="Script" path="res://scripts/components/workshop_exit.gd" id="5_exit"]
+[ext_resource type="Texture2D" uid="uid://cqj1d47mqu1h" path="res://assets/new_assets/Cute_Fantasy/Buildings/House_Decor/Tables.png" id="6_table"]
+[ext_resource type="Texture2D" uid="uid://bt1c42gq0h3d" path="res://assets/new_assets/Cute_Fantasy/Buildings/House_Decor/Fireplaces.png" id="7_fire"]
+[ext_resource type="Texture2D" uid="uid://b23746y2536b" path="res://assets/new_assets/Cute_Fantasy/Buildings/House_Decor/Anvil_Anim.png" id="8_anvil"]
+[ext_resource type="Texture2D" uid="uid://mcv65x0h1k2p" path="res://assets/new_assets/Cute_Fantasy/Buildings/House_Decor/Metal_Chest_Anim.png" id="9_chest"]
+[ext_resource type="Texture2D" uid="uid://b6748w1h0j1k" path="res://assets/new_assets/Cute_Fantasy/Buildings/House_Decor/BookShelves.png" id="10_shelf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(24, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bottom_left"]
+size = Vector2(90, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bottom_right"]
+size = Vector2(90, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_blueprint"]
+size = Vector2(36, 28)
+
+[node name="WorkshopInterior" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_wi")
+
+[node name="DarkBackground" type="ColorRect" parent="."]
+z_index = -100
+offset_left = -400.0
+offset_top = -400.0
+offset_right = 400.0
+offset_bottom = 400.0
+color = Color(0.03, 0.02, 0.04, 1)
+
+[node name="Floor" type="Sprite2D" parent="."]
+z_index = -50
+texture_repeat = 2
+texture = ExtResource("3_floor")
+region_enabled = true
+region_rect = Rect2(0, 0, 224, 112)
+position = Vector2(0, 6)
+
+[node name="WallsSprite" type="Sprite2D" parent="."]
+z_index = -40
+texture = ExtResource("2_walls")
+position = Vector2(0, -18)
+
+[node name="Walls" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="LeftWall" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(-114, -56, -98, -56, -98, 48, -114, 48)
+
+[node name="RightWall" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(98, -56, 114, -56, 114, 48, 98, 48)
+
+[node name="TopWall" type="CollisionPolygon2D" parent="Walls"]
+polygon = PackedVector2Array(-114, -56, 114, -56, 114, -22, -114, -22)
+
+[node name="BottomBarrierLeft" type="CollisionShape2D" parent="Walls"]
+position = Vector2(-55, 52)
+shape = SubResource("RectangleShape2D_bottom_left")
+
+[node name="BottomBarrierRight" type="CollisionShape2D" parent="Walls"]
+position = Vector2(55, 52)
+shape = SubResource("RectangleShape2D_bottom_right")
+
+[node name="WarmLight" type="PointLight2D" parent="."]
+texture_filter = 1
+position = Vector2(0, 0)
+scale = Vector2(3.5, 3.5)
+color = Color(1, 0.88, 0.65, 0.95)
+energy = 0.85
+texture = ExtResource("4_light")
+
+[node name="ExitDoor" type="Area2D" parent="." groups=["interactable"]]
+position = Vector2(0, 44)
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("5_exit")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor"]
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="PromptLabel" type="Label" parent="ExitDoor"]
+offset_left = -50.0
+offset_top = -28.0
+offset_right = 50.0
+offset_bottom = -12.0
+theme_override_colors/font_color = Color(1, 0.9, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 9
+text = "[E] Выход на берег"
+horizontal_alignment = 1
+
+[node name="BlueprintTable" type="Area2D" parent="." groups=["interactable"]]
+position = Vector2(-46, 0)
+collision_layer = 2
+collision_mask = 1
+
+[node name="TableSprite" type="Sprite2D" parent="BlueprintTable"]
+texture = ExtResource("6_table")
+region_enabled = true
+region_rect = Rect2(0, 0, 48, 32)
+offset = Vector2(0, -6)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BlueprintTable"]
+shape = SubResource("RectangleShape2D_blueprint")
+
+[node name="PromptLabel" type="Label" parent="BlueprintTable"]
+offset_left = -60.0
+offset_top = -34.0
+offset_right = 60.0
+offset_bottom = -18.0
+theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 9
+text = "[E] Чертежи судов"
+horizontal_alignment = 1
+
+[node name="Fireplace" type="Sprite2D" parent="."]
+position = Vector2(65, -20)
+texture = ExtResource("7_fire")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 48)
+
+[node name="Shelves" type="Sprite2D" parent="."]
+position = Vector2(0, -28)
+texture = ExtResource("10_shelf")
+region_enabled = true
+region_rect = Rect2(0, 0, 48, 32)
+
+[node name="Anvil" type="Sprite2D" parent="."]
+position = Vector2(40, 16)
+texture = ExtResource("8_anvil")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+offset = Vector2(0, -6)
+
+[node name="Chest" type="Sprite2D" parent="."]
+position = Vector2(75, 18)
+texture = ExtResource("9_chest")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+offset = Vector2(0, -6)

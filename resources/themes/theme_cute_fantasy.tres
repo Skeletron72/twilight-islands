@@ -56,7 +56,6 @@ region_rect = Rect2(64, 16, 32, 16)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hgrabber_normal"]
 texture = ExtResource("4_sliders")
-texture_margin_left = 4.0
 texture_margin_top = 4.0
 texture_margin_right = 4.0
 texture_margin_bottom = 4.0
@@ -84,8 +83,6 @@ region_rect = Rect2(200, 85, 32, 6)
 atlas = ExtResource("4_sliders")
 region = Rect2(304, 96, 16, 16)
 filter_clip = true
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vxeti"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dswxj"]
 content_margin_top = 3.0
@@ -183,8 +180,8 @@ HScrollBar/styles/scroll_focus = SubResource("StyleBoxTexture_hscroll_track")
 HSlider/icons/grabber = SubResource("AtlasTexture_7q3qp")
 HSlider/icons/grabber_disabled = SubResource("AtlasTexture_7q3qp")
 HSlider/icons/grabber_highlight = SubResource("AtlasTexture_7q3qp")
-HSlider/styles/grabber_area = SubResource("StyleBoxEmpty_vxeti")
-HSlider/styles/grabber_area_highlight = SubResource("StyleBoxEmpty_vxeti")
+HSlider/styles/grabber_area = SubResource("StyleBoxTexture_hgrabber_normal")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxTexture_hgrabber_normal")
 HSlider/styles/slider = SubResource("StyleBoxTexture_dswxj")
 Panel/styles/panel = SubResource("StyleBoxTexture_panel")
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_panel")

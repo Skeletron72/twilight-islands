@@ -366,20 +366,20 @@ var boat_level: int = 0
 const BOAT_TIERS = {
 	0: {
 		"level": 0,
-		"name": "Разбитый остов",
-		"desc": "Лодка сильно повреждена прибоем. Требуется заделать пробоины и скрепить корпус досками перед отплытием.",
+		"name": "Разбитый плот",
+		"desc": "Потрепанный плот у прибоя. Соберите брёвна и ветки, чтобы скрепить плот и отправиться в первую экспедицию.",
 		"is_broken": true,
 		"repair_cost": {"wood": 8, "stick": 4},
-		"perks": ["Судно не способно выйти в море", "Требуется базовый ремонт"],
-		"action_title": "Починить лодку"
+		"perks": ["Судно требует ремонта корпуса перед отплытием"],
+		"action_title": "Починить плот"
 	},
 	1: {
 		"level": 1,
-		"name": "Простая лодка",
-		"desc": "Легкая просмоленная лодка. Позволяет совершать первые вылазки на Сумеречный Остров.",
+		"name": "Парусный плот",
+		"desc": "Отремонтированный прочный плот с треугольным парусом и рулевым веслом. Позволяет совершать первые вылазки на Сумеречные Острова.",
 		"is_broken": false,
 		"repair_cost": {"wood": 15, "stone": 6, "cloth_basic": 2},
-		"perks": ["Доступ к экспедициям на Сумеречный остров", "Базовый трюм экспедиции"],
+		"perks": ["Доступ к экспедициям на Сумеречные Острова", "Базовый трюм экспедиции"],
 		"action_title": "Укрепить корпус (Ур. 2)"
 	},
 	2: {
@@ -413,6 +413,11 @@ func can_upgrade_boat() -> bool:
 	var cost: Dictionary = current_tier.get("repair_cost", {})
 	if cost.is_empty():
 		return false
+	# Upgrades beyond repaired raft (Level >= 1) require Finn's completed workshop!
+	if boat_level >= 1:
+		var home_mgr = get_node_or_null("/root/HomeStateManager")
+		if not home_mgr or not home_mgr.is_workshop_ready():
+			return false
 	if not has_node("/root/InventoryManager"):
 		return false
 	var inv_mgr = get_node("/root/InventoryManager")

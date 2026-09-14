@@ -205,8 +205,65 @@ var quests: Dictionary = {
 			{"type": "coin", "item_id": "coin", "name": "Монеты", "amount": 150},
 			{"type": "item", "item_id": "storage_box", "name": "Ящик для хранения", "amount": 1}
 		]
+	},
+	"shipwright_wood": {
+		"id": "shipwright_wood",
+		"title": "Помощь моряку",
+		"category": CAT_SIDE,
+		"desc": "Корабельщик Финн потерпел кораблекрушение из-за сумеречной бури. Поделитесь с ним древесиной, чтобы он смог починить снаряжение.",
+		"icon_atlas": "res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Icons.png",
+		"icon_region": Rect2(192, 32, 16, 16),
+		"status": "inactive",
+		"objectives": [
+			{
+				"id": "wood",
+				"text": "Собрать 5 древесины для Финна",
+				"type": "gather",
+				"target_item": "wood",
+				"target_amount": 5,
+				"current_amount": 0,
+				"is_done": false
+			}
+		],
+		"rewards": [
+			{"type": "coin", "item_id": "coin", "name": "Монеты", "amount": 100}
+		]
+	},
+	"build_workshop": {
+		"id": "build_workshop",
+		"title": "Мастерская корабельщика",
+		"category": CAT_MAIN,
+		"desc": "Финн благодарен за спасение и готов построить на Домашнем Острове корабельную верфь-мастерскую. Соберите необходимые материалы: 10 бревен и 6 камней.",
+		"icon_atlas": "res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Icons.png",
+		"icon_region": Rect2(272, 32, 16, 16),
+		"status": "inactive",
+		"objectives": [
+			{
+				"id": "wood",
+				"text": "Собрать древесину",
+				"type": "gather",
+				"target_item": "wood",
+				"target_amount": 10,
+				"current_amount": 0,
+				"is_done": false
+			},
+			{
+				"id": "stone",
+				"text": "Собрать камень",
+				"type": "gather",
+				"target_item": "stone",
+				"target_amount": 6,
+				"current_amount": 0,
+				"is_done": false
+			}
+		],
+		"rewards": [
+			{"type": "coin", "item_id": "coin", "name": "Монеты", "amount": 250},
+			{"type": "item", "item_id": "cloth_basic", "name": "Морской бушлат", "amount": 1}
+		]
 	}
 }
+
 
 func _ready() -> void:
 	if InventoryManager.has_signal("inventory_changed"):
@@ -221,7 +278,8 @@ func _on_inventory_changed(_item_id: String, _new_amount: int) -> void:
 func evaluate_all_quests() -> void:
 	for q_id in quests:
 		var q = quests[q_id]
-		if q.get("status") == "claimed":
+		var status = q.get("status", "active")
+		if status == "claimed" or status == "inactive":
 			continue
 		
 		var all_done = true
@@ -230,15 +288,17 @@ func evaluate_all_quests() -> void:
 			var target_item = obj.get("target_item", "")
 			var target_amount = obj.get("target_amount", 1)
 			
-			if o_type == "gather":
-				var inv_amt = InventoryManager.get_item_amount(target_item)
-				obj["current_amount"] = inv_amt
-				obj["is_done"] = (inv_amt >= target_amount)
-			elif o_type == "craft":
-				var inv_amt = InventoryManager.get_item_amount(target_item)
-				if inv_amt > obj.get("current_amount", 0):
+			if o_type in ["gather", "deliver", "bring", "custom"]:
+				if target_item != "" and InventoryManager:
+					var inv_amt = InventoryManager.get_item_amount(target_item)
 					obj["current_amount"] = inv_amt
-				obj["is_done"] = (obj.get("current_amount", 0) >= target_amount)
+					obj["is_done"] = (inv_amt >= target_amount)
+			elif o_type == "craft":
+				if InventoryManager:
+					var inv_amt = InventoryManager.get_item_amount(target_item)
+					if inv_amt > obj.get("current_amount", 0):
+						obj["current_amount"] = inv_amt
+					obj["is_done"] = (obj.get("current_amount", 0) >= target_amount)
 			
 			if not obj.get("is_done", false):
 				all_done = false
@@ -292,6 +352,10 @@ func claim_reward(quest_id: String) -> bool:
 	if not quests.has(quest_id):
 		return false
 	var q = quests[quest_id]
+	
+	# Evaluate first in case inventory just satisfied requirements
+	evaluate_all_quests()
+	
 	if q.get("status") != "completed":
 		return false
 	
@@ -299,10 +363,15 @@ func claim_reward(quest_id: String) -> bool:
 	for rew in q.get("rewards", []):
 		var r_item = rew.get("item_id", "")
 		var r_amount = rew.get("amount", 1)
-		if r_item != "":
+		if r_item != "" and InventoryManager:
 			InventoryManager.add_item(r_item, r_amount)
 	
 	q["status"] = "claimed"
+	
+	var title = q.get("title", "Задание")
+	var exp_mgr = get_node_or_null("/root/ExpeditionManager")
+	if exp_mgr and exp_mgr.has_method("post_thought"):
+		exp_mgr.post_thought("🎉 Задание выполнено: %s! Награда получена." % title, Color(0.4, 1.0, 0.6))
 	
 	# Play fanfare SFX
 	if SFX_QUEST_COMPLETE and AudioManager:
@@ -324,7 +393,7 @@ func get_quests_by_category(category: String) -> Array[Dictionary]:
 			if status == "completed" or status == "claimed":
 				result.append(q)
 		else:
-			if q.get("category") == category and status != "completed" and status != "claimed":
+			if q.get("category") == category and status != "completed" and status != "claimed" and status != "inactive":
 				result.append(q)
 	return result
 
@@ -342,3 +411,33 @@ func is_quest_completed(quest_id: String) -> bool:
 func is_quest_claimed(quest_id: String) -> bool:
 	var q = quests.get(quest_id, {})
 	return q.get("status") == "claimed"
+
+func is_quest_active(quest_id: String) -> bool:
+	var q = quests.get(quest_id, {})
+	var st = q.get("status", "")
+	return st == "active" or st == "completed"
+
+func has_quest(quest_id: String) -> bool:
+	return quests.has(quest_id)
+
+func register_quest(quest_dict: Dictionary) -> void:
+	var q_id = quest_dict.get("id", "")
+	if q_id != "":
+		quests[q_id] = quest_dict
+		quest_updated.emit(q_id)
+		evaluate_all_quests()
+
+func activate_quest(quest_id: String) -> void:
+	if quests.has(quest_id):
+		var q = quests[quest_id]
+		if q.get("status") == "inactive" or q.get("status") == "":
+			q["status"] = "active"
+			quest_updated.emit(quest_id)
+			evaluate_all_quests()
+			var title = q.get("title", "Новое задание")
+			var exp_mgr = get_node_or_null("/root/ExpeditionManager")
+			if exp_mgr and exp_mgr.has_method("post_thought"):
+				exp_mgr.post_thought("📜 Новое задание: %s!" % title, Color(1.0, 0.85, 0.35))
+			var audio_mgr = get_node_or_null("/root/AudioManager")
+			if audio_mgr and audio_mgr.has_method("play_sfx") and SFX_QUEST_COMPLETE:
+				audio_mgr.play_sfx(SFX_QUEST_COMPLETE, 1.25, -4.0)

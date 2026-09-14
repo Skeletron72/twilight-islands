@@ -48,6 +48,7 @@
 [ext_resource type="Script" uid="uid://bqk1ar4t3ef88" path="res://scripts/components/water_foam_manager.gd" id="water_foam_mgr_script"]
 [ext_resource type="PackedScene" path="res://scenes/vfx/weather_effects.tscn" id="weather_effects_scene"]
 [ext_resource type="Script" uid="uid://becfq3sbwowyv" path="res://scripts/components/z_sort_fix.gd" id="z_sort_fix_script"]
+[ext_resource type="PackedScene" uid="uid://npcshipwright123" path="res://scenes/characters/npc/npc_shipwright.tscn" id="npc_shipwright_scene"]
 
 [sub_resource type="Environment" id="Environment_glow"]
 background_mode = 3
@@ -1674,6 +1675,9 @@ visible = false
 y_sort_enabled = true
 position = Vector2(40, 160)
 target_scene = "res://scenes/levels/home_island.tscn"
+
+[node name="NpcShipwright" parent="." unique_id=987123456 instance=ExtResource("npc_shipwright_scene")]
+position = Vector2(1560, -280)
 
 [node name="FireflyManager" type="Node2D" parent="." unique_id=58193021]
 script = ExtResource("firefly_mgr_script")

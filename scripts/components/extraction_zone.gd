@@ -13,11 +13,15 @@ var is_home: bool = false
 
 func _ready() -> void:
 	super._ready()
+	add_to_group("boat")
 	collision_layer = 2
 	
 	# Determine if this boat is on HomeIsland or RaidIsland
 	var cur_scene_name = get_tree().current_scene.name if get_tree().current_scene else ""
 	is_home = (cur_scene_name == "HomeIsland" or is_raid_start or cur_scene_name == "")
+	
+	if is_home and HomeStateManager.workshop_built and HomeStateManager.workshop_pos != Vector2.ZERO:
+		global_position = HomeStateManager.get_workshop_boat_pos()
 	
 	if target_scene == "":
 		if is_home:
@@ -42,10 +46,7 @@ func _create_floating_label() -> void:
 	prompt_label.custom_minimum_size = Vector2(150, 20)
 	
 	# Load font
-	var font = load("res://assets/fonts/Chalkboard.ttf")
-	if font:
-		prompt_label.add_theme_font_override("font", font)
-	prompt_label.add_theme_font_size_override("font_size", 9)
+	prompt_label.add_theme_font_size_override("font_size", 10)
 	prompt_label.add_theme_color_override("font_outline_color", Color.BLACK)
 	prompt_label.add_theme_constant_override("outline_size", 3)
 	
@@ -55,18 +56,21 @@ func _update_visuals() -> void:
 	if is_home:
 		var level = GameStateManager.boat_level
 		if level == 0:
-			# Broken boat: tilted, weathered dark modulate
-			rotation_degrees = -5.5
-			self.modulate = Color(0.68, 0.62, 0.55, 0.95)
+			# Broken raft: tilted, weathered dark modulate
+			rotation_degrees = -6.5
+			self.modulate = Color(0.65, 0.58, 0.50, 0.95)
 			if prompt_label:
-				prompt_label.text = "[E] Остов лодки (Сломана)"
+				if not HomeStateManager.is_workshop_ready():
+					prompt_label.text = "[E] Разбитый плот"
+				else:
+					prompt_label.text = "[E] Плот у верфи (Ремонт)"
 				prompt_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.45))
 		else:
 			# Repaired boat
 			rotation_degrees = 0.0
 			self.modulate = Color.WHITE
 			var tier = GameStateManager.get_current_boat_tier()
-			var tier_name = tier.get("name", "Лодка")
+			var tier_name = tier.get("name", "Плот")
 			if prompt_label:
 				prompt_label.text = "[E] %s (Ур. %d)" % [tier_name, level]
 				prompt_label.add_theme_color_override("font_color", Color(0.6, 1.0, 0.6))
@@ -120,6 +124,14 @@ func start_departure() -> void:
 func extract() -> void:
 	InventoryManager.commit_temp_inventory()
 	InventoryManager.set_mode(InventoryManager.Mode.SAFE)
+	if HomeStateManager:
+		HomeStateManager.spawn_on_shore = true
+		if HomeStateManager.shipwright_following and not HomeStateManager.shipwright_rescued:
+			HomeStateManager.shipwright_rescued = true
+			HomeStateManager.shipwright_following = false
+			HomeStateManager.shipwright_arrival_day = GameStateManager.current_day
+			if ExpeditionManager:
+				ExpeditionManager.post_thought("Корабельщик Финн поднялся на борт! Мы плывем домой.", Color(0.4, 0.9, 0.6))
 	print("Extracted Successfully! Loot saved.")
 	TransitionManager.transition_to(target_scene, "Возвращаемся домой...")
 

@@ -28,6 +28,9 @@ TentManager="*res://scripts/autoloads/tent_manager.gd"
 AudioManager="*res://scripts/autoloads/audio_manager.gd"
 QuestManager="*res://scripts/autoloads/quest_manager.gd"
 ExpeditionManager="*res://scripts/autoloads/expedition_manager.gd"
+DialogueManager="*res://scripts/autoloads/dialogue_manager.gd"
+BuildModeManager="*res://scripts/autoloads/build_mode_manager.gd"
+WorkshopManager="*res://scripts/autoloads/workshop_manager.gd"
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
 [display]

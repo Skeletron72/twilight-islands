@@ -1,0 +1,136 @@
+{
+  "start": {
+    "branches": [
+      {
+        "condition": "workshop_ready",
+        "next": "workshop_built_idle"
+      },
+      {
+        "condition": "workshop_under_construction",
+        "next": "workshop_constructing_idle"
+      },
+      {
+        "condition": "quest_claimed:build_workshop",
+        "next": "workshop_finished"
+      },
+      {
+        "condition": "quest_completed:build_workshop",
+        "next": "workshop_turn_in"
+      },
+      {
+        "condition": "quest_active:build_workshop",
+        "next": "workshop_check"
+      },
+      {
+        "condition": "default",
+        "next": "offer_workshop"
+      }
+    ]
+  },
+  "first_day_rest": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Ах, твердая земля под ногами! Твой домашний остров просто прекрасен, друг. Дай мне дух перевести после этой бури, а завтра обсудим великие дела!",
+    "choices": [
+      {
+        "text": "Отдыхай, Финн. Завтра поговорим.",
+        "next": "end"
+      }
+    ]
+  },
+  "offer_workshop": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Доброе утро, друг! Я осмотрел бухту. Место идеальное! Но чтобы строить надежные корабли и укреплять лодку для дальних экспедиций, нам нужна [color=#ffdd77]Корабельная мастерская[/color]. Поможешь собрать материалы?",
+    "choices": [
+      {
+        "text": "Конечно! Что нужно принести?",
+        "action": "start_quest:build_workshop",
+        "next": "workshop_details"
+      },
+      {
+        "text": "Позже, сейчас я занят другими делами.",
+        "next": "end"
+      }
+    ]
+  },
+  "workshop_details": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Принеси мне [color=#ffdd77]10 брёвен[/color] и [color=#ffdd77]6 камней[/color]. Я заложу фундамент прямо у воды, и мы начнем улучшать наш флот!",
+    "choices": [
+      {
+        "text": "Договорились, скоро принесу!",
+        "next": "end"
+      }
+    ]
+  },
+  "workshop_check": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Как продвигается сбор материалов для верфи? Нам нужно [color=#ffdd77]10 бревен[/color] и [color=#ffdd77]6 камней[/color].",
+    "choices": [
+      {
+        "text": "Вот материалы для мастерской! [Сдать 10 дерева и 6 камня]",
+        "condition": "has_item:wood:10,has_item:stone:6",
+        "action": "give_item:wood:10;give_item:stone:6;complete_quest:build_workshop;claim_reward:build_workshop",
+        "next": "workshop_finished"
+      },
+      {
+        "text": "Еще собираю, скоро вернусь.",
+        "next": "end"
+      }
+    ]
+  },
+  "workshop_turn_in": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Ты собрал все необходимые материалы для мастерской!",
+    "choices": [
+      {
+        "text": "Вот материалы! [Сдать 10 дерева и 6 камня]",
+        "condition": "has_item:wood:10,has_item:stone:6",
+        "action": "give_item:wood:10;give_item:stone:6;complete_quest:build_workshop;claim_reward:build_workshop",
+        "next": "workshop_finished"
+      },
+      {
+        "text": "Сейчас подготовлю.",
+        "next": "end"
+      }
+    ]
+  },
+  "workshop_finished": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Браво! Материалы у нас. Теперь выбери на острове самое удобное место у берега — помни, что причал обязательно должен уходить в воду, а здание стоять на суше!",
+    "choices": [
+      {
+        "text": "Полетели выбирать место! [Режим строительства]",
+        "action": "start_build_mode:shipwright_workshop",
+        "next": "end"
+      }
+    ]
+  },
+  "workshop_constructing_idle": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Стучу молотком от рассвета до заката! Стройка верфи требует времени — дай мне ещё денёк-другой. А ты пока не теряй времени, твой плот на пляже отремонтирован и готов к экспедициям!",
+    "choices": [
+      {
+        "text": "Удачи в стройке, Финн! Пойду готовиться к вылазке.",
+        "next": "end"
+      }
+    ]
+  },
+  "workshop_built_idle": {
+    "speaker": "Корабельщик Финн",
+    "portrait": "res://assets/new_assets/Cute_Fantasy/NPCs (Premade)/Fin_portrait_20.png",
+    "text": "Наша мастерская и причал готовы! Я перетащил твой плот к верфи. Заходи внутрь к чертёжному столу или подойди к судну у причала — теперь мы сможем превратить его в быстроходную лодку или каравеллу!",
+    "choices": [
+      {
+        "text": "Спасибо, Финн! Отличная работа.",
+        "next": "end"
+      }
+    ]
+  }
+}

@@ -10,7 +10,6 @@ class_name ThoughtLogUI
 @export var message_lifetime: float = 8.5
 
 @onready var container: VBoxContainer = $MarginContainer/VBoxContainer
-@onready var panel_bg: NinePatchRect = $NinePatchRect
 
 const FONT_WARM = preload("res://assets/fonts/WarmPixel.ttf")
 
@@ -42,13 +41,13 @@ func add_thought(text: String, color: Color = Color(0.95, 0.95, 0.90)) -> void:
 	msg_label.fit_content = true
 	msg_label.scroll_active = false
 	msg_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	msg_label.custom_minimum_size = Vector2(220, 0)
+	msg_label.custom_minimum_size = Vector2(240, 0)
 	
 	msg_label.add_theme_font_override("normal_font", FONT_WARM)
 	msg_label.add_theme_font_size_override("normal_font_size", 9)
 	msg_label.add_theme_color_override("default_color", color)
-	msg_label.add_theme_constant_override("outline_size", 3)
-	msg_label.add_theme_color_override("font_outline_color", Color(0.08, 0.04, 0.08, 0.9))
+	msg_label.add_theme_constant_override("outline_size", 4)
+	msg_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.95))
 	
 	# Форматирование: звездочка/иконка мысли и текст
 	msg_label.text = "[color=#%s]• %s[/color]" % [color.to_html(false), text]
@@ -56,9 +55,6 @@ func add_thought(text: String, color: Color = Color(0.95, 0.95, 0.90)) -> void:
 	# Начальное появление с плавным фейдом
 	msg_label.modulate.a = 0.0
 	container.add_child(msg_label)
-	
-	# Показываем панель, если она была скрыта
-	_update_bg_visibility()
 	
 	var in_tween = create_tween()
 	in_tween.tween_property(msg_label, "modulate:a", 1.0, 0.25)
@@ -70,19 +66,4 @@ func add_thought(text: String, color: Color = Color(0.95, 0.95, 0.90)) -> void:
 	lifetime_tween.tween_callback(func():
 		if is_instance_valid(msg_label):
 			msg_label.queue_free()
-		# Проверяем видимость панели
-		get_tree().create_timer(0.1).timeout.connect(_update_bg_visibility)
 	)
-
-func _update_bg_visibility() -> void:
-	if not panel_bg or not container:
-		return
-	var has_visible = false
-	for child in container.get_children():
-		if child is CanvasItem and child.modulate.a > 0.05:
-			has_visible = true
-			break
-			
-	var target_a = 0.85 if has_visible else 0.0
-	var tw = create_tween()
-	tw.tween_property(panel_bg, "modulate:a", target_a, 0.3)

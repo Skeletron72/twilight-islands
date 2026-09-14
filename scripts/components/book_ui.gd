@@ -591,30 +591,55 @@ func _refresh_craft_tab() -> void:
 	for child in craft_recipe_list.get_children():
 		child.queue_free()
 		
-	for recipe_id in ItemDB.RECIPES.keys():
-		var btn = Button.new()
-		var item = ItemDB.get_item(recipe_id)
-		btn.text = " " + item.get("name", recipe_id)
-		btn.icon = ItemDB.get_icon(recipe_id)
-		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		btn.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		btn.clip_text = true
+	var all_recipes = ItemDB.RECIPES.keys()
+	var unlocked_ids = []
+	var locked_ids = []
+	
+	for r_id in all_recipes:
+		if ItemDB.is_recipe_unlocked(r_id):
+			unlocked_ids.append(r_id)
+		else:
+			locked_ids.append(r_id)
+			
+	# Сначала отображаем доступные для крафта рецепты
+	for recipe_id in unlocked_ids:
+		_add_craft_list_item(recipe_id, true)
 		
-		btn.flat = true
-		btn.add_theme_font_override("font", preload("res://assets/fonts/Chalkboard.ttf"))
-		btn.add_theme_font_size_override("font_size", 12)
+	# Затем заблокированные рецепты с замком
+	for recipe_id in locked_ids:
+		_add_craft_list_item(recipe_id, false)
+
+func _add_craft_list_item(recipe_id: String, is_unlocked: bool) -> void:
+	var btn = Button.new()
+	var item = ItemDB.get_item(recipe_id)
+	var title = item.get("name", recipe_id)
+	
+	if is_unlocked:
+		btn.text = " " + title
 		btn.add_theme_color_override("font_color", Color(0.2, 0.1, 0.05, 1))
-		btn.add_theme_color_override("font_hover_color", Color(0.4, 0.2, 0.1, 1))
-		btn.add_theme_color_override("font_pressed_color", Color(0.1, 0.05, 0.02, 1))
+	else:
+		btn.text = " 🔒 " + title
+		btn.add_theme_color_override("font_color", Color(0.55, 0.50, 0.45, 0.85))
 		
-		var empty_style = StyleBoxEmpty.new()
-		btn.add_theme_stylebox_override("normal", empty_style)
-		btn.add_theme_stylebox_override("hover", empty_style)
-		btn.add_theme_stylebox_override("pressed", empty_style)
-		btn.add_theme_stylebox_override("focus", empty_style)
-		
-		btn.pressed.connect(func(): _show_recipe_details(recipe_id))
-		craft_recipe_list.add_child(btn)
+	btn.icon = ItemDB.get_icon(recipe_id)
+	btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	btn.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	btn.clip_text = true
+	
+	btn.flat = true
+	btn.add_theme_font_override("font", preload("res://assets/fonts/Chalkboard.ttf"))
+	btn.add_theme_font_size_override("font_size", 12)
+	btn.add_theme_color_override("font_hover_color", Color(0.4, 0.2, 0.1, 1))
+	btn.add_theme_color_override("font_pressed_color", Color(0.1, 0.05, 0.02, 1))
+	
+	var empty_style = StyleBoxEmpty.new()
+	btn.add_theme_stylebox_override("normal", empty_style)
+	btn.add_theme_stylebox_override("hover", empty_style)
+	btn.add_theme_stylebox_override("pressed", empty_style)
+	btn.add_theme_stylebox_override("focus", empty_style)
+	
+	btn.pressed.connect(func(): _show_recipe_details(recipe_id))
+	craft_recipe_list.add_child(btn)
 
 func _show_recipe_details(recipe_id: String) -> void:
 	current_craft_id = recipe_id
@@ -640,11 +665,20 @@ func _show_recipe_details(recipe_id: String) -> void:
 		return
 		
 	var item = ItemDB.get_item(recipe_id)
+	var is_unlocked = ItemDB.is_recipe_unlocked(recipe_id) if ItemDB else true
+	
 	craft_icon.visible = true
 	craft_btn.visible = true
 	craft_req_title.visible = true
-	craft_name.text = item.get("name", "")
-	craft_desc.text = item.get("desc", "")
+	
+	if is_unlocked:
+		craft_name.text = item.get("name", "")
+		craft_desc.text = item.get("desc", "")
+	else:
+		craft_name.text = item.get("name", "") + " [🔒 Не изучено]"
+		var hint = ItemDB.get_recipe_unlock_hint(recipe_id)
+		craft_desc.text = item.get("desc", "") + "\n\n[color=#994422]📜 Как открыть:[/color] " + hint
+		
 	craft_icon.texture = ItemDB.get_icon(recipe_id)
 	
 	# Stats with icons
@@ -681,7 +715,7 @@ func _show_recipe_details(recipe_id: String) -> void:
 			craft_stats_box.add_child(stat_item)
 	
 	var recipe = ItemDB.RECIPES[recipe_id]
-	var can_craft = true
+	var can_craft = is_unlocked
 	
 	for req_id in recipe:
 		var req_amt = recipe[req_id]
@@ -720,9 +754,14 @@ func _show_recipe_details(recipe_id: String) -> void:
 		req_box.add_child(req_label)
 		craft_req_list.add_child(req_box)
 		
-	craft_btn.disabled = not can_craft
-	if can_craft:
-		craft_btn.pressed.connect(_on_craft_pressed)
+	if not is_unlocked:
+		craft_btn.text = "Чертеж закрыт"
+		craft_btn.disabled = true
+	else:
+		craft_btn.text = "Создать"
+		craft_btn.disabled = not can_craft
+		if can_craft:
+			craft_btn.pressed.connect(_on_craft_pressed)
 
 func _on_craft_pressed() -> void:
 	if current_craft_id == "": return

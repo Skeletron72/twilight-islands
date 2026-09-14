@@ -287,8 +287,23 @@ func _physics_process(delta: float) -> void:
 		_process_animation(delta)
 		return
 
-	var dist = global_position.distance_to(player.global_position)
-	var dir = global_position.direction_to(player.global_position)
+	var target_entity: Node2D = player
+	var min_target_dist: float = global_position.distance_to(player.global_position)
+	
+	var allies = get_tree().get_nodes_in_group("allies")
+	for ally in allies:
+		if is_instance_valid(ally) and ally.is_visible_in_tree():
+			if ally.has_method("is_unconscious") and ally.is_unconscious():
+				continue
+			if ally.has_method("is_targetable_by_enemies") and not ally.is_targetable_by_enemies():
+				continue
+			var d_ally = global_position.distance_to(ally.global_position)
+			if d_ally < min_target_dist:
+				min_target_dist = d_ally
+				target_entity = ally
+
+	var dist = min_target_dist
+	var dir = global_position.direction_to(target_entity.global_position)
 
 	# Detection / Aggro
 	if not is_aggro:
@@ -316,11 +331,11 @@ func _physics_process(delta: float) -> void:
 	if dist <= touch_dist and touch_cooldown <= 0.0:
 		touch_cooldown = 1.4
 		var rolled_dmg = int(max(1.0, round(float(damage) * randf_range(0.85, 1.15))))
-		if player.has_method("take_damage"):
-			player.take_damage(rolled_dmg, global_position)
-		else:
+		if target_entity.has_method("take_damage"):
+			target_entity.take_damage(rolled_dmg, global_position)
+		elif target_entity == player:
 			GameStateManager.take_damage(rolled_dmg)
-		# Slime recoils back slightly upon hitting player to prevent stun-locking
+		# Slime recoils back slightly upon hitting target to prevent stun-locking
 		knockback_velocity = -jump_target_dir * 40.0
 		is_jumping = false
 		match slime_size:
@@ -348,6 +363,17 @@ func _physics_process(delta: float) -> void:
 		if jump_cooldown <= 0.0:
 			# Start next jump towards player!
 			_start_jump(dir)
+
+	# Gentle separation if overlapping with player
+	if is_instance_valid(player) and not player.get("is_dead") and not player.get("is_rolling"):
+		var to_player = global_position - player.global_position
+		var d = to_player.length()
+		if d < 12.0 and d > 0.1:
+			velocity += to_player.normalized() * (12.0 - d) * 3.5
+
+	# Clamp velocity to prevent physics glitching / unnatural launching
+	if velocity.length() > 220.0:
+		velocity = velocity.normalized() * 220.0
 
 	move_and_slide()
 	_process_animation(delta)
@@ -535,18 +561,7 @@ func _spawn_split_slimes() -> void:
 		get_parent().call_deferred("add_child", child_slime)
 
 func _spawn_loot() -> void:
-	var drop_scene = preload("res://scenes/objects/dropped_item.tscn")
-	var drops = [
-		{"id": "coin", "count": randi_range(1, 3)},
-	]
-	if randf() < 0.5:
-		drops.append({"id": "stone", "count": 1})
-
-	for d in drops:
-		var drop = drop_scene.instantiate()
-		drop.setup(d["id"], d["count"])
-		drop.position = global_position + Vector2(randf_range(-6, 6), randf_range(-4, 4))
-		get_parent().call_deferred("add_child", drop)
+	pass
 
 func interact(actor: Node2D) -> void:
 	if is_dead:
@@ -554,3 +569,10 @@ func interact(actor: Node2D) -> void:
 	var dir = actor.global_position.direction_to(global_position) if actor else Vector2.ZERO
 	var dmg = 12 if InventoryManager.get_item_amount("stone_sword") > 0 else 6
 	take_damage(dmg, dir)
+
+func receive_push(push_dir: Vector2, push_speed: float, delta: float) -> void:
+	if is_dead:
+		return
+	var push_impulse = push_dir * (push_speed / max(0.5, mass))
+	knockback_velocity = knockback_velocity.move_toward(push_impulse, 250.0 * delta)
+

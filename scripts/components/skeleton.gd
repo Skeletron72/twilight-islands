@@ -181,8 +181,24 @@ func _physics_process(delta: float) -> void:
 		_process_animation(delta)
 		return
 
-	var dist = global_position.distance_to(player.global_position)
-	var dir = global_position.direction_to(player.global_position)
+	var target_entity: Node2D = player
+	var min_target_dist: float = global_position.distance_to(player.global_position)
+	
+	# Check if any ally in group 'allies' (e.g. conscious NPC) is closer or attacking
+	var allies = get_tree().get_nodes_in_group("allies")
+	for ally in allies:
+		if is_instance_valid(ally) and ally.is_visible_in_tree():
+			if ally.has_method("is_unconscious") and ally.is_unconscious():
+				continue # Do NOT attack unconscious NPC!
+			if ally.has_method("is_targetable_by_enemies") and not ally.is_targetable_by_enemies():
+				continue
+			var d_ally = global_position.distance_to(ally.global_position)
+			if d_ally < min_target_dist:
+				min_target_dist = d_ally
+				target_entity = ally
+
+	var dist = min_target_dist
+	var dir = global_position.direction_to(target_entity.global_position)
 
 	# Detection / Aggro handling
 	if not is_aggro:
@@ -204,7 +220,7 @@ func _physics_process(delta: float) -> void:
 			_process_animation(delta)
 			return
 
-	# Update facing direction towards player
+	# Update facing direction towards target
 	_update_facing(dir)
 
 	# Attack range check
@@ -215,13 +231,24 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		_play_anim("attack_" + facing_dir)
 	else:
-		# Chase player with physical sliding
+		# Chase target with physical sliding
 		if dist > attack_range - 4.0:
 			velocity = dir * speed + knockback_velocity
 			_play_anim("walk_" + facing_dir)
 		else:
 			velocity = knockback_velocity
 			_play_anim("idle_" + facing_dir)
+
+	# Gentle separation if overlapping with player (prevent sudden jitter or launch)
+	if is_instance_valid(player) and not player.get("is_dead") and not player.get("is_rolling"):
+		var to_player = global_position - player.global_position
+		var d = to_player.length()
+		if d < 12.0 and d > 0.1:
+			velocity += to_player.normalized() * (12.0 - d) * 3.5
+
+	# Clamp velocity to prevent physics glitching / unnatural launching
+	if velocity.length() > 220.0:
+		velocity = velocity.normalized() * 220.0
 
 	move_and_slide()
 	_process_animation(delta)
@@ -300,26 +327,33 @@ func _process_animation(delta: float) -> void:
 		_apply_frame()
 
 func _perform_attack_hit() -> void:
-	if is_instance_valid(player):
-		var to_player = player.global_position - global_position
-		var dist = to_player.length()
-		if dist <= attack_range + 10.0:
-			var attack_dir = Vector2.DOWN
-			match facing_dir:
-				"right":
-					attack_dir = Vector2.LEFT if (sprite and sprite.scale.x < 0) else Vector2.RIGHT
-				"up":
-					attack_dir = Vector2.UP
-				"down":
-					attack_dir = Vector2.DOWN
+	var target_list: Array[Node2D] = []
+	if is_instance_valid(player): target_list.append(player)
+	var allies = get_tree().get_nodes_in_group("allies")
+	for a in allies:
+		if is_instance_valid(a) and a.is_visible_in_tree() and not (a.has_method("is_unconscious") and a.is_unconscious()):
+			target_list.append(a)
 
-			# Удар поражает цель только если игрок перед скелетом (~180°), если игрок не увернулся за спину
-			if to_player.is_zero_approx() or to_player.normalized().dot(attack_dir) > -0.2:
+	var attack_dir = Vector2.DOWN
+	match facing_dir:
+		"right":
+			attack_dir = Vector2.LEFT if (sprite and sprite.scale.x < 0) else Vector2.RIGHT
+		"up":
+			attack_dir = Vector2.UP
+		"down":
+			attack_dir = Vector2.DOWN
+
+	for target in target_list:
+		var to_target = target.global_position - global_position
+		var dist = to_target.length()
+		if dist <= attack_range + 10.0:
+			if to_target.is_zero_approx() or to_target.normalized().dot(attack_dir) > -0.2:
 				var rolled_dmg = int(max(1.0, round(float(damage) * randf_range(0.85, 1.15))))
-				if player.has_method("take_damage"):
-					player.take_damage(rolled_dmg, global_position)
-				else:
+				if target.has_method("take_damage"):
+					target.take_damage(rolled_dmg, global_position)
+				elif target == player:
 					GameStateManager.take_damage(rolled_dmg)
+				break # Hit one target per swing
 
 func _spawn_impact_dust(pos: Vector2) -> void:
 	var dust_scene = load("res://scenes/vfx/impact_dust.tscn")
@@ -383,11 +417,8 @@ func _finish_death() -> void:
 
 func _spawn_loot() -> void:
 	var items = [
-		{"id": "coin", "count": randi_range(2, 5)},
-		{"id": "stone", "count": randi_range(1, 2)}
+		{"id": "bone", "count": randi_range(1, 2)}
 	]
-	if randf() < 0.4:
-		items.append({"id": "cloth_basic", "count": 1})
 
 	for item_info in items:
 		var drop = DROPPED_ITEM_SCENE.instantiate()
@@ -407,3 +438,9 @@ func _play_sound(stream: AudioStream, min_pitch: float = 0.9, max_pitch: float =
 		sfx_audio.stream = stream
 		sfx_audio.pitch_scale = randf_range(min_pitch, max_pitch)
 		sfx_audio.play()
+
+func receive_push(push_dir: Vector2, push_speed: float, delta: float) -> void:
+	if is_dead:
+		return
+	var push_impulse = push_dir * (push_speed / max(0.5, mass))
+	knockback_velocity = knockback_velocity.move_toward(push_impulse, 250.0 * delta)
