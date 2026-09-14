@@ -45,34 +45,34 @@ const SIZE_FRAME_DIMS = {
 
 const SIZE_STATS = {
 	SlimeSize.BIG: {
-		"hp": 45,
-		"damage": 12,
+		"hp": 55,
+		"damage": 13,
 		"speed": 28.0,
 		"col_radius": 11.0,
 		"offset": Vector2(0, -14),
 		"bar_pos": Vector2(-16, -30),
 		"bar_w": 32.0,
-		"mass": 2.2
+		"mass": 2.4
 	},
 	SlimeSize.MEDIUM: {
-		"hp": 20,
-		"damage": 7,
-		"speed": 32.0,
+		"hp": 26,
+		"damage": 8,
+		"speed": 34.0,
 		"col_radius": 7.0,
 		"offset": Vector2(0, -8),
 		"bar_pos": Vector2(-12, -19),
 		"bar_w": 24.0,
-		"mass": 1.0
+		"mass": 1.1
 	},
 	SlimeSize.SMALL: {
-		"hp": 8,
+		"hp": 12,
 		"damage": 4,
-		"speed": 36.0,
+		"speed": 38.0,
 		"col_radius": 4.0,
 		"offset": Vector2(0, -4),
 		"bar_pos": Vector2(-8, -12),
 		"bar_w": 16.0,
-		"mass": 0.5
+		"mass": 0.6
 	}
 }
 
@@ -211,8 +211,12 @@ func _setup_hp_bar() -> void:
 		hp_fill.region_rect = Rect2(2, 7, 28, 3)
 		hp_fill.texture_margin_left = 1.0
 		hp_fill.texture_margin_right = 1.0
-		hp_fill.texture_margin_top = 0.0
-		hp_fill.texture_margin_bottom = 0.0
+		hp_fill.texture_margin_top = 1.0
+		hp_fill.texture_margin_bottom = 1.0
+		hp_fill.expand_margin_left = -1.0
+		hp_fill.expand_margin_top = -1.0
+		hp_fill.expand_margin_right = -1.0
+		hp_fill.expand_margin_bottom = -1.0
 		hp_fill.modulate_color = Color(0.85, 0.15, 0.15, 1.0)
 		
 		hp_bar.add_theme_stylebox_override("background", hp_bg)
@@ -311,10 +315,11 @@ func _physics_process(delta: float) -> void:
 	var touch_dist = stats["col_radius"] + 8.0
 	if dist <= touch_dist and touch_cooldown <= 0.0:
 		touch_cooldown = 1.4
+		var rolled_dmg = int(max(1.0, round(float(damage) * randf_range(0.85, 1.15))))
 		if player.has_method("take_damage"):
-			player.take_damage(damage, global_position)
+			player.take_damage(rolled_dmg, global_position)
 		else:
-			GameStateManager.take_damage(damage)
+			GameStateManager.take_damage(rolled_dmg)
 		# Slime recoils back slightly upon hitting player to prevent stun-locking
 		knockback_velocity = -jump_target_dir * 40.0
 		is_jumping = false
@@ -426,7 +431,7 @@ func _spawn_impact_dust(pos: Vector2) -> void:
 		if get_tree() and get_tree().current_scene:
 			get_tree().current_scene.add_child(dust)
 
-func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
+func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO, is_crit: bool = false) -> void:
 	if is_dead:
 		return
 
@@ -439,6 +444,9 @@ func take_damage(amount: int, knockback_dir: Vector2 = Vector2.ZERO) -> void:
 
 	# Impact dust
 	_spawn_impact_dust(global_position + Vector2(0, -4))
+
+	# Всплывающий урон (обычный или критический)
+	DamageNumber.spawn(get_parent(), global_position + Vector2(0, -14), amount, is_crit)
 
 	# Red flash
 	if sprite:

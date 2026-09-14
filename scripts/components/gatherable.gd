@@ -80,7 +80,11 @@ func _collect() -> void:
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.tween_property(self, "modulate:a", 0.0, 0.08)
 	tween.chain().tween_callback(func():
-		InventoryManager.add_item(resource_id, amount)
+		# Небольшая рандомизация сбора: шанс получить +1 бонусный ресурс (например, 22% шанс)
+		var final_amount = amount
+		if randf() < 0.22:
+			final_amount += 1
+		InventoryManager.add_item(resource_id, final_amount)
 		if is_permanent and HomeStateManager:
 			HomeStateManager.mark_destroyed(get_path())
 		queue_free()

@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://storageui123" path="res://scenes/ui/storage_ui.tscn" id="6_storage"]
 [ext_resource type="PackedScene" uid="uid://boatui123" path="res://scenes/ui/boat_ui.tscn" id="7_boat"]
 [ext_resource type="PackedScene" uid="uid://debugpanel123" path="res://scenes/ui/debug_panel.tscn" id="10_debug"]
+[ext_resource type="PackedScene" uid="uid://statshud123" path="res://scenes/ui/stats_hud.tscn" id="11_statshud"]
+[ext_resource type="PackedScene" uid="uid://thoughtlog123" path="res://scenes/ui/thought_log_ui.tscn" id="12_thoughtlog"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_book_closed"]
 atlas = ExtResource("2_tex")
@@ -24,16 +26,16 @@ font = ExtResource("3_font")
 outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_time"]
-font = ExtResource("4_font_chalk")
-font_size = 15
-outline_size = 3
-outline_color = Color(0, 0, 0, 1)
-
 [sub_resource type="LabelSettings" id="LabelSettings_day"]
 font = ExtResource("4_font_chalk")
 font_size = 13
 font_color = Color(0.85, 0.85, 0.85, 1)
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_time"]
+font = ExtResource("4_font_chalk")
+font_size = 15
 outline_size = 3
 outline_color = Color(0, 0, 0, 1)
 
@@ -74,16 +76,16 @@ label_settings = SubResource("LabelSettings_warm")
 horizontal_alignment = 1
 
 [node name="TimeIcon" type="TextureRect" parent="." unique_id=546684029]
+custom_minimum_size = Vector2(48, 48)
 offset_left = 16.0
 offset_top = 16.0
 offset_right = 64.0
 offset_bottom = 64.0
-custom_minimum_size = Vector2(48, 48)
 stretch_mode = 2
 
 [node name="TimeContainer" type="VBoxContainer" parent="." unique_id=870165610]
 offset_left = 16.0
-offset_top = 68.0
+offset_top = 73.0
 offset_right = 240.0
 offset_bottom = 136.0
 theme_override_constants/separation = 1
@@ -120,3 +122,7 @@ anchors_preset = 0
 visible = false
 
 [node name="DebugPanel" parent="." unique_id=1607764611 instance=ExtResource("10_debug")]
+
+[node name="StatsHud" parent="." unique_id=1607764612 instance=ExtResource("11_statshud")]
+
+[node name="ThoughtLogUI" parent="." unique_id=1607764613 instance=ExtResource("12_thoughtlog")]

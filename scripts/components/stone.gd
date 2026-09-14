@@ -99,11 +99,14 @@ func _collect_as_gatherable(player: Node2D) -> void:
 	if audio_mgr and audio_mgr.has_method("play_sfx"):
 		audio_mgr.play_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), randf_range(1.0, 1.2), -1.0)
 		
-	# Add stone item to inventory
-	InventoryManager.add_item("stone", 1)
+	# Add stone item to inventory with small bonus chance (+1 stone with 22% chance)
+	var final_amount = 1
+	if randf() < 0.22:
+		final_amount += 1
+	InventoryManager.add_item("stone", final_amount)
 	
 	# Update stats
-	GameStateManager.add_stat("items_gathered", 1)
+	GameStateManager.add_stat("items_gathered", final_amount)
 	
 	# Mark collected in HomeStateManager so it stays collected on reload
 	var current_scene = get_tree().current_scene

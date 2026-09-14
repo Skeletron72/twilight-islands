@@ -27,6 +27,7 @@ WeatherManager="*res://scripts/autoloads/weather_manager.gd"
 TentManager="*res://scripts/autoloads/tent_manager.gd"
 AudioManager="*res://scripts/autoloads/audio_manager.gd"
 QuestManager="*res://scripts/autoloads/quest_manager.gd"
+ExpeditionManager="*res://scripts/autoloads/expedition_manager.gd"
 _mcp_game_helper="*res://addons/godot_ai/runtime/game_helper.gd"
 
 [display]

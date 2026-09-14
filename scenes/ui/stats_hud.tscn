@@ -1,0 +1,225 @@
+[gd_scene format=3 uid="uid://statshud123"]
+
+[ext_resource type="Script" uid="uid://cf8bjiw54jxvv" path="res://scripts/components/stats_hud.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://ddxofik0g03t7" path="res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Bars.png" id="2_bars"]
+[ext_resource type="Texture2D" uid="uid://st0dw5byqsv7" path="res://assets/new_assets/Cute_Fantasy_UI/UI/UI_Icons.png" id="3_icons"]
+[ext_resource type="Texture2D" uid="uid://cf20noynya4e7" path="res://assets/new_assets/Cute_Fantasy/Icons/No Outline/Food_Icons_NO_Outline.png" id="4_food"]
+[ext_resource type="FontFile" uid="uid://biwqbhnnjqhqe" path="res://assets/fonts/WarmPixel.ttf" id="5_font"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_heart"]
+atlas = ExtResource("3_icons")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bg_hp"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+texture = ExtResource("2_bars")
+texture_margin_left = 1.0
+texture_margin_top = 1.0
+texture_margin_right = 1.0
+texture_margin_bottom = 1.0
+region_rect = Rect2(82, 33, 12, 6)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fill_hp"]
+texture = ExtResource("2_bars")
+texture_margin_left = 1.0
+texture_margin_top = 1.0
+texture_margin_right = 1.0
+texture_margin_bottom = 1.0
+expand_margin_left = -1.0
+expand_margin_top = -1.0
+expand_margin_right = -1.0
+expand_margin_bottom = -1.0
+region_rect = Rect2(83, 42, 10, 4)
+modulate_color = Color(0.92, 0.2, 0.22, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stamina"]
+atlas = ExtResource("3_icons")
+region = Rect2(144, 0, 16, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bg_st"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+texture = ExtResource("2_bars")
+texture_margin_left = 1.0
+texture_margin_top = 1.0
+texture_margin_right = 1.0
+texture_margin_bottom = 1.0
+region_rect = Rect2(82, 33, 12, 6)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fill_st"]
+texture = ExtResource("2_bars")
+texture_margin_left = 1.0
+texture_margin_top = 1.0
+texture_margin_right = 1.0
+texture_margin_bottom = 1.0
+expand_margin_left = -1.0
+expand_margin_top = -1.0
+expand_margin_right = -1.0
+expand_margin_bottom = -1.0
+region_rect = Rect2(83, 42, 10, 4)
+modulate_color = Color(0.25, 0.85, 0.35, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hunger"]
+atlas = ExtResource("4_food")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bg_hg"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+texture = ExtResource("2_bars")
+texture_margin_left = 1.0
+texture_margin_top = 1.0
+texture_margin_right = 1.0
+texture_margin_bottom = 1.0
+region_rect = Rect2(82, 33, 12, 6)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fill_hg"]
+texture = ExtResource("2_bars")
+texture_margin_left = 1.0
+texture_margin_top = 1.0
+texture_margin_right = 1.0
+texture_margin_bottom = 1.0
+expand_margin_left = -1.0
+expand_margin_top = -1.0
+expand_margin_right = -1.0
+expand_margin_bottom = -1.0
+region_rect = Rect2(83, 42, 10, 4)
+modulate_color = Color(0.95, 0.62, 0.18, 1)
+
+[node name="StatsHud" type="Control" unique_id=190458788]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 200.0
+offset_bottom = 60.0
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="HealthContainer" type="HBoxContainer" parent="." unique_id=1278575286]
+layout_mode = 1
+offset_left = 70.0
+offset_top = 16.0
+offset_right = 210.0
+offset_bottom = 32.0
+theme_override_constants/separation = 5
+
+[node name="HeartIcon" type="TextureRect" parent="HealthContainer" unique_id=636588916]
+texture_filter = 1
+custom_minimum_size = Vector2(8, 8)
+layout_mode = 2
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_heart")
+expand_mode = 1
+stretch_mode = 5
+pivot_offset = Vector2(4, 4)
+
+[node name="HealthBar" type="ProgressBar" parent="HealthContainer" unique_id=998925492]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 6)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 0
+theme_override_styles/background = SubResource("StyleBoxTexture_bg_hp")
+theme_override_styles/fill = SubResource("StyleBoxTexture_fill_hp")
+value = 20.0
+show_percentage = false
+
+[node name="HealthHover" type="Label" parent="HealthContainer" unique_id=998925493]
+visible = false
+texture_filter = 1
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 1, 1, 0.95)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 8
+text = "100/100"
+
+[node name="StaminaContainer" type="HBoxContainer" parent="." unique_id=282874956]
+layout_mode = 1
+offset_left = 70.0
+offset_top = 34.0
+offset_right = 210.0
+offset_bottom = 50.0
+theme_override_constants/separation = 5
+
+[node name="StaminaIcon" type="TextureRect" parent="StaminaContainer" unique_id=1321856476]
+texture_filter = 1
+custom_minimum_size = Vector2(8, 8)
+layout_mode = 2
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_stamina")
+expand_mode = 1
+stretch_mode = 5
+pivot_offset = Vector2(4, 4)
+
+[node name="StaminaBar" type="ProgressBar" parent="StaminaContainer" unique_id=489781900]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 6)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 0
+theme_override_styles/background = SubResource("StyleBoxTexture_bg_st")
+theme_override_styles/fill = SubResource("StyleBoxTexture_fill_st")
+value = 20.0
+show_percentage = false
+
+[node name="StaminaHover" type="Label" parent="StaminaContainer" unique_id=489781901]
+visible = false
+texture_filter = 1
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 1, 1, 0.95)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 8
+text = "100/100"
+
+[node name="HungerContainer" type="HBoxContainer" parent="." unique_id=1023185411]
+layout_mode = 1
+offset_left = 70.0
+offset_top = 52.0
+offset_right = 210.0
+offset_bottom = 68.0
+theme_override_constants/separation = 5
+
+[node name="HungerIcon" type="TextureRect" parent="HungerContainer" unique_id=1235579635]
+texture_filter = 1
+custom_minimum_size = Vector2(8, 8)
+layout_mode = 2
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_hunger")
+expand_mode = 1
+stretch_mode = 5
+pivot_offset = Vector2(4, 4)
+
+[node name="HungerBar" type="ProgressBar" parent="HungerContainer" unique_id=15833843]
+texture_filter = 1
+custom_minimum_size = Vector2(64, 6)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 0
+theme_override_styles/background = SubResource("StyleBoxTexture_bg_hg")
+theme_override_styles/fill = SubResource("StyleBoxTexture_fill_hg")
+value = 20.0
+show_percentage = false
+
+[node name="HungerHover" type="Label" parent="HungerContainer" unique_id=15833844]
+visible = false
+texture_filter = 1
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 1, 1, 0.95)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("5_font")
+theme_override_font_sizes/font_size = 8
+text = "100/100"

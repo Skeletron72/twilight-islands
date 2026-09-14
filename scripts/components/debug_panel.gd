@@ -837,6 +837,31 @@ func _build_tab_world() -> void:
 	strike_btn.pressed.connect(_trigger_player_lightning_strike)
 	w_row2.add_child(strike_btn)
 	tab_world.add_child(w_row2)
+	
+	# Строка тестирования Экспедиции и мыслей персонажа
+	var w_row3 = HBoxContainer.new()
+	w_row3.add_theme_constant_override("separation", 4)
+	
+	var storm_test_btn = Button.new()
+	storm_test_btn.text = "Шторм экспедиции (+6 мин)"
+	storm_test_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	storm_test_btn.pressed.connect(func():
+		if ExpeditionManager:
+			ExpeditionManager.is_in_raid = true
+			ExpeditionManager.raid_duration = ExpeditionManager.storm_start_time
+			ExpeditionManager.post_thought("Буря началась! (Через дебаг-панель)", ExpeditionManager.COLOR_DANGER)
+	)
+	w_row3.add_child(storm_test_btn)
+	
+	var thought_test_btn = Button.new()
+	thought_test_btn.text = "Тест мысли"
+	thought_test_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	thought_test_btn.pressed.connect(func():
+		if ExpeditionManager:
+			ExpeditionManager.post_thought("Кажется, начинается буря... Воздух тяжелеет.", ExpeditionManager.COLOR_WARNING)
+	)
+	w_row3.add_child(thought_test_btn)
+	tab_world.add_child(w_row3)
 
 func _update_world_tab_info() -> void:
 	if not time_info_label: return

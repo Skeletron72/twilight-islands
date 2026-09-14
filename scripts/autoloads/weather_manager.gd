@@ -122,11 +122,16 @@ func _start_twilight_storm_escalation() -> void:
 func roll_weather() -> Weather:
 	var total_weight = 0
 	for key in WEATHER_DATA.keys():
+		# На обычном домашнем острове Сумеречный шторм естественным образом не выпадает
+		if key == Weather.TWILIGHT_STORM:
+			continue
 		total_weight += WEATHER_DATA[key].get("weight", 10)
 		
 	var roll = randi_range(1, total_weight)
 	var accum = 0
 	for key in WEATHER_DATA.keys():
+		if key == Weather.TWILIGHT_STORM:
+			continue
 		accum += WEATHER_DATA[key].get("weight", 10)
 		if roll <= accum:
 			return key as Weather

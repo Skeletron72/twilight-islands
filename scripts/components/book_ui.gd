@@ -580,7 +580,7 @@ func _refresh_character_tab() -> void:
 @onready var craft_desc = $DimBackground/CenterContainer/BookContainer/BookPanel/Pages/CraftTab/RightPage/DescLabel
 @onready var craft_stats_box = $DimBackground/CenterContainer/BookContainer/BookPanel/Pages/CraftTab/RightPage/StatsBox
 @onready var craft_req_title = $DimBackground/CenterContainer/BookContainer/BookPanel/Pages/CraftTab/RightPage/ReqTitle
-@onready var craft_req_list = $DimBackground/CenterContainer/BookContainer/BookPanel/Pages/CraftTab/RightPage/ReqList
+@onready var craft_req_list = $DimBackground/CenterContainer/BookContainer/BookPanel/Pages/CraftTab/RightPage/ScrollContainer2/ReqList
 @onready var craft_btn = $DimBackground/CenterContainer/BookContainer/BookPanel/Pages/CraftTab/RightPage/CraftButton
 
 var current_craft_id: String = ""
@@ -686,29 +686,36 @@ func _show_recipe_details(recipe_id: String) -> void:
 	for req_id in recipe:
 		var req_amt = recipe[req_id]
 		var have_amt = InventoryManager.get_item_amount(req_id)
+		var item_name = ItemDB.get_item(req_id).get("name", req_id)
 		
 		var req_box = HBoxContainer.new()
-		req_box.add_theme_constant_override("separation", 4)
+		req_box.add_theme_constant_override("separation", 3)
+		req_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		req_box.tooltip_text = "%s (В наличии: %d / Нужно: %d)" % [item_name, have_amt, req_amt]
 		
 		var icon = TextureRect.new()
 		icon.texture = ItemDB.get_icon(req_id)
 		icon.custom_minimum_size = Vector2(16, 16)
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		icon.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		req_box.add_child(icon)
 		
 		var req_label = Label.new()
-		req_label.text = "%s: %d / %d" % [ItemDB.get_item(req_id).get("name", req_id), have_amt, req_amt]
+		req_label.text = "%s\n%d/%d" % [item_name, have_amt, req_amt]
 		req_label.add_theme_font_override("font", preload("res://assets/fonts/WarmPixel.ttf"))
 		req_label.add_theme_font_size_override("font_size", 8)
-		req_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		req_label.add_theme_constant_override("line_spacing", -2)
+		req_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		req_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		req_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		
 		if have_amt < req_amt:
-			req_label.add_theme_color_override("font_color", Color(0.8, 0.0, 0.0))
+			req_label.add_theme_color_override("font_color", Color(0.85, 0.15, 0.15))
 			can_craft = false
 		else:
-			req_label.add_theme_color_override("font_color", Color(0, 0.4, 0))
+			req_label.add_theme_color_override("font_color", Color(0.1, 0.5, 0.15))
 			
 		req_box.add_child(req_label)
 		craft_req_list.add_child(req_box)

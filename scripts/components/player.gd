@@ -59,6 +59,12 @@ var roll_speed: float = 0.0
 var roll_cooldown: float = 0.0
 var _ghost_timer: float = 0.0
 
+# Punch combo state (4-hit combo: 1=Strong, 2=Fast, 3=Fast, 4=Lunge finisher)
+var punch_combo_step: int = 0
+var punch_combo_timer: float = 0.0
+const PUNCH_COMBO_WINDOW: float = 0.55
+var current_punch_step: int = 0
+
 # Paralysis state
 var is_paralyzed: bool = false
 var paralysis_timer: float = 0.0
@@ -270,6 +276,11 @@ func _spawn_impact_dust(pos: Vector2) -> void:
 
 func _on_hurt() -> void:
 	if is_dead: return
+	punch_combo_step = 0
+	punch_combo_timer = 0.0
+	if is_rolling:
+		is_rolling = false
+		roll_speed = 0.0
 	_spawn_impact_dust(global_position + Vector2(0, -6))
 	_flash_red()
 	_play_hurt_sfx()
@@ -281,6 +292,10 @@ func _on_hurt() -> void:
 func _on_died() -> void:
 	is_dead = true
 	is_acting = true
+	is_rolling = false
+	roll_speed = 0.0
+	punch_combo_step = 0
+	punch_combo_timer = 0.0
 	is_paralyzed = false
 	is_burning = false
 	var pfx = get_node_or_null("ParalysisEffect")
@@ -373,6 +388,12 @@ func _physics_process(delta: float) -> void:
 		if _debug_cone_timer <= 0.0:
 			_update_cone_visualizer()
 
+	# Combo timer decay (окно между ударами комбо)
+	if punch_combo_timer > 0.0:
+		punch_combo_timer -= delta
+		if punch_combo_timer <= 0.0:
+			punch_combo_step = 0
+
 	if roll_cooldown > 0.0:
 		roll_cooldown -= delta
 
@@ -392,15 +413,19 @@ func _physics_process(delta: float) -> void:
 		return
 
 	if is_rolling:
-		roll_speed = lerp(roll_speed, 40.0, 4.0 * delta)
-		velocity = roll_direction * roll_speed + knockback_velocity
-		move_and_slide()
-		_ghost_timer += delta
-		if _ghost_timer >= 0.06:
-			_ghost_timer = 0.0
-			_spawn_ghost_trail()
-		_process_animation(delta)
-		return
+		if current_anim != "roll":
+			is_rolling = false
+			roll_speed = 0.0
+		else:
+			roll_speed = lerp(roll_speed, 40.0, 4.0 * delta)
+			velocity = roll_direction * roll_speed + knockback_velocity
+			move_and_slide()
+			_ghost_timer += delta
+			if _ghost_timer >= 0.06:
+				_ghost_timer = 0.0
+				_spawn_ghost_trail()
+			_process_animation(delta)
+			return
 
 	if is_acting:
 		velocity = knockback_velocity
@@ -557,6 +582,9 @@ func _play_anim(anim_name: String) -> void:
 	if current_anim != anim_name:
 		current_frame = 0
 		anim_timer = 0.0
+		if anim_name != "roll" and is_rolling:
+			is_rolling = false
+			roll_speed = 0.0
 		
 	current_anim = anim_name
 	last_played_dir = current_dir
@@ -573,6 +601,14 @@ func _process_animation(delta: float) -> void:
 	var fps_mult = 1.0
 	if current_anim == "run": fps_mult = 1.5
 	elif current_anim == "roll": fps_mult = 3.0 # 18 FPS for roll
+	elif current_anim == "attack":
+		if not _has_sword_equipped():
+			if current_punch_step in [1, 2]:
+				fps_mult = 1.65 # Удары 2 и 3 заметно быстрее!
+			elif current_punch_step == 3:
+				fps_mult = 1.25 # Выпад вперед
+			else:
+				fps_mult = 1.05 # Первый сильный удар
 	
 	anim_timer += delta
 	var frame_dur = 1.0 / (fps * fps_mult)
@@ -614,7 +650,11 @@ func _process_animation(delta: float) -> void:
 		# For most others, it's just + current_dir
 		var actual_row = row
 		if current_anim == "attack":
-			actual_row = row + (current_dir * 3)
+			if _has_sword_equipped():
+				actual_row = row + (current_dir * 3)
+			else:
+				var punch_sub_row = current_punch_step % 3
+				actual_row = row + (current_dir * 3) + punch_sub_row
 		elif current_anim == "roll":
 			match current_dir:
 				0: actual_row = 17
@@ -637,7 +677,11 @@ func _update_sprites() -> void:
 	var row = ANIM_MAP[current_anim]["row"]
 	var actual_row = row
 	if current_anim == "attack":
-		actual_row = row + (current_dir * 3)
+		if _has_sword_equipped():
+			actual_row = row + (current_dir * 3)
+		else:
+			var punch_sub_row = current_punch_step % 3
+			actual_row = row + (current_dir * 3) + punch_sub_row
 	elif current_anim == "roll":
 		match current_dir:
 			0: actual_row = 17
@@ -748,6 +792,7 @@ func _perform_dodge() -> void:
 	is_rolling = true
 	is_acting = true
 	is_invulnerable = true
+	invulnerability_timer = 0.35
 	roll_speed = 170.0
 	roll_cooldown = 0.18
 	_ghost_timer = 0.0
@@ -782,8 +827,17 @@ func _spawn_ghost_trail() -> void:
 		tween.tween_property(ghost, "modulate:a", 0.0, 0.22)
 		tween.tween_callback(ghost.queue_free)
 
+func _perform_attack() -> void:
+	if _has_sword_equipped():
+		_perform_sword_attack()
+	else:
+		_perform_punch_attack()
+
 func _perform_sword_attack() -> void:
 	if attack_cooldown > 0.0 or is_acting:
+		return
+	# Атака мечом требует выносливости (8 единиц)
+	if not GameStateManager.consume_stamina(8.0):
 		return
 	is_acting = true
 	attack_cooldown = 0.35
@@ -797,6 +851,63 @@ func _perform_sword_attack() -> void:
 	if debug_show_attack_cone:
 		_debug_cone_timer = 0.25
 		_update_cone_visualizer()
+
+func _perform_punch_attack() -> void:
+	# Если мы в фазе восстановления предыдущего удара (кадр 2..3) — позволяем продолжить серию
+	if is_acting:
+		if current_anim == "attack" and not _has_sword_equipped() and current_frame >= 2 and attack_cooldown <= 0.12:
+			is_acting = false
+		else:
+			return
+			
+	if attack_cooldown > 0.0:
+		return
+
+	# Расход стамины на удары кулаками (быстрые удары по 4 стамины, мощные/финишер 6-8)
+	var stamina_cost = 5.0
+	if punch_combo_step == 3:
+		stamina_cost = 8.0
+	elif punch_combo_step in [1, 2]:
+		stamina_cost = 4.0
+
+	if not GameStateManager.consume_stamina(stamina_cost):
+		return
+
+	is_acting = true
+	current_punch_step = punch_combo_step
+	_attack_already_hit.clear()
+	
+	var facing = get_facing_direction()
+	
+	match current_punch_step:
+		0:
+			# Удар 1: Прямой удар (1-2 урона)
+			attack_cooldown = 0.28
+			knockback_velocity += facing * 22.0
+			_play_temp_sfx(SFX_HIT_IMPACT, -2.0, randf_range(0.95, 1.05))
+		1:
+			# Удар 2: Быстрый хук
+			attack_cooldown = 0.16
+			knockback_velocity += facing * 12.0
+			_play_temp_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), 0.5, randf_range(1.25, 1.4))
+		2:
+			# Удар 3: Второй быстрый хук
+			attack_cooldown = 0.16
+			knockback_velocity += facing * 16.0
+			_play_temp_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), 1.0, randf_range(1.35, 1.5))
+		3:
+			# Удар 4: Финальный выпад вперед с рывком
+			attack_cooldown = 0.40
+			knockback_velocity += facing * 145.0 # Мощный выпад/рывок вперед
+			_spawn_impact_dust(global_position + Vector2(0, -4))
+			_play_temp_sfx(SFX_SWORD_SWING, 1.2, randf_range(1.15, 1.3))
+			_play_temp_sfx(SFX_HIT_IMPACT, 1.2, randf_range(0.85, 0.95))
+			
+	_play_anim("attack")
+	
+	# Продвигаем комбо на следующий шаг
+	punch_combo_step = (punch_combo_step + 1) % 4
+	punch_combo_timer = PUNCH_COMBO_WINDOW
 
 func _get_enemy_hit_info(enemy: Node2D) -> Dictionary:
 	var hurtbox = enemy.get_node_or_null("Hurtbox")
@@ -822,12 +933,43 @@ func _execute_sword_attack_hit() -> void:
 	var center = global_position + Vector2(0, -6)
 	var facing = get_facing_direction()
 	var has_sword = _has_sword_equipped()
-	var dmg = 12 if has_sword else 4
-	var base_kb = attack_base_knockback if has_sword else (attack_base_knockback * 0.6)
-	var min_dot = cos(deg_to_rad(attack_arc_degrees * 0.5))
 	
+	var base_dmg = 12
+	var crit_chance = 0.20
+	var base_kb = attack_base_knockback
+	var shake_power = 2.2
+	
+	if not has_sword:
+		match current_punch_step:
+			0:
+				# Удар 1: 1-2 урона
+				base_dmg = 2
+				base_kb = 110.0
+				crit_chance = 0.10
+				shake_power = 1.6
+			1:
+				# Удар 2: 1-2 урона
+				base_dmg = 1
+				base_kb = 60.0
+				crit_chance = 0.10
+				shake_power = 1.1
+			2:
+				# Удар 3: 1-2 урона
+				base_dmg = 2
+				base_kb = 75.0
+				crit_chance = 0.10
+				shake_power = 1.3
+			3:
+				# Удар 4: Финальный выпад вперед (акцентный удар, 3-4 урона)
+				base_dmg = 3
+				base_kb = 210.0
+				crit_chance = 0.25 # Чуть выше шанс крита на финишере
+				shake_power = 2.8
+	
+	var min_dot = cos(deg_to_rad(attack_arc_degrees * 0.5))
 	var enemies = get_tree().get_nodes_in_group("enemies")
 	var hit_count = 0
+	var has_crit_hit = false
 	
 	for enemy in enemies:
 		if not is_instance_valid(enemy):
@@ -842,8 +984,9 @@ func _execute_sword_attack_hit() -> void:
 		var enemy_radius: float = hit_info["radius"]
 		var effective_dist = max(0.0, dist - enemy_radius)
 		
-		# Attack range check against enemy body boundary
-		if effective_dist <= attack_range:
+		# Дальность атаки: для выпада вперед зона поражения шире
+		var extra_reach = 8.0 if (not has_sword and current_punch_step == 3) else 0.0
+		if effective_dist <= (attack_range + extra_reach):
 			var in_arc = false
 			if effective_dist <= attack_point_blank_radius:
 				in_arc = true # Point-blank overlap
@@ -857,19 +1000,44 @@ func _execute_sword_attack_hit() -> void:
 				_attack_already_hit.append(enemy)
 				hit_count += 1
 				var hit_dir = to_enemy.normalized() if dist > 1.0 else facing
-				var kb_impulse = (hit_dir * 0.7 + facing * 0.3).normalized() * base_kb
+				
+				# Крит удар (2x урон, увеличенное отбрасывание, сочный визуальный фидбек)
+				var is_crit = randf() < crit_chance
+				if is_crit:
+					has_crit_hit = true
+				
+				# Небольшой диапазон урона для динамики боя (~85%..120%)
+				var dmg_variance = randf_range(0.85, 1.20)
+				var raw_dmg = round(float(base_dmg) * dmg_variance)
+				if is_crit:
+					raw_dmg = round(raw_dmg * 2.0)
+				var dmg = int(max(1.0, raw_dmg))
+				
+				var kb_mult = 1.35 if is_crit else 1.0
+				var kb_impulse = (hit_dir * 0.7 + facing * 0.3).normalized() * (base_kb * kb_mult)
 				
 				if enemy.has_method("take_damage"):
-					enemy.take_damage(dmg, kb_impulse)
+					enemy.take_damage(dmg, kb_impulse, is_crit)
 				elif enemy.has_method("interact"):
 					enemy.interact(self)
 					
 	if hit_count > 0:
-		shake_camera(2.2 if has_sword else 1.2, 0.12)
-		if has_sword:
-			_play_hit_impact_sfx()
+		if has_crit_hit:
+			shake_camera(shake_power * 1.5, 0.18)
+			_play_temp_sfx(SFX_HIT_IMPACT, 1.5, randf_range(1.25, 1.4))
+			_spawn_impact_dust(global_position + facing * 12.0)
 		else:
-			_play_temp_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), -2.0, randf_range(0.85, 1.05))
+			shake_camera(shake_power, 0.12)
+			if has_sword:
+				_play_hit_impact_sfx()
+			else:
+				if current_punch_step == 3:
+					_play_temp_sfx(SFX_HIT_IMPACT, 1.2, randf_range(0.9, 1.05))
+					_spawn_impact_dust(global_position + facing * 10.0)
+				elif current_punch_step in [1, 2]:
+					_play_temp_sfx(preload("res://assets/audio/ui/sfx_pop.mp3"), 1.0, randf_range(1.2, 1.4))
+				else:
+					_play_temp_sfx(SFX_HIT_IMPACT, -2.0, randf_range(1.0, 1.15))
 
 func _update_auto_target() -> void:
 	var interactables: Array[Node2D] = []
@@ -927,7 +1095,7 @@ func _try_interact() -> void:
 					break
 
 	if enemy_in_front:
-		_perform_sword_attack()
+		_perform_attack()
 		return
 
 	if current_target and is_instance_valid(current_target):
@@ -979,7 +1147,7 @@ func _try_interact() -> void:
 		if InventoryManager.get_active_item_id() == "hoe":
 			_use_hoe()
 		else:
-			_perform_sword_attack()
+			_perform_attack()
 
 func _update_equipment_visuals() -> void:
 	var chest_sprite = visuals.get_node_or_null("Chest")

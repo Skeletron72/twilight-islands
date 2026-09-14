@@ -85,10 +85,6 @@ font_color = Color(0.4, 0.2912, 0.20799999, 1)
 atlas = ExtResource("tex_btn_icons")
 region = Rect2(0, 0, 16, 16)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_trash"]
-atlas = ExtResource("tex_btn_icons")
-region = Rect2(224, 48, 16, 16)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_equip_head"]
 atlas = ExtResource("tex_frames")
 region = Rect2(959, 207, 18, 18)
@@ -529,7 +525,7 @@ layout_mode = 0
 offset_left = 16.0
 offset_top = 130.0
 offset_right = 186.0
-offset_bottom = 208.0
+offset_bottom = 202.0
 
 [node name="DescLabel" type="Label" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab/LeftPage/DescScroll" unique_id=1223050890]
 layout_mode = 2
@@ -543,28 +539,24 @@ horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="BtnDropN" type="Button" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab/LeftPage" unique_id=1223050910]
-visible = false
 layout_mode = 0
 offset_left = 12.0
-offset_top = 212.0
+offset_top = 204.0
 offset_right = 96.0
-offset_bottom = 236.0
+offset_bottom = 228.0
 tooltip_text = "Выбрать количество для сброса"
 mouse_default_cursor_shape = 2
 text = "Выбросить..."
 
 [node name="BtnDropAll" type="Button" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab/LeftPage" unique_id=1223050911]
-visible = false
 layout_mode = 0
-offset_left = 100.0
-offset_top = 212.0
-offset_right = 184.0
-offset_bottom = 236.0
+offset_left = 99.0
+offset_top = 204.0
+offset_right = 190.0
+offset_bottom = 228.0
 tooltip_text = "Выбросить все предметы из стака"
 mouse_default_cursor_shape = 2
 text = "Выбросить всё"
-
-
 
 [node name="RightPage" type="Control" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages/InventoryTab" unique_id=1471340789]
 anchors_preset = 0
@@ -1011,7 +1003,6 @@ custom_minimum_size = Vector2(42, 42)
 layout_mode = 2
 
 [node name="CraftTab" type="Control" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages" unique_id=401506201]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1120,12 +1111,21 @@ theme_override_fonts/font = ExtResource("4_yq8p3")
 theme_override_font_sizes/font_size = 8
 text = "Необходимые ресурсы:"
 
-[node name="ReqList" type="VBoxContainer" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages/CraftTab/RightPage" unique_id=971582885]
+[node name="ScrollContainer2" type="ScrollContainer" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages/CraftTab/RightPage" unique_id=368184002]
 layout_mode = 0
-offset_left = 10.0
-offset_top = 154.0
-offset_right = 182.0
-offset_bottom = 196.0
+offset_left = 7.0
+offset_top = 152.0
+offset_right = 183.0
+offset_bottom = 191.0
+horizontal_scroll_mode = 0
+
+[node name="ReqList" type="GridContainer" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages/CraftTab/RightPage/ScrollContainer2" unique_id=971582885]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 4
+columns = 2
 
 [node name="CraftButton" type="Button" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages/CraftTab/RightPage" unique_id=1879932352]
 layout_mode = 0
@@ -1538,6 +1538,7 @@ offset_bottom = 216.0
 theme_override_constants/separation = 4
 
 [node name="AchieveTab" type="Control" parent="DimBackground/CenterContainer/BookContainer/BookPanel/Pages" unique_id=388290486]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

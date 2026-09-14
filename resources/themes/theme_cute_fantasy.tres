@@ -103,11 +103,22 @@ content_margin_top = 8.0
 content_margin_right = 8.0
 content_margin_bottom = 8.0
 texture = ExtResource("2_frames")
-texture_margin_left = 10.0
-texture_margin_top = 10.0
-texture_margin_right = 10.0
-texture_margin_bottom = 10.0
-region_rect = Rect2(912, 0, 48, 48)
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
+region_rect = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vhl7e"]
+atlas = ExtResource("2_frames")
+region = Rect2(336, 0, 48, 48)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fuo11"]
+texture = SubResource("AtlasTexture_vhl7e")
+texture_margin_left = 15.0
+texture_margin_top = 15.0
+texture_margin_right = 15.0
+texture_margin_bottom = 15.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vgrabber_normal"]
 texture = ExtResource("4_sliders")
@@ -178,8 +189,9 @@ HSlider/styles/slider = SubResource("StyleBoxTexture_dswxj")
 Panel/styles/panel = SubResource("StyleBoxTexture_panel")
 PanelContainer/styles/panel = SubResource("StyleBoxTexture_panel")
 TooltipLabel/colors/font_color = Color(0.2, 0.1, 0.05, 1)
-TooltipLabel/font_sizes/font_size = 10
+TooltipLabel/font_sizes/font_size = 12
 TooltipLabel/fonts/font = ExtResource("1_font")
+TooltipPanel/styles/panel = SubResource("StyleBoxTexture_fuo11")
 VScrollBar/constants/minimum_grabber_size = 16
 VScrollBar/styles/grabber = SubResource("StyleBoxTexture_vgrabber_normal")
 VScrollBar/styles/grabber_highlight = SubResource("StyleBoxTexture_vgrabber_normal")
